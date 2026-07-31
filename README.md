@@ -15,6 +15,31 @@ Example:
 
     cp AGENTS.template.md /path/to/project/AGENTS.md
 
+## Included sub-agent templates
+
+Reusable role guides live under [.agents/templates/](.agents/templates/). Start
+with the smallest team that has distinct owned outputs.
+
+| Role | Best used for |
+| --- | --- |
+| [Role skeleton](.agents/templates/role-skeleton.template.md) | A project-specific specialist that does not fit a starter role |
+| [Orchestrator](.agents/templates/orchestrator.template.md) | Routing, prerequisite gates, user questions, cross-file validation, and commits |
+| [Researcher](.agents/templates/researcher.template.md) | Bounded, source-backed research written one completed question at a time |
+| [Writer / Implementer](.agents/templates/writer-implementer.template.md) | Producing one approved prose artifact, document, code surface, or directly owned test |
+| [Reviewer / Critic](.agents/templates/reviewer-critic.template.md) | Independent, anchored findings without modifying the artifact |
+| [Validator / Auditor](.agents/templates/validator-auditor.template.md) | Reproducible PASS, FAIL, or NOT ASSESSABLE exit gates |
+| [Privacy / Risk Gate](.agents/templates/privacy-risk-gate.template.md) | Pre-plan and final-diff veto for sensitive or high-risk work |
+
+The [.agents selection guide](.agents/README.md) explains when each role earns
+its place, common team shapes, handoff formats, sequencing, runtime adapters, and
+degraded-mode behavior.
+
+Example:
+
+    mkdir -p /path/to/project/.agents
+    cp .agents/templates/orchestrator.template.md /path/to/project/.agents/orchestrator.md
+    cp .agents/templates/researcher.template.md /path/to/project/.agents/researcher.md
+
 ## What the template carries forward
 
 - Git-first work on feature branches, logical commits, pull requests, CI

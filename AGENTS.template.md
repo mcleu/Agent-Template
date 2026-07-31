@@ -439,6 +439,11 @@ When an existing artifact changes:
 Use multiple agents only when roles have independent, bounded work and the
 coordination cost is justified.
 
+When starting from the Agent-Template repository, reusable role guides live in
+.agents/templates/. Copy only the roles the project needs, give them
+project-specific names and exact paths, and delete every unused placeholder.
+The root AGENTS.md remains authoritative.
+
 ### Role definition
 
 Every role guide should specify:
@@ -466,8 +471,9 @@ Prefer current capability tiers over dated model IDs:
 
 - Give each artifact one owner. A specialist writes only its named artifact and
   returns all cross-file effects as proposals.
-- Use one coordinator as the sole cross-file writer, validator, committer, and
-  question broker for multi-file workflows.
+- Use one coordinator as the sole cross-file integrator, committer, and question
+  broker for multi-file workflows. The coordinator checks each handoff; an
+  independent Validator/Auditor owns any formal exit-gate verdict.
 - Serialize overlapping writes. Independent read-only reviews may run in
   parallel.
 - After each worker, validate path ownership, schema, privacy, duplicates,
