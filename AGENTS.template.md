@@ -537,6 +537,23 @@ Customize the ownership table:
 - Do not copy private source bodies into process documentation. Record durable
   process decisions and high-level outcomes only.
 
+### Review against the canonical template [OPTIONAL]
+
+When asked to bring forward general practices from `mcleu/Agent-Template`, use
+the current `main` version of its `ADOPTION.md` as the comparison procedure.
+
+- Start audit-only and identify both the template commit and local commit.
+- Compare practices rather than synchronizing files or headings.
+- Write the adoption matrix incrementally to a locally governed durable path.
+- Preserve stricter local and project-specific rules; escalate material
+  conflicts instead of silently choosing one.
+- Propose exact target files and wording before implementation unless the user
+  already authorized the change.
+- Update canonical `AGENTS.md` before `CLAUDE.md` or another runtime adapter, and
+  validate that shared policy is not duplicated or contradictory.
+- Never copy unresolved placeholders, example paths, commands, branch names, or
+  optional modules into the project.
+
 ## 12. Completion and handoff
 
 Before declaring work complete:

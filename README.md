@@ -15,6 +15,17 @@ Example:
 
     cp AGENTS.template.md /path/to/project/AGENTS.md
 
+## Improve an existing repository
+
+Use [ADOPTION.md](ADOPTION.md) when a future agent should compare an existing
+repository with the current `Agent-Template/main` guidance.
+
+The workflow is audit-first and practice-based. It records the exact template
+and local commits, writes an incremental adoption matrix, preserves stricter or
+project-specific rules, and proposes exact changes before editing local
+`AGENTS.md` or `CLAUDE.md`. Authorized changes are made minimally on a feature
+branch, with `AGENTS.md` updated before its tool-specific adapters.
+
 ## Included sub-agent templates
 
 Reusable role guides live under [.agents/templates/](.agents/templates/). Start
