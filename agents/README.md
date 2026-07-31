@@ -126,7 +126,7 @@ The Markdown role guide is the semantic source of truth. Runtime-specific files
 under .claude/, .codex/, or another adapter directory should contain only the
 metadata and tool/model declarations that runtime needs.
 
-- Keep policy in AGENTS.md and role behavior in .agents/.
+- Keep policy in AGENTS.md and role behavior in the visible agents/ folder.
 - Prefer references or generated adapters over independent policy copies.
 - When duplication is unavoidable, update and test every adapter in the same
   change.

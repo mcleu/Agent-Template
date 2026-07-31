@@ -37,7 +37,7 @@ silently choosing one.
 
 Produce a durable audit at the path selected by local governance, normally:
 
-    .agents/template-adoption.md
+    agents/template-adoption.md
 
 The audit must identify:
 
@@ -59,8 +59,9 @@ Before retrieving or comparing the template:
 
 1. Read the local root `AGENTS.md` and every more-specific `AGENTS.md` governing
    files that may change.
-2. Read the complete local `CLAUDE.md` files and relevant `.agents/`, `.claude/`,
-   or equivalent role/runtime guidance one or two useful layers deep.
+2. Read the complete local `CLAUDE.md` files and relevant visible `agents/`,
+   legacy `.agents/`, `.claude/`, or equivalent role/runtime guidance one or two
+   useful layers deep.
 3. Inspect the current branch, worktree status, upstream, remotes, and worktrees.
 4. Record the local `HEAD` commit and whether the working tree contains unrelated
    changes.
@@ -76,6 +77,7 @@ Suggested read-only inventory:
       -g 'CLAUDE.md' \
       -g 'ROBOTS.md' \
       -g 'robots.md' \
+      -g 'agents/**' \
       -g '.agents/**' \
       -g '.claude/**' \
       -g '!node_modules/**' \
@@ -85,6 +87,10 @@ Suggested read-only inventory:
 Exclude dependency, generated, archive, and vendored documentation unless it is
 an intentional source of project policy. Record exclusions that could otherwise
 be mistaken for authored guidance.
+
+If the local repository still uses `.agents/`, record it as a legacy path and
+propose a separate, reference-complete rename to visible `agents/`. Do not create
+both active folders or move it during audit-only work.
 
 ## 2. Obtain an identifiable template snapshot
 
@@ -163,7 +169,7 @@ Use one of these states:
 Never copy `[CUSTOMIZE]`, example paths, model names, commands, branch names, or
 optional modules without resolving them against the actual repository.
 
-Use a matrix like this in `.agents/template-adoption.md`:
+Use a matrix like this in `agents/template-adoption.md`:
 
 | ID | Practice | Template evidence | Local evidence | State | Proposed target | Rationale / risk |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -271,11 +277,11 @@ result.
 ## Ready-to-use instruction for a future agent
 
     Compare this repository's authored AGENTS.md, CLAUDE.md, and relevant
-    .agents/.claude guidance against the current main branch of
-    https://github.com/mcleu/Agent-Template using ADOPTION.md from that
+    agents/, legacy .agents/, and .claude/ guidance against the current main
+    branch of https://github.com/mcleu/Agent-Template using ADOPTION.md from that
     repository. Start audit-only. Read the local rules in full, identify the
     exact template and local commits, and write the practice-by-practice matrix
-    incrementally to .agents/template-adoption.md (or the locally governed
+    incrementally to agents/template-adoption.md (or the locally governed
     equivalent). Preserve stricter and project-specific rules. Do not edit
     guidance until the comparison and proposed first batch are durable and I
     have authorized implementation. If implementation is authorized, use a

@@ -85,7 +85,7 @@ private inputs, working state, generated output, and archived history.
     plans/                Reviewable implementation plans and decision records
     memory/               Optional durable local context; private by default
     .github/workflows/    CI checks that enforce repository contracts
-    .agents/              Tool-neutral roles, skills, and workflows
+    agents/               Visible tool-neutral roles, skills, and workflows
     .claude/              Claude runtime adapters; policy remains in AGENTS.md
     .codex/               Codex runtime adapters; policy remains in AGENTS.md
     private/              Local sensitive material; ignored unless explicitly safe
@@ -440,7 +440,7 @@ Use multiple agents only when roles have independent, bounded work and the
 coordination cost is justified.
 
 When starting from the Agent-Template repository, reusable role guides live in
-.agents/templates/. Copy only the roles the project needs, give them
+agents/templates/. Copy only the roles the project needs, give them
 project-specific names and exact paths, and delete every unused placeholder.
 The root AGENTS.md remains authoritative.
 
