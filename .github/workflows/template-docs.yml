@@ -1,0 +1,35 @@
+name: Template documentation
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "scripts/check_template_docs.py"
+      - ".github/workflows/template-docs.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - "scripts/check_template_docs.py"
+      - ".github/workflows/template-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  documentation:
+    name: Relative links and agent paths
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Validate documentation
+        run: python3 scripts/check_template_docs.py

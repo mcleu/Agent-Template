@@ -12,14 +12,15 @@ Auditor, Migration Verifier, Public-Safety Checker, or Visual QA.
 
 ## Objective
 
-Return a reproducible PASS, FAIL, or NOT ASSESSABLE verdict for every required
-gate, with exact evidence and no silent downgrade.
+Return a reproducible verdict for every assigned gate, distinguishing required
+gates that cannot be evaluated from gates that are genuinely outside scope.
 
 ## Definition of done
 
 - Every assigned completion criterion has a verdict and evidence.
 - Required checks ran against the final artifact/diff, not a stale intermediate.
 - Unknown or unavailable evidence is marked NOT ASSESSABLE.
+- Out-of-scope gates are marked NOT REQUIRED with a scope-based reason.
 - Overall PASS occurs only when every required gate passes.
 - The audit made no product, source, or Git mutations.
 
@@ -74,9 +75,16 @@ Before validating:
 | PASS | The criterion was directly checked and met |
 | FAIL | The criterion was directly checked and not met |
 | NOT ASSESSABLE | Required evidence, environment, authority, or tool was unavailable |
+| NOT REQUIRED | The gate is outside the approved change scope and does not apply |
 
 - NOT ASSESSABLE is not PASS.
+- NOT REQUIRED is neutral only when scope evidence shows the gate does not
+  apply; convenience, missing tools, or unavailable evidence do not qualify.
 - A skipped required check prevents an overall PASS.
+- A NOT REQUIRED gate does not prevent overall PASS, but its rationale must be
+  reviewable.
+- Overall NOT REQUIRED is valid only when every assigned gate is outside scope;
+  if any required gate is in scope, use the strictest required-gate result.
 - A passing build does not prove visual layout, privacy, external integration,
   or use-condition behavior.
 - Prior checks become stale after a relevant edit; re-run them.
@@ -115,10 +123,23 @@ Before validating:
 
 - Check staged content for secrets, PII, prohibited paths, private facts,
   generated artifacts, and unrelated files.
-- Confirm branch, commit, remote, PR, and CI claims match observed state.
+- Confirm branch, trunk, commit, remote, PR, and CI claims match observed state
+  and actual workflow/default-branch configuration.
+- Confirm deployment, hosting/runtime, and release claims against the actual
+  deployment configuration and target, not names or prior prose.
 - Confirm no external action is represented as completed without evidence.
 
-### 6. Validate high-risk filesystem work [OPTIONAL]
+### 6. Adjudicate scanner candidates
+
+- Treat link, path, case, secret, policy, lint, and other scanner matches as
+  candidates rather than automatic failures.
+- Check each candidate against authoritative files, path semantics, and the
+  project's explicit approved exceptions.
+- Record each disposition as confirmed defect, approved exception, false
+  positive, or unresolved, with evidence.
+- An unresolved candidate for a required gate is NOT ASSESSABLE, not PASS.
+
+### 7. Validate high-risk filesystem work [OPTIONAL]
 
 - Independently confirm destination presence, expected source absence, hash or
   byte preservation, reference/link validity, collision handling, exact
@@ -132,12 +153,13 @@ Before validating:
     - Artifact/revision:
     - Checked:
     - Environment:
-    - Overall verdict: PASS | FAIL | NOT ASSESSABLE
+    - Overall verdict: PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
 
     ## Gates
 
-    VERDICT | PASS | FAIL | NOT ASSESSABLE
-    GATE | <criterion> | pass|fail|not-assessable | evidence=<path, command, result>
+    VERDICT | PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
+    GATE | <criterion> | pass|fail|not-assessable|not-required
+    evidence=<path, command, result, scope reason, or approved exception>
 
     ## Failures
 
@@ -157,10 +179,15 @@ Checkpoint unit: one complete gate with its evidence.
 
 ## Quality gates for the audit
 
-- [ ] Every required criterion has exactly one verdict.
+- [ ] Every assigned criterion has exactly one verdict.
 - [ ] Evidence is direct, reproducible, and tied to the final revision.
 - [ ] NOT ASSESSABLE items are not reported as passing.
+- [ ] NOT REQUIRED items have explicit scope evidence and are not unavailable
+      required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
+- [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Scanner candidates were adjudicated against authoritative evidence and
+      approved exceptions.
 - [ ] No mutation occurred outside approved temporary output.
 - [ ] The overall verdict follows the strictest required failed/unassessable gate.
 
@@ -183,6 +210,8 @@ Escalate immediately when:
 - Do not run destructive, production, publishing, payment, or external-write
   checks without explicit authorization.
 - Do not soften FAIL or convert NOT ASSESSABLE to PASS.
+- Do not convert a required but unavailable check to NOT REQUIRED.
+- Do not convert an unreviewed scanner match directly to FAIL.
 
 ## Model and resources
 

@@ -85,7 +85,7 @@ private inputs, working state, generated output, and archived history.
     plans/                Reviewable implementation plans and decision records
     memory/               Optional durable local context; private by default
     .github/workflows/    CI checks that enforce repository contracts
-    .agents/              Tool-neutral roles, skills, and workflows
+    agents/               Visible tool-neutral roles, skills, and workflows
     .claude/              Claude runtime adapters; policy remains in AGENTS.md
     .codex/               Codex runtime adapters; policy remains in AGENTS.md
     private/              Local sensitive material; ignored unless explicitly safe
@@ -418,6 +418,15 @@ document libraries:
   validate with real customer or personal records.
 - If an external service is unavailable, verify local behavior and state the
   unverified integration plainly.
+- Verify trunk, deployment target, hosting/runtime, CI, and release claims
+  against actual remotes, workflow files, deployment configuration, and live
+  state. Names and prior prose are not proof of current reality.
+- Treat scanner matches as candidates, not automatic failures. Adjudicate link,
+  path, case, secret, policy, and lint candidates against authoritative files,
+  path semantics, and documented approved exceptions. Record confirmed defect,
+  approved exception, false positive, or unresolved.
+- Use NOT ASSESSABLE when a required gate cannot be evaluated. Use NOT REQUIRED
+  only when the gate is outside the approved change scope and record why.
 - Render and visually inspect documents, PDFs, slides, spreadsheets, images,
   and responsive UI when layout matters. A successful build or page count is
   not visual validation.
@@ -440,7 +449,7 @@ Use multiple agents only when roles have independent, bounded work and the
 coordination cost is justified.
 
 When starting from the Agent-Template repository, reusable role guides live in
-.agents/templates/. Copy only the roles the project needs, give them
+agents/templates/. Copy only the roles the project needs, give them
 project-specific names and exact paths, and delete every unused placeholder.
 The root AGENTS.md remains authoritative.
 
@@ -457,6 +466,12 @@ Every role guide should specify:
 - Collaboration handoffs and structured return format.
 - Escalation triggers and decisions reserved for humans.
 - Quality gates, prohibited actions, and suitable model/resource tier.
+
+When implementing a policy adoption or governance change, maintain a
+role-coverage table for every relevant role. Confirm that ownership,
+checkpointing, handoff format, applicable verdict/gate semantics, and model tier
+are explicit in the role guide itself. Root `AGENTS.md` language does not fill an
+implicit role-guide gap.
 
 Prefer current capability tiers over dated model IDs:
 
@@ -536,6 +551,23 @@ Customize the ownership table:
   reason. Let failures improve the rules.
 - Do not copy private source bodies into process documentation. Record durable
   process decisions and high-level outcomes only.
+
+### Review against the canonical template [OPTIONAL]
+
+When asked to bring forward general practices from `mcleu/Agent-Template`, use
+the current `main` version of its `ADOPTION.md` as the comparison procedure.
+
+- Start audit-only and identify both the template commit and local commit.
+- Compare practices rather than synchronizing files or headings.
+- Write the adoption matrix incrementally to a locally governed durable path.
+- Preserve stricter local and project-specific rules; escalate material
+  conflicts instead of silently choosing one.
+- Propose exact target files and wording before implementation unless the user
+  already authorized the change.
+- Update canonical `AGENTS.md` before `CLAUDE.md` or another runtime adapter, and
+  validate that shared policy is not duplicated or contradictory.
+- Never copy unresolved placeholders, example paths, commands, branch names, or
+  optional modules into the project.
 
 ## 12. Completion and handoff
 

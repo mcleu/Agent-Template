@@ -23,7 +23,8 @@ work begins and against the actual final output.
 - Every claim/action traces to an allowed source and permission level.
 - Blocked items were removed or explicitly resolved by the authorized human.
 - Approval-required items appear on an owner approval list.
-- The gate issued a clear GO, NO-GO, or CONDITIONAL verdict with residual risk.
+- The gate issued a clear GO, NO-GO, or CONDITIONAL verdict with residual risk
+  and exact allowed and blocked next stages.
 
 ## Scope and ownership
 
@@ -86,7 +87,28 @@ executed, or released:
 4. Check containment: private working files, source records, and approval notes
    remain in permitted locations.
 5. Check final approval list and unresolved risk.
-6. Issue the final verdict. Nothing blocked may remain.
+6. Issue the final verdict. No blocked material may remain in the artifact, and
+   every blocked next stage remains prohibited.
+
+## Verdict semantics
+
+| Verdict | Meaning |
+| --- | --- |
+| GO | Every named next stage in `allows` may proceed within the reviewed scope |
+| CONDITIONAL | Only the stages in `allows` may proceed; every stage in `blocks` remains prohibited until its named condition is resolved |
+| NO-GO | None of the requested next stages may proceed |
+
+- Every verdict must name `allows=<stage list or none>` and
+  `blocks=<stage list or none>`; words such as proceed or continue are too vague.
+- Suggested stages include research, drafting, implementation, review, commit,
+  delivery, publication, submission, deployment, migration, or another
+  project-defined lifecycle state.
+- Pending owner approval may allow drafting from already permitted material
+  while blocking delivery or publication.
+- Unresolved blocked material must not be written into the artifact. It stops
+  writing that material even when unrelated drafting is allowed.
+- A later stage cannot be inferred from an earlier allowed stage. Permission to
+  draft is not permission to commit, deliver, publish, submit, or deploy.
 
 ## Privacy checks [CUSTOMIZE]
 
@@ -132,7 +154,9 @@ Approval-list item:
 Final verdict:
 
     GATE | GO | NO-GO | CONDITIONAL
-    scope=<artifact/diff/action> | residual-risk=<summary>
+    scope=<artifact/diff/action> | allows=<stage list or none>
+    blocks=<stage list or none> | conditions=<exact conditions or none>
+    residual-risk=<summary>
     pending-approvals=<count> | blocked-items=<count>
 
 ## Checkpointing and resume
@@ -153,6 +177,10 @@ Checkpoint unit: one reviewed claim, file, action, or risk item.
 - [ ] Required controls have an owner and implemented artifact.
 - [ ] Residual risk and unassessable areas are explicit.
 - [ ] Final review used the actual diff/artifact/action.
+- [ ] The verdict names exact allowed and blocked lifecycle stages.
+- [ ] A CONDITIONAL verdict ties every blocked stage to a specific condition.
+- [ ] No unresolved blocked material was written under a broader drafting
+      allowance.
 - [ ] The gate did not rewrite another role's work.
 
 ## Escalation triggers
@@ -175,6 +203,8 @@ Escalate to the named human owner or qualified counsel when:
 - Do not expose restricted source text in the gate report.
 - Do not treat an empty approval list as permission to skip the gate; record the
   empty result explicitly.
+- Do not use a CONDITIONAL verdict without exact `allows`, `blocks`, and
+  `conditions` fields.
 - Do not authorize an external or reserved decision beyond the role's authority.
 
 ## Model and resources

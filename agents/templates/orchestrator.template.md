@@ -95,6 +95,8 @@ Before dispatch:
   availability.
 - Verify prerequisite artifacts exist before routing the next stage.
 - Give each worker a minimal context packet and an exact output path.
+- When adopting shared policy, require a role-coverage table and update every
+  relevant role guide; root guidance alone is not role implementation.
 
 ### 3. Schedule safely
 
@@ -164,6 +166,8 @@ Require:
 
 - [ ] Every planned write has one owner.
 - [ ] Every completed role has a durable output or read-only handoff.
+- [ ] Every accepted multi-agent policy has explicit coverage in each relevant
+      role guide for ownership, checkpoints, handoffs, verdicts, and model tier.
 - [ ] Prerequisite and approval gates are evidenced.
 - [ ] No unresolved high-risk item is hidden.
 - [ ] Privacy and external-action boundaries were respected.

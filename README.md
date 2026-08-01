@@ -15,30 +15,41 @@ Example:
 
     cp AGENTS.template.md /path/to/project/AGENTS.md
 
+## Improve an existing repository
+
+Use [ADOPTION.md](ADOPTION.md) when a future agent should compare an existing
+repository with the current `Agent-Template/main` guidance.
+
+The workflow is audit-first and practice-based. It records the exact template
+and local commits, writes an incremental adoption matrix, preserves stricter or
+project-specific rules, and proposes exact changes before editing local
+`AGENTS.md` or `CLAUDE.md`. Authorized changes are made minimally on a feature
+branch, with `AGENTS.md` updated before its tool-specific adapters.
+
 ## Included sub-agent templates
 
-Reusable role guides live under [.agents/templates/](.agents/templates/). Start
+Reusable role guides live under [agents/templates/](agents/templates/). Start
 with the smallest team that has distinct owned outputs.
 
 | Role | Best used for |
 | --- | --- |
-| [Role skeleton](.agents/templates/role-skeleton.template.md) | A project-specific specialist that does not fit a starter role |
-| [Orchestrator](.agents/templates/orchestrator.template.md) | Routing, prerequisite gates, user questions, cross-file validation, and commits |
-| [Researcher](.agents/templates/researcher.template.md) | Bounded, source-backed research written one completed question at a time |
-| [Writer / Implementer](.agents/templates/writer-implementer.template.md) | Producing one approved prose artifact, document, code surface, or directly owned test |
-| [Reviewer / Critic](.agents/templates/reviewer-critic.template.md) | Independent, anchored findings without modifying the artifact |
-| [Validator / Auditor](.agents/templates/validator-auditor.template.md) | Reproducible PASS, FAIL, or NOT ASSESSABLE exit gates |
-| [Privacy / Risk Gate](.agents/templates/privacy-risk-gate.template.md) | Pre-plan and final-diff veto for sensitive or high-risk work |
+| [Role skeleton](agents/templates/role-skeleton.template.md) | A project-specific specialist that does not fit a starter role |
+| [Orchestrator](agents/templates/orchestrator.template.md) | Routing, prerequisite gates, user questions, cross-file validation, and commits |
+| [Researcher](agents/templates/researcher.template.md) | Bounded, source-backed research written one completed question at a time |
+| [Writer / Implementer](agents/templates/writer-implementer.template.md) | Producing one approved prose artifact, document, code surface, or directly owned test |
+| [Reviewer / Critic](agents/templates/reviewer-critic.template.md) | Independent, anchored findings without modifying the artifact |
+| [Validator / Auditor](agents/templates/validator-auditor.template.md) | Reproducible PASS, FAIL, NOT ASSESSABLE, or NOT REQUIRED gate results |
+| [Privacy / Risk Gate](agents/templates/privacy-risk-gate.template.md) | Pre-plan and final-diff veto for sensitive or high-risk work |
 
-The [.agents selection guide](.agents/README.md) explains when each role earns
+The [agents selection guide](agents/README.md) explains when each role earns
 its place, common team shapes, handoff formats, sequencing, runtime adapters, and
 degraded-mode behavior.
 
 Example:
 
-    mkdir -p /path/to/project/.agents
-    cp .agents/templates/orchestrator.template.md /path/to/project/.agents/orchestrator.md
-    cp .agents/templates/researcher.template.md /path/to/project/.agents/researcher.md
+    mkdir -p /path/to/project/agents
+    cp agents/templates/orchestrator.template.md /path/to/project/agents/orchestrator.md
+    cp agents/templates/researcher.template.md /path/to/project/agents/researcher.md
 
 ## What the template carries forward
 
@@ -57,6 +68,18 @@ Example:
   and independent validation for high-risk filesystem changes.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
+
+## Validate the template
+
+Run the same documentation check used by CI:
+
+    python3 scripts/check_template_docs.py
+
+The check resolves relative Markdown links with exact case, confirms the active
+visible `agents/` template tree, rejects doubled separators and unapproved hidden
+agent-folder references, and adjudicates intentional `.agents/` discussion
+through explicit approved exceptions rather than treating every scanner match
+as a failure.
 
 ## Review basis
 
