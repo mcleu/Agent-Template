@@ -35,9 +35,14 @@ silently choosing one.
 
 ## Required result
 
-Produce a durable audit at the path selected by local governance, normally:
+Produce a durable audit at the path selected by local governance. For a new
+repository, the recommended default is:
 
     agents/template-adoption.md
+
+For an existing repository, keep its established role-guide directory—whether
+`agents/`, `.agents/`, or another governed path—unless the comparison identifies
+a demonstrated interoperability problem or the user chooses a migration.
 
 The audit must identify:
 
@@ -59,9 +64,9 @@ Before retrieving or comparing the template:
 
 1. Read the local root `AGENTS.md` and every more-specific `AGENTS.md` governing
    files that may change.
-2. Read the complete local `CLAUDE.md` files and relevant visible `agents/`,
-   legacy `.agents/`, `.claude/`, or equivalent role/runtime guidance one or two
-   useful layers deep.
+2. Read the complete local `CLAUDE.md` files and relevant `agents/`, `.agents/`,
+   `.claude/`, or equivalent role/runtime guidance one or two useful layers
+   deep.
 3. Inspect the current branch, worktree status, upstream, remotes, and worktrees.
 4. Record the local `HEAD` commit and whether the working tree contains unrelated
    changes.
@@ -88,9 +93,13 @@ Exclude dependency, generated, archive, and vendored documentation unless it is
 an intentional source of project policy. Record exclusions that could otherwise
 be mistaken for authored guidance.
 
-If the local repository still uses `.agents/`, record it as a legacy path and
-propose a separate, reference-complete rename to visible `agents/`. Do not create
-both active folders or move it during audit-only work.
+`Agent-Template` recommends visible `agents/` for new repositories. An existing
+`.agents/` directory is not inherently stale or defective. Classify its retention
+as `KEEP_LOCAL` when it works with local tooling and conventions. Use
+`NEEDS_DECISION` when visibility is a user preference or when a rename has
+meaningful migration cost. Propose a reference-complete rename only when there is
+a demonstrated interoperability problem or explicit authorization; never create
+two competing active role-guide directories.
 
 ## 2. Obtain an identifiable template snapshot
 
@@ -169,7 +178,7 @@ Use one of these states:
 Never copy `[CUSTOMIZE]`, example paths, model names, commands, branch names, or
 optional modules without resolving them against the actual repository.
 
-Use a matrix like this in `agents/template-adoption.md`:
+Use a matrix like this in the selected audit file:
 
 | ID | Practice | Template evidence | Local evidence | State | Proposed target | Rationale / risk |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -190,6 +199,27 @@ After the matrix is complete:
 6. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
 7. State the smallest coherent implementation batch.
 
+### Require role-guide coverage
+
+Do not treat a root `AGENTS.md` change as automatically adopted by sub-agents.
+For every accepted practice that affects multi-agent behavior, identify each
+relevant role and confirm that its own guide makes the behavior operational.
+
+Add a role-coverage table to the audit:
+
+| Practice ID | Role | Guide path | Ownership | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [ID] | [role] | [path] | explicit/missing | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
+
+- `covered` requires explicit ownership, checkpointing, handoff, applicable
+  verdict/gate semantics, and model-tier guidance in the role guide itself.
+- Use `not-required` only when the practice or field genuinely does not apply to
+  that role, and record why.
+- A missing or implicit field is a `gap`, not inherited coverage.
+- Include affected role-guide edits in the implementation batch or defer the
+  practice explicitly. Do not declare adoption complete while relevant role
+  gaps remain.
+
 In audit-only mode, stop here and give the user the durable report path, the
 recommended first batch, and one focused question if a material decision is
 required. Do not quietly turn an audit into a cross-repository rewrite.
@@ -203,13 +233,14 @@ When implementation is explicitly authorized:
    authoritative trunk.
 3. Update the canonical local policy first, normally the root `AGENTS.md`.
 4. Update nested `AGENTS.md` files only when their scoped behavior changes.
-5. Update `CLAUDE.md` last so it points to the canonical policy and retains only
+5. Update every relevant role guide identified by the role-coverage table.
+6. Update `CLAUDE.md` last so it points to the canonical policy and retains only
    genuinely Claude-specific runtime instructions.
-6. Make the smallest coherent diff. Preserve stricter local rules and verified
+7. Make the smallest coherent diff. Preserve stricter local rules and verified
    project-specific commands, paths, schemas, role names, and approval gates.
-7. Keep the adoption matrix current as each item is implemented, deferred, or
-   rejected.
-8. Commit logical documentation changes, push the branch, and open a pull
+8. Keep the adoption and role-coverage matrices current as each item is
+   implemented, deferred, or rejected.
+9. Commit logical documentation changes, push the branch, and open a pull
    request when a remote exists. Do not merge the pull request.
 
 Do not replace a mature local `AGENTS.md` wholesale with the template. Merge
@@ -234,6 +265,26 @@ If the local repository currently treats `CLAUDE.md` as canonical, record that
 fact and propose the migration separately. Do not reverse authority merely to
 match the template.
 
+### Close the audit without self-reference
+
+Do not require an audit file to contain the commit or CI result of the commit
+that contains that same metadata.
+
+When commit-level traceability is required:
+
+1. Create the implementation commit containing the approved policy and role
+   changes.
+2. Observe the checks for that implementation commit.
+3. Create one audit-closure commit that records the implementation commit and
+   its observed CI/check state in the durable audit.
+4. Report the audit-closure commit and its own CI/check state in the task handoff
+   or pull request. Do not amend the audit again merely to record its closure
+   commit; that would recreate the loop.
+
+If local policy allows the audit and implementation to share one commit, record
+the base commit and final diff in the audit, then report the resulting commit and
+CI externally in the handoff.
+
 ## 8. Validate the adopted guidance
 
 After the final edit:
@@ -245,13 +296,28 @@ After the final edit:
 - Check that no local privacy, safety, evidence, approval, or domain rule was
   weakened or dropped.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
+- Confirm the role-coverage table has no unexplained gaps for accepted
+  multi-agent practices.
+- Verify trunk, deployment target, hosting/runtime, CI, and release claims
+  against actual remotes, workflow files, deployment configuration, and other
+  authoritative project files. Names and prior prose are not sufficient proof.
+- Treat search, lint, link, case, secret, and other scanner matches as
+  candidates. Check each candidate against the authoritative file, path
+  semantics, and documented approved exceptions before marking it a failure.
+- Record candidate disposition as confirmed defect, approved exception, false
+  positive, or unresolved. An unresolved required candidate prevents a pass.
 - Run documentation lint, link checks, policy tests, branch guards, and privacy
   checks that the local repository provides.
 - Run `git diff --check`, inspect the complete diff, stage exact files, and
   inspect the staged diff before committing.
-- Record every check with PASS, FAIL, or NOT ASSESSABLE. A skipped required
-  check is not a pass.
-- Record the final local commit, branch, pull request, and CI state in the audit.
+- Record every check with `PASS`, `FAIL`, `NOT ASSESSABLE`, or `NOT REQUIRED`.
+  Use `NOT ASSESSABLE` only when a required gate cannot be evaluated. Use
+  `NOT REQUIRED` only when the gate is outside the approved change scope, with a
+  reason. A skipped required check is not a pass.
+- Record the implementation commit and its observed CI/check state in the audit
+  through the closure procedure above. Report the audit-closure commit, branch,
+  pull request, and final CI state in the handoff or PR rather than recursively
+  editing the audit.
 
 An independent Reviewer or Validator is appropriate when the adoption changes
 privacy, destructive-action, publication, regulated, production, or other
@@ -262,11 +328,13 @@ high-stakes controls.
 Return a concise, evidence-backed summary:
 
     TEMPLATE | repo=mcleu/Agent-Template | branch=main | commit=<sha> | checked=<date>
-    LOCAL | repo=<path or URL> | branch=<branch> | commit=<sha>
+    LOCAL | repo=<path or URL> | branch=<branch> | base-commit=<sha>
     AUDIT | path=<durable comparison report>
     RESULT | present=<n> | adopt=<n> | adapt=<n> | keep-local=<n> | decision=<n> | not-applicable=<n> | reject=<n>
+    IMPLEMENTATION | commit=<sha> | ci=<observed state>
+    AUDIT-CLOSURE | commit=<sha or none> | ci=<observed state or pending>
     CHANGE | <path> | <implemented or proposed practice IDs>
-    CHECK | <name> | pass | fail | not-assessable | <evidence>
+    CHECK | <name> | pass | fail | not-assessable | not-required | <evidence or reason>
     OPEN | <decision, risk, approval, unknown, or none>
     NEXT | <smallest safe next action>
 
@@ -277,14 +345,16 @@ result.
 ## Ready-to-use instruction for a future agent
 
     Compare this repository's authored AGENTS.md, CLAUDE.md, and relevant
-    agents/, legacy .agents/, and .claude/ guidance against the current main
+    agents/, .agents/, and .claude/ guidance against the current main
     branch of https://github.com/mcleu/Agent-Template using ADOPTION.md from that
     repository. Start audit-only. Read the local rules in full, identify the
     exact template and local commits, and write the practice-by-practice matrix
-    incrementally to agents/template-adoption.md (or the locally governed
-    equivalent). Preserve stricter and project-specific rules. Do not edit
-    guidance until the comparison and proposed first batch are durable and I
-    have authorized implementation. If implementation is authorized, use a
-    feature branch, make minimal changes to canonical AGENTS.md first and
-    CLAUDE.md last, validate the full and staged diffs, commit, push, open a PR,
-    and never merge it.
+    incrementally to the repository's locally governed role-guide directory.
+    Preserve stricter and project-specific rules. Add a role-coverage table for
+    every accepted multi-agent practice. Do not edit guidance until the
+    comparison and proposed first batch are durable and I have authorized
+    implementation. If implementation is authorized, use a feature branch,
+    make minimal changes to canonical AGENTS.md first, relevant role guides
+    next, and CLAUDE.md last. Validate reality claims and scanner candidates,
+    close commit metadata without self-reference, commit, push, open a PR, and
+    never merge it.

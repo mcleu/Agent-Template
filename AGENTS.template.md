@@ -418,6 +418,15 @@ document libraries:
   validate with real customer or personal records.
 - If an external service is unavailable, verify local behavior and state the
   unverified integration plainly.
+- Verify trunk, deployment target, hosting/runtime, CI, and release claims
+  against actual remotes, workflow files, deployment configuration, and live
+  state. Names and prior prose are not proof of current reality.
+- Treat scanner matches as candidates, not automatic failures. Adjudicate link,
+  path, case, secret, policy, and lint candidates against authoritative files,
+  path semantics, and documented approved exceptions. Record confirmed defect,
+  approved exception, false positive, or unresolved.
+- Use NOT ASSESSABLE when a required gate cannot be evaluated. Use NOT REQUIRED
+  only when the gate is outside the approved change scope and record why.
 - Render and visually inspect documents, PDFs, slides, spreadsheets, images,
   and responsive UI when layout matters. A successful build or page count is
   not visual validation.
@@ -457,6 +466,12 @@ Every role guide should specify:
 - Collaboration handoffs and structured return format.
 - Escalation triggers and decisions reserved for humans.
 - Quality gates, prohibited actions, and suitable model/resource tier.
+
+When implementing a policy adoption or governance change, maintain a
+role-coverage table for every relevant role. Confirm that ownership,
+checkpointing, handoff format, applicable verdict/gate semantics, and model tier
+are explicit in the role guide itself. Root `AGENTS.md` language does not fill an
+implicit role-guide gap.
 
 Prefer current capability tiers over dated model IDs:
 

@@ -74,7 +74,9 @@ Every project role must:
 8. Run changed artifacts through full review; scan unchanged artifacts only for
    stale cross-references.
 9. Apply privacy/risk and independent validation gates where required.
-10. Commit only validated files and report the actual branch, checks, and
+10. For adopted multi-agent policy, verify every relevant role guide explicitly
+    covers ownership, checkpoints, handoffs, applicable verdicts, and model tier.
+11. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -99,8 +101,12 @@ Suggested review finding:
 
 Suggested validator verdict:
 
-    VERDICT | PASS | FAIL | NOT ASSESSABLE
-    GATE | <criterion> | pass|fail|not-assessable | evidence=<path, command, result>
+    VERDICT | PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
+    GATE | <criterion> | pass|fail|not-assessable|not-required
+    evidence=<path, command, result, or scope reason>
+
+Use NOT ASSESSABLE when a required gate cannot be evaluated. Use NOT REQUIRED
+only when the gate is outside the approved change scope.
 
 Machine-consumable summaries should be capped to the most material findings.
 The durable file may contain the complete analysis.
@@ -143,6 +149,8 @@ metadata and tool/model declarations that runtime needs.
 - [ ] Define the role's checkpoint unit.
 - [ ] Fill the may-read, may-write, and must-not-write boundaries.
 - [ ] Define prerequisite and completion gates.
+- [ ] Define formal verdict semantics, or state why verdicts are not required
+      for this role.
 - [ ] Add project-specific privacy and external-action restrictions.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.

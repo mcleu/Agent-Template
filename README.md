@@ -38,7 +38,7 @@ with the smallest team that has distinct owned outputs.
 | [Researcher](agents/templates/researcher.template.md) | Bounded, source-backed research written one completed question at a time |
 | [Writer / Implementer](agents/templates/writer-implementer.template.md) | Producing one approved prose artifact, document, code surface, or directly owned test |
 | [Reviewer / Critic](agents/templates/reviewer-critic.template.md) | Independent, anchored findings without modifying the artifact |
-| [Validator / Auditor](agents/templates/validator-auditor.template.md) | Reproducible PASS, FAIL, or NOT ASSESSABLE exit gates |
+| [Validator / Auditor](agents/templates/validator-auditor.template.md) | Reproducible PASS, FAIL, NOT ASSESSABLE, or NOT REQUIRED gate results |
 | [Privacy / Risk Gate](agents/templates/privacy-risk-gate.template.md) | Pre-plan and final-diff veto for sensitive or high-risk work |
 
 The [agents selection guide](agents/README.md) explains when each role earns
@@ -68,6 +68,18 @@ Example:
   and independent validation for high-risk filesystem changes.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
+
+## Validate the template
+
+Run the same documentation check used by CI:
+
+    python3 scripts/check_template_docs.py
+
+The check resolves relative Markdown links with exact case, confirms the active
+visible `agents/` template tree, rejects doubled separators and unapproved hidden
+agent-folder references, and adjudicates intentional `.agents/` discussion
+through explicit approved exceptions rather than treating every scanner match
+as a failure.
 
 ## Review basis
 
