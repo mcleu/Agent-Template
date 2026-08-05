@@ -30,6 +30,16 @@ APPROVED_HIDDEN_AGENT_REFERENCES = {
     ),
 }
 
+REQUIRED_SCAFFOLD_PATHS = (
+    "AGENTS.template.md",
+    "VERSIONING.template.md",
+    "schemas/README.md",
+    "schemas/schema.template.md",
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    "agents/README.md",
+    "agents/templates/schema-version-steward.template.md",
+)
+
 
 def markdown_files() -> list[Path]:
     return sorted(
@@ -154,11 +164,23 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
     return candidates, approved, failures
 
 
+def check_required_scaffolds() -> tuple[int, list[str]]:
+    failures: list[str] = []
+
+    for relative_path in REQUIRED_SCAFFOLD_PATHS:
+        path = ROOT / relative_path
+        if not path.is_file():
+            failures.append(f"{relative_path}: required scaffold file is missing")
+
+    return len(REQUIRED_SCAFFOLD_PATHS), failures
+
+
 def main() -> int:
     files = markdown_files()
     link_count, link_failures = check_links(files)
     path_candidates, approved_candidates, path_failures = check_agent_paths(files)
-    failures = link_failures + path_failures
+    scaffold_count, scaffold_failures = check_required_scaffolds()
+    failures = link_failures + path_failures + scaffold_failures
 
     print(f"Markdown files scanned: {len(files)}")
     print(f"Relative Markdown links resolved: {link_count}")
@@ -166,6 +188,8 @@ def main() -> int:
         "Hidden agent-path candidates: "
         f"{path_candidates} ({approved_candidates} approved exceptions)"
     )
+    present_count = scaffold_count - len(scaffold_failures)
+    print(f"Required scaffold files present: {present_count}/{scaffold_count}")
 
     if failures:
         print("\nDocumentation validation failed:", file=sys.stderr)

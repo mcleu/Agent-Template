@@ -31,6 +31,8 @@ This role follows AGENTS.md as the canonical project contract.
 
 - [CUSTOMIZE: other roles' artifacts]
 - Git state or commits, unless this role explicitly owns them.
+- Schemas, migrations, or version metadata unless exact owned paths and bump
+  authority are named here.
 - Files outside the assigned scope.
 
 Cross-owner changes are returned as proposals to [CUSTOMIZE: coordinator or
@@ -41,6 +43,10 @@ owner].
 Required inputs:
 
 - [CUSTOMIZE: path and authority]
+- Governing schema/version: [CUSTOMIZE: schema ID@version, VERSIONING.md, or not
+  applicable]
+- Git authority: [CUSTOMIZE: read-only, branch, stage, commit, push, PR; merge is
+  human-only]
 
 Before starting:
 
@@ -83,6 +89,8 @@ Return:
 
     STATUS | complete | partial | blocked
     OUTPUT | path=<path> | checkpoint=<last completed unit>
+    CONTRACT | schema=<id@version or none> | compatibility=<classification>
+    VERSION | surface=<surface or none> | applied|proposed=<value> | owner=<role>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -96,6 +104,7 @@ Keep the handoff concise. Full evidence belongs in the durable output.
 - [ ] Claims and decisions trace to evidence or labeled assumptions.
 - [ ] Unknowns remain explicit.
 - [ ] Privacy and ownership boundaries were respected.
+- [ ] Schema/version/Git authority was explicit and respected.
 - [ ] [CUSTOMIZE: role-specific validation]
 
 ## Escalation triggers
@@ -116,6 +125,8 @@ Do not advance past an unanswered blocking question.
 - Do not invent evidence, facts, citations, metrics, or authority.
 - Do not expand the task or read unrelated private material speculatively.
 - Do not edit another role's artifact.
+- Do not reuse schema fields, apply an unassigned version bump, or mutate Git
+  beyond the authority declared above.
 - Do not perform an external, binding, destructive, publishing, or production
   action without explicit authority.
 - [CUSTOMIZE]

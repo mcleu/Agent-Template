@@ -146,12 +146,14 @@ these practice families:
 | --- | --- |
 | Instruction hierarchy | Is the canonical policy file clear? Do nested rules have defined scope and precedence? |
 | Session and Git workflow | Are preflight, trunk, feature-branch, commit, push, PR, CI, and no-agent-merge rules explicit and accurate? |
+| Git authority and traceability | Is it explicit who may branch, stage, commit, push, open a PR, tag, release, or merge? Can a change be traced from decision through reviewed revision and release? |
 | Checkpointing and resume | Is each natural unit written durably? Can interrupted work resume from the first unfinished unit? |
 | Folder and artifact ownership | Are source, work state, research, templates, generated output, private data, and archives separated? Does each artifact have one writer? |
 | Evidence and research | Are sources, URLs, check dates, confidence, assumptions, unknowns, and source-of-truth precedence preserved? |
 | Privacy and publication | Are private inputs, public output, synthetic examples, secret/PII scans, approval gates, and publication surfaces defined? |
 | Planning and ambiguity | Are prerequisite gates, decision owners, approval boundaries, reversibility, and one-question-at-a-time escalation clear? |
 | Multi-agent operation | Are roles bounded by exact reads/writes, checkpoints, handoffs, model tiers, and serialized overlapping writes? |
+| Schemas and versioning | Are canonical contracts, stable IDs, versions, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority explicit? Are schema, release, deliverable, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
@@ -207,12 +209,13 @@ relevant role and confirm that its own guide makes the behavior operational.
 
 Add a role-coverage table to the audit:
 
-| Practice ID | Role | Guide path | Ownership | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [ID] | [role] | [path] | explicit/missing | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
+| Practice ID | Role | Guide path | Ownership | Schema/version authority | Git authority | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [ID] | [role] | [path] | explicit/missing | explicit/missing/not-required | explicit/missing/not-required | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
 
 - `covered` requires explicit ownership, checkpointing, handoff, applicable
-  verdict/gate semantics, and model-tier guidance in the role guide itself.
+  schema/version and Git authority when applicable, verdict/gate semantics, and
+  model-tier guidance in the role guide itself.
 - Use `not-required` only when the practice or field genuinely does not apply to
   that role, and record why.
 - A missing or implicit field is a `gap`, not inherited coverage.
@@ -298,6 +301,11 @@ After the final edit:
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
+- Confirm each affected schema has one authority, stable ID/version, verified
+  producers/consumers, compatibility classification, migration path when
+  required, and an authorized bump owner.
+- Confirm schema, product/release, deliverable, migration/manifest, and Git
+  revision identifiers are not conflated.
 - Verify trunk, deployment target, hosting/runtime, CI, and release claims
   against actual remotes, workflow files, deployment configuration, and other
   authoritative project files. Names and prior prose are not sufficient proof.

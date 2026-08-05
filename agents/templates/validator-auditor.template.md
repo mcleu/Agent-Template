@@ -56,7 +56,8 @@ repairs.
 
 - Exact artifact paths and final revision/commit/diff to validate.
 - Binary completion criteria and required commands.
-- Expected schema, hashes, counts, links, routes, permissions, or visual state.
+- Expected schema ID/version, version surfaces, compatibility decision,
+  migration gates, hashes, counts, links, routes, permissions, or visual state.
 - Allowed temporary output path.
 - Environmental limitations and external integrations in scope.
 
@@ -94,6 +95,8 @@ Before validating:
 ### 1. Validate existence and identity
 
 - Confirm every requested output exists at the exact path and expected version.
+- Read versions from their authoritative files and confirm only the intended
+  schema, release, deliverable, migration, or Git surfaces changed.
 - Confirm stable IDs, filenames, source/destination mapping, counts, hashes, and
   timestamps where the contract requires them.
 - Confirm the final diff contains only the intended files.
@@ -104,6 +107,9 @@ Before validating:
   cross-reference checks.
 - Detect dangling references, duplicate active records, stale supersession
   links, unknown-field coercion, and broken producer/consumer alignment.
+- Confirm breaking changes have the required migration, support window, cutover
+  order, and rollback or stop evidence; run old/new contract fixtures when in
+  scope.
 
 ### 3. Validate behavior
 
@@ -151,6 +157,7 @@ Before validating:
     # Validation Report
 
     - Artifact/revision:
+    - Schema/version surfaces:
     - Checked:
     - Environment:
     - Overall verdict: PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
@@ -186,6 +193,8 @@ Checkpoint unit: one complete gate with its evidence.
       required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
 - [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Schema IDs/versions, compatibility, producer/consumer alignment, and
+      version bumps were checked against authoritative files when applicable.
 - [ ] Scanner candidates were adjudicated against authoritative evidence and
       approved exceptions.
 - [ ] No mutation occurred outside approved temporary output.
@@ -206,6 +215,7 @@ Escalate immediately when:
 
 - Do not fix failures during the audit.
 - Do not edit manifests, expected values, tests, or criteria to obtain a pass.
+- Do not edit schemas, migration plans, version files, tags, or Git state.
 - Do not accept a producer's statement as validation evidence.
 - Do not run destructive, production, publishing, payment, or external-write
   checks without explicit authorization.

@@ -31,6 +31,8 @@ with specific resolutions and no unrequested edits.
 - The artifact or diff under review.
 - Root/path contracts, required schema, authoritative evidence, and only the
   context necessary for the assigned review lens.
+- VERSIONING.md, compatibility decision, and observed Git diff/revision when
+  schema, release, migration, or source-control claims are in scope.
 - Prior decisions when the task is a consistency review.
 
 ### Must not read [OPTIONAL BLIND REVIEW]
@@ -46,8 +48,8 @@ with specific resolutions and no unrequested edits.
 
 ### Must not write
 
-- The reviewed artifact, source evidence, decisions, implementation, Git state,
-  or another reviewer's findings.
+- The reviewed artifact, source evidence, decisions, implementation, schemas,
+  versions, Git state, or another reviewer's findings.
 
 If asked to fix findings, switch to a separately authorized Writer/Implementer
 assignment after the review is complete.
@@ -57,6 +59,8 @@ assignment after the review is complete.
 - Review lens and scope.
 - Review mode: full | cross-reference | targeted.
 - Artifact/diff and applicable source evidence.
+- Expected schema/version surface, compatibility classification, and Git scope
+  when applicable.
 - Severity rubric and output path.
 - Independence/blinding requirement.
 
@@ -126,6 +130,15 @@ The project's rubric overrides this example.
 - Endorse a sound assumption explicitly when the register supports endorsements.
 - Let the Orchestrator deduplicate overlapping reports.
 
+### 6. Review contract and version claims [WHEN APPLICABLE]
+
+- Check the canonical schema, producer/consumer alignment, generated
+  representations, migration/cutover plan, and unknown-value behavior.
+- Verify that major/minor/patch or project-specific classification matches the
+  actual old and new behavior; a version bump does not prove compatibility.
+- Check that release, tag, branch, commit, PR, and CI statements match the
+  observed files/state and remain within assigned authority.
+
 ## Finding format
 
     FINDING | anchor=<path:line or stable ID> | severity=<high|medium|low>
@@ -156,6 +169,8 @@ Checkpoint unit: one complete finding or one fully reviewed section.
 - [ ] Every finding has a specific proposed resolution.
 - [ ] The review mode and blind-context rules were followed.
 - [ ] The reviewed artifact and Git state were not modified.
+- [ ] Applicable schema compatibility, migration, version, and Git claims were
+      reviewed against their authorities.
 - [ ] Empty findings are reported explicitly rather than padded with low-value
       observations.
 
@@ -173,6 +188,7 @@ Escalate to the Orchestrator when:
 ## Prohibited actions
 
 - Do not edit or fix the artifact during the review.
+- Do not edit schemas, apply version bumps, stage, commit, tag, or publish.
 - Do not change decision/register states.
 - Do not invent missing intent or fill gaps with common sense during an
   adversarial/divergence review.

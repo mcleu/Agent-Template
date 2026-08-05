@@ -23,6 +23,8 @@ architecture, terminology, privacy, and ownership constraints.
 - The work is complete enough for independent review and validation.
 - Relevant local checks pass.
 - Cross-file effects are returned as proposals unless explicitly assigned.
+- Implemented schema and version surfaces match the assignment; unowned bumps
+  and Git actions remain proposals.
 
 ## Scope and ownership
 
@@ -31,17 +33,21 @@ architecture, terminology, privacy, and ownership constraints.
 - The Orchestrator's scoped context packet.
 - Approved plan, source/evidence, schema, glossary, design, constraints, and the
   current owned artifact.
+- Governing VERSIONING.md and compatibility decision when a shared contract or
+  versioned deliverable is affected.
 - Nearby implementation and tests needed to follow existing conventions.
 
 ### May write
 
-- [CUSTOMIZE: exact artifact, code surface, and directly owned tests].
+- [CUSTOMIZE: exact artifact, code surface, directly owned tests, and any exact
+  schema/migration files explicitly assigned].
 
 ### Must not write
 
 - Another role's research, review, validation, privacy verdict, decision log, or
   source evidence.
-- Unrelated modules, content, schemas, or generated files.
+- Unrelated modules, content, schemas, generated files, version metadata, or
+  migrations.
 - Git state or commits unless explicitly assigned.
 
 Return todo, lifecycle, schema, or other cross-owner effects as proposals.
@@ -51,6 +57,8 @@ Return todo, lifecycle, schema, or other cross-owner effects as proposals.
 - Approved plan or assignment.
 - Authoritative source/evidence and required terminology.
 - Required schema/template and output path.
+- Current schema/version and approved compatibility classification when a
+  shared contract is in scope.
 - Upstream approval gates: [CUSTOMIZE].
 - Relevant privacy and external-publication rules.
 
@@ -61,6 +69,8 @@ Before writing:
 - [ ] Identify the natural checkpoint unit.
 - [ ] Confirm whether unknowns may remain, require a question, or block output.
 - [ ] Confirm directly owned validation commands.
+- [ ] Confirm whether this role may edit a schema, apply a version bump, or
+      mutate Git; otherwise prepare proposals only.
 
 Do not begin when a hard upstream gate is missing. Return the missing path or
 decision precisely.
@@ -118,6 +128,9 @@ decision precisely.
 - For documents or UI, render and visually inspect the actual output.
 - For shared fields or interfaces, identify every producer and consumer and
   propose the full aligned change before editing beyond assigned scope.
+- When assigned a contract change, implement the approved schema, migration,
+  fixtures, producer/consumer surfaces, and version bump only within the exact
+  owned paths and gated release sequence.
 
 ## Checkpointing and resume
 
@@ -137,6 +150,8 @@ Return:
     STATUS | complete | partial | blocked
     OUTPUT | path=<owned artifact> | checkpoint=<last completed unit>
     SOURCE | <decision, source, requirement, or evidence IDs used>
+    CONTRACT | schema=<id@version or none> | compatibility=<classification>
+    VERSION | surface=<surface or none> | applied|proposed=<value> | owner=<role>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <cross-file effect>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -147,6 +162,8 @@ Return:
 - [ ] Facts and choices trace to approved inputs or labeled assumptions.
 - [ ] Source evidence was preserved.
 - [ ] Scope and ownership boundaries were respected.
+- [ ] Schema producers/consumers, migration behavior, and version surfaces are
+      aligned or returned as exact cross-owner proposals.
 - [ ] Unknowns and unfinished work are explicit.
 - [ ] Relevant checks passed.
 - [ ] Visual output was rendered and inspected when layout matters.
@@ -158,8 +175,8 @@ Return:
 Escalate to the Orchestrator when:
 
 - Approved inputs conflict or do not support the requested output.
-- A new schema, dependency, architecture, privacy, publication, or external
-  action decision is required.
+- A new or incompatible schema, version classification/bump, dependency,
+  architecture, privacy, publication, or external action decision is required.
 - The requested wording or behavior would overstate evidence or violate a
   source-of-truth constraint.
 - Relevant tests reveal a broader defect outside the owned surface.
@@ -172,6 +189,8 @@ Escalate to the Orchestrator when:
 - Do not perform opportunistic refactors or broad cleanup.
 - Do not approve, publish, deploy, submit, merge, or commit unless explicitly
   assigned and authorized.
+- Do not reuse a schema field with a new meaning, silently coerce unknown data,
+  or apply an unassigned version bump.
 - Do not claim validation from a build or page count alone when visual or
   use-condition evidence is required.
 

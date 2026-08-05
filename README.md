@@ -7,13 +7,23 @@ A reusable, tool-neutral operating-contract template for future projects.
 1. Copy AGENTS.template.md into a new repository as AGENTS.md.
 2. Replace every [CUSTOMIZE] field.
 3. Remove optional sections that do not apply.
-4. Keep AGENTS.md canonical. Make CLAUDE.md and other runtime entry files thin
+4. Copy VERSIONING.template.md to VERSIONING.md when the project has schemas,
+   releases, migrations, or versioned deliverables; customize its version
+   surfaces and owners.
+5. Copy schemas/schema.template.md for each shared data or interface contract
+   and register it in schemas/README.md.
+6. Keep AGENTS.md canonical. Make CLAUDE.md and other runtime entry files thin
    pointers rather than divergent copies.
-5. Commit the customized contract on a feature branch and review it like code.
+7. Commit the customized contract on a feature branch and review it like code.
+
+The included [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
+keeps schema, version, validation, Git, and human approval evidence visible at
+the review boundary.
 
 Example:
 
     cp AGENTS.template.md /path/to/project/AGENTS.md
+    cp VERSIONING.template.md /path/to/project/VERSIONING.md
 
 ## Improve an existing repository
 
@@ -35,6 +45,7 @@ with the smallest team that has distinct owned outputs.
 | --- | --- |
 | [Role skeleton](agents/templates/role-skeleton.template.md) | A project-specific specialist that does not fit a starter role |
 | [Orchestrator](agents/templates/orchestrator.template.md) | Routing, prerequisite gates, user questions, cross-file validation, and commits |
+| [Schema / Version Steward](agents/templates/schema-version-steward.template.md) | Shared contracts, compatibility, migrations, and version-bump proposals |
 | [Researcher](agents/templates/researcher.template.md) | Bounded, source-backed research written one completed question at a time |
 | [Writer / Implementer](agents/templates/writer-implementer.template.md) | Producing one approved prose artifact, document, code surface, or directly owned test |
 | [Reviewer / Critic](agents/templates/reviewer-critic.template.md) | Independent, anchored findings without modifying the artifact |
@@ -55,6 +66,12 @@ Example:
 
 - Git-first work on feature branches, logical commits, pull requests, CI
   follow-through, and no agent-initiated merge.
+- Distinct schema, release, deliverable, migration, and Git version surfaces
+  with explicit owners, compatibility rules, and traceability.
+- Canonical schema contracts with producer/consumer inventories, synthetic
+  fixtures, migration gates, and generated-drift checks.
+- A pull-request checklist that makes version decisions, checks, release state,
+  and human-only merge authority reviewable.
 - Durable checkpoints after each natural unit and interruption-safe resume.
 - Clear folder boundaries for framework, private input, work state, generated
   output, templates, examples, research, tests, and archives.
@@ -79,7 +96,8 @@ The check resolves relative Markdown links with exact case, confirms the active
 visible `agents/` template tree, rejects doubled separators and unapproved hidden
 agent-folder references, and adjudicates intentional `.agents/` discussion
 through explicit approved exceptions rather than treating every scanner match
-as a failure.
+as a failure. It also requires the schema, versioning, and schema-steward
+scaffold files used by this public template.
 
 ## Review basis
 

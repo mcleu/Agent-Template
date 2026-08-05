@@ -22,6 +22,8 @@ cross-file effects.
 - Every prerequisite, approval gate, and project-specific completion criterion
   has an evidence-backed status.
 - Cross-file effects were validated and applied by their owner.
+- Schema compatibility and affected version surfaces have an evidence-backed
+  classification and an authorized owner.
 - Relevant checks passed or are named as not run with a reason.
 - The final commit contains only validated in-scope files.
 - The handoff states confirmed facts, risks, open work, and explicit unknowns.
@@ -32,7 +34,7 @@ cross-file effects.
 
 - Root and path-specific AGENTS.md files.
 - User request, repository state, source-of-truth files, role guides, plans,
-  decisions, worker outputs, and final diff.
+  decisions, schemas, VERSIONING.md, worker outputs, and final diff.
 - Only the private context needed to assign and validate the task.
 
 ### May write
@@ -56,7 +58,8 @@ independence.
 - Current user outcome and constraints.
 - Root AGENTS.md and relevant scoped contracts.
 - Clean or safely isolated repository/worktree state.
-- [CUSTOMIZE: authoritative trunk, schemas, source records, role roster].
+- [CUSTOMIZE: authoritative trunk, schemas, VERSIONING.md, source records, role
+  roster].
 
 Before dispatch:
 
@@ -64,6 +67,8 @@ Before dispatch:
 - [ ] Update clean remote branches according to project policy.
 - [ ] Identify privacy and external-action boundaries.
 - [ ] Identify the source of truth and definition of done.
+- [ ] Identify affected schema/version surfaces and name the owner authorized to
+      edit or bump each one.
 - [ ] Verify each role's prerequisite files exist.
 - [ ] Assign every write target to one owner.
 
@@ -91,6 +96,8 @@ Before dispatch:
 
 - Use the smallest team that covers the task.
 - Assign one owned artifact or read-only verdict per specialist.
+- Route shared-contract changes through the named Schema/Version Steward or
+  explicitly assign equivalent ownership; never leave compatibility implicit.
 - Match model/resource tier to risk and task complexity after checking current
   availability.
 - Verify prerequisite artifacts exist before routing the next stage.
@@ -111,6 +118,8 @@ Before dispatch:
 - Inspect the actual output, not only the worker's completion message.
 - Check path ownership, structure/schema, privacy, source attribution,
   duplicates/collisions, consistency, and the named checkpoint.
+- Confirm reported schema IDs/versions, compatibility, migration gates, and
+  version proposals against authoritative files.
 - Accept only cross-file proposals supported by the worker's owned artifact.
 - Return invalid work with a precise defect and expected correction.
 
@@ -138,6 +147,8 @@ Before dispatch:
 - Re-read the final changed files and review both unstaged and staged diffs.
 - Stage only validated files, commit one logical change, and push/open a pull
   request when a configured remote and policy require it.
+- Apply version bumps only when this role is the documented bump owner; otherwise
+  preserve the steward's proposal for the authorized owner.
 - Never merge or claim CI, external integration, or publication success that
   was not observed.
 
@@ -157,6 +168,8 @@ Require:
 
     STATUS | complete | partial | blocked
     OUTPUT | path=<path> | checkpoint=<last completed unit>
+    CONTRACT | schema=<id@version or none> | compatibility=<classification>
+    VERSION | surface=<surface or none> | proposal=<bump or none> | owner=<role>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -169,6 +182,8 @@ Require:
 - [ ] Every accepted multi-agent policy has explicit coverage in each relevant
       role guide for ownership, checkpoints, handoffs, verdicts, and model tier.
 - [ ] Prerequisite and approval gates are evidenced.
+- [ ] Schema, migration, version-bump, and Git ownership is explicit where
+      applicable.
 - [ ] No unresolved high-risk item is hidden.
 - [ ] Privacy and external-action boundaries were respected.
 - [ ] Checks and final diff support the completion claim.
@@ -191,6 +206,8 @@ Escalate to the user when:
 - Do not ask the user something safe local evidence or a specialist can answer.
 - Do not edit another role's output without owning a declared degraded fallback.
 - Do not stage private or unrelated files.
+- Do not classify a breaking change as compatible, bump an unassigned version
+  surface, publish a release, tag, force-push, or rewrite shared history.
 - Do not bypass a privacy, risk, validation, or approval gate.
 - Do not merge a pull request.
 

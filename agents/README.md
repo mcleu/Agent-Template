@@ -26,6 +26,7 @@ smallest useful specialist set.
 | --- | --- | --- |
 | [role-skeleton.template.md](templates/role-skeleton.template.md) | Creating a project-specific role not covered below | Must be customized |
 | [orchestrator.template.md](templates/orchestrator.template.md) | Work has prerequisites, multiple owners, cross-file effects, or user decision gates | Coordinator-owned files and commits only |
+| [schema-version-steward.template.md](templates/schema-version-steward.template.md) | Shared schemas, producer/consumer compatibility, migrations, or version decisions require an explicit owner | Canonical contracts and version proposals only |
 | [researcher.template.md](templates/researcher.template.md) | A bounded question needs source-backed investigation | One assigned research file |
 | [writer-implementer.template.md](templates/writer-implementer.template.md) | An approved plan or evidence set must become prose, code, or another artifact | One assigned artifact or code surface |
 | [reviewer-critic.template.md](templates/reviewer-critic.template.md) | Independent critique is needed before acceptance | Findings only; read-only by default |
@@ -37,6 +38,8 @@ Common team shapes:
 - Research task: Orchestrator → Researcher → Validator.
 - Writing task: Orchestrator → Researcher, when needed → Writer → Reviewer.
 - Coding task: Orchestrator → Writer/Implementer → Reviewer → Validator.
+- Shared-contract change: Orchestrator → Schema/Version Steward → affected
+  Writer/Implementers → Reviewer → Validator.
 - Sensitive publication: Orchestrator → Researcher/Writer → Privacy Gate →
   Reviewer/Validator.
 - High-risk migration: Orchestrator → independent inventory/classification →
@@ -60,6 +63,10 @@ Every project role must:
 9. Avoid external or binding actions unless the role and user authorization
    explicitly permit them.
 10. Report blockers, degraded execution, and unverified checks plainly.
+11. Read the governing schema and `VERSIONING.md` when the task affects shared
+    fields, interfaces, migrations, releases, or versioned deliverables.
+12. State whether the role may edit schemas, propose or apply version bumps, and
+    mutate Git. Unassigned authority means proposal-only or read-only.
 
 ## Standard execution sequence
 
@@ -71,12 +78,14 @@ Every project role must:
 5. Run independent read-only work in parallel when it will not create anchoring.
 6. Serialize overlapping writes through the Orchestrator.
 7. Validate each worker result before allowing its cross-file consequences.
-8. Run changed artifacts through full review; scan unchanged artifacts only for
+8. Classify schema compatibility and every affected version surface before
+   shared-contract implementation.
+9. Run changed artifacts through full review; scan unchanged artifacts only for
    stale cross-references.
-9. Apply privacy/risk and independent validation gates where required.
-10. For adopted multi-agent policy, verify every relevant role guide explicitly
+10. Apply privacy/risk and independent validation gates where required.
+11. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model tier.
-11. Commit only validated files and report the actual branch, checks, and
+12. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -88,6 +97,8 @@ Suggested worker handoff:
 
     STATUS | complete | partial | blocked
     OUTPUT | path=<path> | checkpoint=<last completed unit>
+    CONTRACT | schema=<id@version or none> | compatibility=<classification or none>
+    VERSION | surface=<surface or none> | proposal=<bump or none> | owner=<role>
     CHECK | <check name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested cross-file change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -122,6 +133,8 @@ The durable file may contain the complete analysis.
   producer's reported checks.
 - Specialists do not stage or commit unless they own an isolated repository or
   their contract explicitly says otherwise.
+- Schema authors do not implicitly own producer/consumer implementation,
+  release publication, version bumps, or Git integration. Name each authority.
 - If a role fails or cannot run, the Orchestrator may absorb it only when safe,
   must follow its guide, and must report the substitution and reduced
   independence.
@@ -141,6 +154,21 @@ metadata and tool/model declarations that runtime needs.
   only for high-stakes reasoning, adversarial exit gates, or after a failed
   Balanced attempt.
 
+## Schema, version, and Git role coverage
+
+Customize this table whenever a project adopts the roles. `propose` is not
+permission to apply, publish, commit, or merge.
+
+| Role | Schema authority | Version authority | Git authority | Required contract handoff |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Routes owner changes; integrates only when assigned | Confirms affected surfaces and authorized owner | Branch/commit/PR owner; never merges | Final schema/version impact and observed revision |
+| Schema / Version Steward | Owns named canonical contracts and registry | Classifies compatibility; proposes bumps unless explicitly authorized | Read-only by default | Schema ID, old/new version, impact, migration, checks |
+| Researcher | Read-only | Records governing external version/cutoff | None | Sources, checked date, governing version |
+| Writer / Implementer | Only exact assigned contract/test surfaces | Proposes affected bump; applies only when assigned | None by default | Implemented contract version, checks, cross-owner proposals |
+| Reviewer / Critic | Read-only | Reviews compatibility and release claims | Read-only | Anchored findings or no-findings result |
+| Validator / Auditor | Read-only | Verifies expected versions and compatibility gates | Read-only | Verdicts tied to final revision and observed CI |
+| Privacy / Risk Gate | Read-only; may veto sensitivity/retention changes | No bump authority | Read-only | Exact allowed/blocked stages and residual risk |
+
 ## Customization checklist
 
 - [ ] Replace every [CUSTOMIZE] placeholder.
@@ -149,6 +177,10 @@ metadata and tool/model declarations that runtime needs.
 - [ ] Define the role's checkpoint unit.
 - [ ] Fill the may-read, may-write, and must-not-write boundaries.
 - [ ] Define prerequisite and completion gates.
+- [ ] Name governing schema IDs, current versions, producers, consumers, and
+      migration owner when shared contracts are in scope.
+- [ ] Define whether the role may edit schemas, propose/apply version bumps,
+      stage, commit, push, or open a PR. Do not imply authority from role name.
 - [ ] Define formal verdict semantics, or state why verdicts are not required
       for this role.
 - [ ] Add project-specific privacy and external-action restrictions.

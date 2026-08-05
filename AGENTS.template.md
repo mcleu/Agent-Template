@@ -14,6 +14,9 @@
   same change when runtime metadata must stay aligned.
 - README.md explains the project to users. AGENTS.md governs how humans and
   agents work in the repository. Do not make either file carry both jobs.
+- VERSIONING.md defines the project's version surfaces, compatibility promises,
+  and bump owners. It supplements this contract and does not grant release,
+  publication, merge, or Git authority.
 - Remove examples and optional clauses that do not fit this project. A shorter,
   accurate contract is safer than a comprehensive contract nobody follows.
 - If this contract conflicts with the actual repository, stop, report the
@@ -73,6 +76,7 @@ private inputs, working state, generated output, and archived history.
     AGENTS.md             Canonical operating contract
     CLAUDE.md             Thin compatibility pointer to AGENTS.md
     README.md             User-facing purpose, setup, and entry points
+    VERSIONING.md         Version surfaces, compatibility, and bump ownership
     src/                  Product or application source
     lib/                  Reusable libraries with stable interfaces
     tests/                Automated tests mirroring owned code surfaces
@@ -113,7 +117,9 @@ Before the first write:
 
 1. Read this file and every more-specific AGENTS.md governing the target paths.
 2. Read the relevant schema, role definition, skill, README section, and source
-   of truth. Do not load unrelated private context speculatively.
+   of truth. Read VERSIONING.md when schemas, releases, migrations, or versioned
+   deliverables are in scope. Do not load unrelated private context
+   speculatively.
 3. Inspect git status, the current branch/worktree, upstream, remotes, and
    unrelated changes. Preserve all pre-existing work.
 4. Fetch origin. If the worktree is clean, fast-forward the working branch and
@@ -317,6 +323,21 @@ gate may block but does not silently rewrite another role's work.
 - If a local/private workspace is its own Git repository, commit there and keep
   it separate from the shareable framework repository.
 
+### Git authority and traceability
+
+- Name the role that may create branches, stage, commit, push, open pull
+  requests, tag, release, and merge. Unassigned Git authority is read-only.
+- In multi-agent work, specialists return diffs and version proposals to the
+  coordinator unless their role explicitly owns an isolated branch or
+  repository.
+- A Git commit or tag identifies source state. It does not replace a schema,
+  migration, product, or human-deliverable version.
+- Keep traceability from requirement/decision through schema or version impact,
+  feature-branch commits, pull request checks, merge commit, and release tag or
+  deployed revision when applicable.
+- Never rewrite shared history, move an existing release tag, or force-push
+  without explicit human authorization and a documented recovery plan.
+
 ### Pull requests
 
 - Push the feature branch and open a descriptive pull request before merging to
@@ -347,6 +368,43 @@ gate may block but does not silently rewrite another role's work.
   before producing derived analysis.
 - Do not delete merely because a file appears unused. Check references,
   generated consumers, alternate tools, and archival rules.
+
+### Schema and interface contracts [OPTIONAL]
+
+- Keep canonical shared contracts in schemas/ or another documented authority.
+  Register each stable schema ID, current version, owner, producers, consumers,
+  validator, generated representations, and migration path.
+- Every field keeps one meaning and type. Define requiredness, defaults,
+  invariants, lifecycle transitions, and missing/unknown/null/invalid/deprecated
+  behavior explicitly. Do not silently coerce unknown values.
+- Generated models, API documentation, examples, and storage layouts identify
+  their canonical source; they do not become competing schema authorities.
+- Before editing, compare old and proposed behavior and classify compatibility
+  using VERSIONING.md. Default semantic meaning is major for breaking changes,
+  minor for backward-compatible additions, and patch only when observable
+  accepted/emitted behavior does not change.
+- Update the canonical schema, producers, consumers, generated representations,
+  fixtures, validators, tests, migrations, examples, and documentation in one
+  reviewed change, or document prerequisite gates and a safe release order.
+- Breaking changes require a migration/backfill owner, consumer cutover order,
+  support window, rollback or stop condition, and preserved audit evidence.
+- Validate with synthetic fixtures and contract tests. Never put live private or
+  customer records in a shareable schema fixture.
+
+### Version surfaces and bump rules [OPTIONAL]
+
+- Keep product/package release, schema/interface, human deliverable,
+  migration/manifest, and Git source-revision identifiers distinct.
+- Document the identifier, authority, bump owner, and compatibility promise for
+  each used surface in VERSIONING.md. Remove unused surfaces.
+- A version bump records an accepted change; it does not decide compatibility.
+  Roles without bump authority return an exact proposal to the named owner.
+- Change only affected version surfaces. Keep the bump with the behavior it
+  describes unless release automation requires a separate release pull request.
+- Version claims must come from authoritative files and actual tags/releases,
+  not filenames, branch names, prior prose, or memory.
+- Publication, package release, deployment, tagging, and merge remain explicit
+  approval gates even when an agent may prepare their artifacts.
 
 ### Versioned human deliverables [OPTIONAL]
 
@@ -466,6 +524,8 @@ Every role guide should specify:
 - Collaboration handoffs and structured return format.
 - Escalation triggers and decisions reserved for humans.
 - Quality gates, prohibited actions, and suitable model/resource tier.
+- Schema read/write authority, version proposal/bump authority, and Git
+  authority when any could apply. Unassigned authority is read-only.
 
 When implementing a policy adoption or governance change, maintain a
 role-coverage table for every relevant role. Confirm that ownership,
@@ -502,6 +562,7 @@ Customize the ownership table:
 | Role | May read | May write | Must not write | Checkpoint unit |
 | --- | --- | --- | --- | --- |
 | coordinator | Task-scoped context | Validated cross-file updates and commits | Specialist-owned content | One validated handoff |
+| schema/version steward | Canonical schemas and affected interfaces | Named contracts, registry, and version proposals | Unassigned implementation, live data, release/Git | One field, consumer, or migration stage |
 | researcher | Assigned sources and context | One research topic | Product state, decisions, Git | One completed question |
 | implementer | Assigned code surface | Owned implementation and tests | Unrelated modules | One coherent change |
 | reviewer | Relevant diff and sources | Findings only, or nothing | Product files and commits | One finding |
@@ -634,6 +695,12 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | Subject | Authority | Consumers that must remain aligned |
 | --- | --- | --- |
 | [CUSTOMIZE] | | |
+
+### Version surfaces and ownership
+
+| Surface | Identifier/authority | Bump owner | Compatibility or retention rule |
+| --- | --- | --- | --- |
+| [CUSTOMIZE: product/schema/deliverable/migration/Git] | | | |
 
 ### Restricted paths and prohibited actions
 
