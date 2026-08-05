@@ -3,7 +3,7 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-privacy-risk-gate
 role: privacy-risk-gate
-document_version: "1.0"
+document_version: "1.1"
 last_edited: "2026-08-05"
 ---
 
@@ -57,7 +57,9 @@ work begins and against the actual final output.
 ### Must not write
 
 - The Writer's artifact, source evidence, product implementation, schemas,
-  version metadata, migration plan, or Git state.
+  migration plan, or Git state.
+- Version metadata outside the assigned gate record's own document-control
+  fields and history.
 
 Return blocked work to its owner with the reason and required resolution.
 
@@ -244,8 +246,9 @@ Escalate to the named human owner or qualified counsel when:
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
+| 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |

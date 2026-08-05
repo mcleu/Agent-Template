@@ -1,6 +1,23 @@
 # Agent Template
 
-A reusable, tool-neutral operating-contract template for future projects.
+A reusable, MIT-licensed, tool-neutral operating-contract template for future
+projects.
+
+## Start a new repository
+
+The recommended path is GitHub's **Use this template** button. It creates a new
+repository containing the current default-branch files without carrying this
+repository's commit history.
+
+Other supported options:
+
+- Clone directly: `git clone https://github.com/mcleu/Agent-Template.git`
+- Download a ZIP from GitHub's **Code** menu.
+- Download the current `main` archive:
+  `https://github.com/mcleu/Agent-Template/archive/refs/heads/main.zip`
+
+After creating the repository, customize or remove the example contracts before
+using them as active project policy.
 
 ## Use
 
@@ -19,6 +36,11 @@ A reusable, tool-neutral operating-contract template for future projects.
 7. Keep AGENTS.md canonical. Make CLAUDE.md and other runtime entry files thin
    pointers rather than divergent copies.
 8. Commit the customized contract on a feature branch and review it like code.
+
+When adopting only selected files into an existing repository, also copy the
+validator, its tests, and the documentation workflow if you want the template's
+rules enforced in CI. Preserve the existing repository's license and local
+governance unless the owner explicitly approves changing them.
 
 The included [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
 keeps schema, version, validation, Git, and human approval evidence visible at
@@ -110,6 +132,7 @@ Example:
 Run the same documentation check used by CI:
 
     python3 scripts/check_template_docs.py
+    python3 -m unittest discover -s tests -v
 
 The check resolves relative Markdown links with exact case, confirms the active
 visible `agents/` template tree, rejects doubled separators and unapproved hidden
@@ -117,7 +140,13 @@ agent-folder references, and adjudicates intentional `.agents/` discussion
 through explicit approved exceptions rather than treating every scanner match
 as a failure. It also requires the schema, versioning, and schema-steward
 scaffold files, checks document-control blocks on every Markdown file, and
-verifies the schema and document metadata on every reusable template.
+verifies the schema and typed document metadata on every reusable template. It
+discovers supported integer schema versions from `schemas/vN/`, reports the
+latest supported version, and rejects missing version scaffolds or version gaps.
+
+## License
+
+Agent-Template is available under the [MIT License](LICENSE).
 
 ## Review basis
 
@@ -131,8 +160,9 @@ source repositories.
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
+| 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
