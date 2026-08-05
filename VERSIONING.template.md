@@ -2,6 +2,8 @@
 schema_version: 1
 type: versioning_policy
 template_id: versioning-policy
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Versioning Policy Template
@@ -18,12 +20,14 @@ Do not use one number to mean several kinds of change.
 | --- | --- | --- | --- | --- |
 | Product or package release | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] |
 | Data or interface schema | Integer `schema_version` + `schemas/vN/` | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] |
+| Durable document content | Two-part `document_version` + document-control block | Each governed document | Document owner | Prior history rows preserved |
 | Human-facing deliverable | [CUSTOMIZE: for example, filename `vNN`] | [CUSTOMIZE] | [CUSTOMIZE] | Prior versions preserved |
 | Migration or manifest | [CUSTOMIZE: stable ID or digest] | [CUSTOMIZE] | [CUSTOMIZE] | Immutable once approved/applied |
 | Source revision | Git commit SHA and release tag | Git | Authorized integrator | Immutable revision identity |
 
 - A Git branch, commit, or tag identifies source state. It does not replace a
-  schema version, document version, migration ID, or product release.
+  schema version, document version, deliverable filename version, migration ID,
+  or product release.
 - Do not bump an unrelated surface merely because another surface changed.
 - Never use `final`, `latest`, `new`, `old`, or `copy` as a version.
 
@@ -64,6 +68,28 @@ version. The project's actual compatibility window is: [CUSTOMIZE].
 - Archive path: [CUSTOMIZE].
 - Version authority: inspect both the active and archive locations before
   choosing the next number.
+
+### Durable human-authored documents
+
+Every durable operating guide, role guide, plan, research file, decision log,
+review, audit, report, or similar authored document follows
+[schemas/v1/document-control.md](schemas/v1/document-control.md) or a stricter
+local equivalent.
+
+- Use two-part `MAJOR.MINOR` document versions. Working drafts use `0.x`; the
+  first reviewed baseline is `1.0`.
+- Increment `MINOR` for a material correction, addition, or refinement that
+  preserves the document's purpose and governing structure. Increment `MAJOR`
+  when purpose, required structure, authority, or interpretation changes
+  materially while the document keeps the same identity.
+- Update the current version, last-edited date, and exactly one specific history
+  row once per coherent material revision. Preserve all prior rows.
+- Reusable templates declare matching `document_version` and `last_edited`
+  metadata. A copied template begins a new document history while retaining its
+  schema identity.
+- Source code, configuration, generated output, third-party inputs, and
+  machine-managed lockfiles use native/Git versions unless a local contract
+  explicitly requires an embedded file version.
 
 ## 3. Schema change protocol
 
@@ -137,6 +163,9 @@ Every versioned change should be traceable through:
 - [ ] Current versions were read from authoritative files, not recalled.
 - [ ] Every new or changed structured template/artifact declares the schema
       version and stable type required by its versioned schema directory.
+- [ ] Every new or materially changed durable human-authored file has a current
+      document version, matching last-edited date/history row, and preserved
+      prior history.
 - [ ] Compatibility classification and rationale are recorded.
 - [ ] Canonical schemas and every producer/consumer remain aligned.
 - [ ] Migration, rollback/stop conditions, and deprecation window are defined
@@ -147,3 +176,13 @@ Every versioned change should be traceable through:
 - [ ] Only the authorized version surface was bumped.
 - [ ] Git diff, staged diff, branch, commit, PR, and CI state were verified.
 - [ ] Publication, deployment, release, and merge gates remain human-controlled.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established schema, document, release, migration, and Git version controls. |

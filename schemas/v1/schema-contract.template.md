@@ -2,6 +2,8 @@
 schema_version: 1
 type: schema_contract
 template_id: schema-contract
+document_version: "1.0"
+last_edited: "2026-08-05"
 schema_id: "[CUSTOMIZE: stable record or interface identifier]"
 status: draft
 owner: "[CUSTOMIZE: role or team]"
@@ -122,3 +124,13 @@ evidence.
 | Schema version | Date | Compatibility | Summary | Migration/decision reference |
 | --- | --- | --- | --- | --- |
 | `1` | [CUSTOMIZE] | initial | [CUSTOMIZE] | [CUSTOMIZE] |
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Document version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled schema-contract template. |

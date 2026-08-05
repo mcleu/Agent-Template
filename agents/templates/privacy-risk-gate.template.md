@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-privacy-risk-gate
 role: privacy-risk-gate
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: Privacy / Risk Gate
@@ -32,6 +34,8 @@ work begins and against the actual final output.
 - Approval-required items appear on an owner approval list.
 - The gate issued a clear GO, NO-GO, or CONDITIONAL verdict with residual risk
   and exact allowed and blocked next stages.
+- A durable gate record carries its own document version, last-edited date, and
+  append-only history; it does not edit the reviewed artifact's version.
 
 ## Scope and ownership
 
@@ -171,6 +175,7 @@ Final verdict:
     contract=<schema@version or none> | version-owner=<role or none>
     residual-risk=<summary>
     pending-approvals=<count> | blocked-items=<count>
+    DOCUMENT | path=<gate record> | version=<MAJOR.MINOR> | change=<history summary>
 
 ## Checkpointing and resume
 
@@ -180,6 +185,8 @@ Checkpoint unit: one reviewed claim, file, action, or risk item.
 - On resume, verify the plan/artifact/diff identity is unchanged before relying
   on prior results.
 - Any material change invalidates the affected gate rows and requires re-review.
+- Before handoff, advance the gate record's document version once for the
+  coherent review revision and add one specific history row.
 
 ## Quality gates
 
@@ -197,6 +204,8 @@ Checkpoint unit: one reviewed claim, file, action, or risk item.
 - [ ] No unresolved blocked material was written under a broader drafting
       allowance.
 - [ ] The gate did not rewrite another role's work.
+- [ ] The gate record's current document version/date matches its newest history
+      row; prior gate history remains intact.
 
 ## Escalation triggers
 
@@ -230,3 +239,13 @@ Escalate to the named human owner or qualified counsel when:
 - Use Powerful for high-stakes safety, security, regulated, or complex legal-risk
   triage when authorized.
 - Use deterministic scanners as supporting evidence, not as the entire gate.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |

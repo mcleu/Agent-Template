@@ -153,7 +153,7 @@ these practice families:
 | Privacy and publication | Are private inputs, public output, synthetic examples, secret/PII scans, approval gates, and publication surfaces defined? |
 | Planning and ambiguity | Are prerequisite gates, decision owners, approval boundaries, reversibility, and one-question-at-a-time escalation clear? |
 | Multi-agent operation | Are roles bounded by exact reads/writes, checkpoints, handoffs, model tiers, and serialized overlapping writes? |
-| Schemas and versioning | Are canonical contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Are schema, release, deliverable, migration, and Git revisions kept distinct? |
+| Schemas and versioning | Are canonical contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Does every durable human-authored file have a document version, last-edited date, and append-only history? Are document, schema, release, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
@@ -209,13 +209,13 @@ relevant role and confirm that its own guide makes the behavior operational.
 
 Add a role-coverage table to the audit:
 
-| Practice ID | Role | Guide path | Ownership | Schema/version authority | Git authority | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [ID] | [role] | [path] | explicit/missing | explicit/missing/not-required | explicit/missing/not-required | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
+| Practice ID | Role | Guide path | Ownership | Schema authority | Document-version authority | Git authority | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [ID] | [role] | [path] | explicit/missing | explicit/missing/not-required | explicit/missing/not-required | explicit/missing/not-required | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
 
 - `covered` requires explicit ownership, checkpointing, handoff, applicable
-  schema/version and Git authority when applicable, verdict/gate semantics, and
-  model-tier guidance in the role guide itself.
+  schema, document-version, and Git authority when applicable, verdict/gate
+  semantics, and model-tier guidance in the role guide itself.
 - Use `not-required` only when the practice or field genuinely does not apply to
   that role, and record why.
 - A missing or implicit field is a `gap`, not inherited coverage.
@@ -243,7 +243,10 @@ When implementation is explicitly authorized:
    project-specific commands, paths, schemas, role names, and approval gates.
 8. Keep the adoption and role-coverage matrices current as each item is
    implemented, deferred, or rejected.
-9. Commit logical documentation changes, push the branch, and open a pull
+9. Start or advance the document-control version for every durable audit,
+   guidance file, or role guide materially changed in the batch. Update its
+   last-edited date and append one specific history row.
+10. Commit logical documentation changes, push the branch, and open a pull
    request when a remote exists. Do not merge the pull request.
 
 Do not replace a mature local `AGENTS.md` wholesale with the template. Merge
@@ -305,10 +308,14 @@ After the final edit:
   producers/consumers, compatibility classification, migration path when
   required, and an authorized bump owner.
 - Confirm every new or changed reusable template declares the schema version,
-  stable type/identity, and any role-specific metadata required by its versioned
-  contract. Do not infer legacy status from missing metadata alone.
-- Confirm schema, product/release, deliverable, migration/manifest, and Git
-  revision identifiers are not conflated.
+  stable type/identity, document version/last-edited date, and any role-specific
+  metadata required by its versioned contract. Do not infer legacy status from
+  missing metadata alone.
+- Confirm every new or materially changed durable human-authored file has one
+  current document version, a matching last-edited date/history row, and no
+  reused or silently rewritten version entry.
+- Confirm document, schema, product/release, deliverable, migration/manifest,
+  and Git revision identifiers are not conflated.
 - Verify trunk, deployment target, hosting/runtime, CI, and release claims
   against actual remotes, workflow files, deployment configuration, and other
   authoritative project files. Names and prior prose are not sufficient proof.
@@ -345,6 +352,7 @@ Return a concise, evidence-backed summary:
     IMPLEMENTATION | commit=<sha> | ci=<observed state>
     AUDIT-CLOSURE | commit=<sha or none> | ci=<observed state or pending>
     CHANGE | <path> | <implemented or proposed practice IDs>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR> | change=<history summary>
     CHECK | <name> | pass | fail | not-assessable | not-required | <evidence or reason>
     OPEN | <decision, risk, approval, unknown, or none>
     NEXT | <smallest safe next action>
@@ -367,5 +375,15 @@ result.
     implementation. If implementation is authorized, use a feature branch,
     make minimal changes to canonical AGENTS.md first, relevant role guides
     next, and CLAUDE.md last. Validate reality claims and scanner candidates,
-    close commit metadata without self-reference, commit, push, open a PR, and
-    never merge it.
+    apply document control to every durable authored file, close commit metadata
+    without self-reference, commit, push, open a PR, and never merge it.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |

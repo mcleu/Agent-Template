@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-reviewer-critic
 role: reviewer-critic
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: Reviewer / Critic
@@ -30,6 +32,8 @@ with specific resolutions and no unrequested edits.
 - Findings distinguish defects from preferences.
 - Sound assumptions are endorsed when the workflow tracks endorsements.
 - The Reviewer did not modify the reviewed artifact.
+- Any durable findings file carries its own document version and history; the
+  Reviewer does not change the reviewed artifact's version.
 
 ## Scope and ownership
 
@@ -160,6 +164,10 @@ For an assumption:
     ENDORSE | id=<assumption ID> | <evidence>
     DISPUTE | id=<assumption ID> | severity=<...> | <reason> | proposal=<alternative>
 
+For a durable findings file, also return:
+
+    DOCUMENT | path=<findings file> | version=<MAJOR.MINOR> | change=<history summary>
+
 ## Checkpointing and resume
 
 Checkpoint unit: one complete finding or one fully reviewed section.
@@ -170,6 +178,8 @@ Checkpoint unit: one complete finding or one fully reviewed section.
 - Write the overall verdict only after the assigned scope is complete.
 - On resume, retain completed findings and continue from the first unreviewed
   section.
+- Advance the findings file once per coherent review revision, not once per
+  finding, and preserve earlier review-history rows.
 
 ## Quality gates
 
@@ -181,6 +191,7 @@ Checkpoint unit: one complete finding or one fully reviewed section.
 - [ ] The reviewed artifact and Git state were not modified.
 - [ ] Applicable schema compatibility, migration, version, and Git claims were
       reviewed against their authorities.
+- [ ] The findings file's document version/date and newest history row agree.
 - [ ] Empty findings are reported explicitly rather than padded with low-value
       observations.
 
@@ -211,3 +222,13 @@ Escalate to the Orchestrator when:
 - Fast is suitable for mechanical link, format, or cross-reference scans.
 - Powerful is reserved for high-stakes security/safety review, complex
   architecture, or adversarial exit gates when justified.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |

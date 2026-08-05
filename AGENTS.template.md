@@ -2,6 +2,8 @@
 schema_version: 1
 type: agent_contract
 template_id: root-agent-contract
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # AGENTS.md Template — Project Operating Contract
@@ -128,8 +130,9 @@ Before the first write:
 1. Read this file and every more-specific AGENTS.md governing the target paths.
 2. Read the relevant schema, role definition, skill, README section, and source
    of truth. Read VERSIONING.md when schemas, releases, migrations, or versioned
-   deliverables are in scope. Do not load unrelated private context
-   speculatively.
+   deliverables are in scope. Read the repository's document-control contract
+   before creating or materially revising a durable human-authored file. Do not
+   load unrelated private context speculatively.
 3. Inspect git status, the current branch/worktree, upstream, remotes, and
    unrelated changes. Preserve all pre-existing work.
 4. Fetch origin. If the worktree is clean, fast-forward the working branch and
@@ -340,8 +343,8 @@ gate may block but does not silently rewrite another role's work.
 - In multi-agent work, specialists return diffs and version proposals to the
   coordinator unless their role explicitly owns an isolated branch or
   repository.
-- A Git commit or tag identifies source state. It does not replace a schema,
-  migration, product, or human-deliverable version.
+- A Git commit or tag identifies source state. It does not replace a document,
+  schema, migration, product, or human-deliverable version.
 - Keep traceability from requirement/decision through schema or version impact,
   feature-branch commits, pull request checks, merge commit, and release tag or
   deployed revision when applicable.
@@ -379,6 +382,29 @@ gate may block but does not silently rewrite another role's work.
 - Do not delete merely because a file appears unused. Check references,
   generated consumers, alternate tools, and archival rules.
 
+### Durable file and document control
+
+- Every durable human-authored file an agent creates or materially revises has
+  one content revision, last-edited date, and append-only history under the
+  project's document-control contract. This includes operating guides, role
+  guides, plans, research, decisions, reviews, audits, and reports.
+- Use the v1 [document-control contract](schemas/v1/document-control.md) when the
+  project has not adopted a stricter local equivalent. Begin drafts at `0.1`,
+  mark the first reviewed baseline `1.0`, and advance the two-part document
+  version once per coherent material revision.
+- Update the version, date, and one specific history row in the same change as
+  the content. Do not rewrite or delete earlier history rows. A correction to a
+  dated or approved record is a new version and clearly labeled amendment.
+- A copied reusable template starts its own document history. Preserve the
+  template's schema identity, but reset `document_version`, `last_edited`, and
+  the history block to the new artifact's governed draft or baseline values.
+- Source code, configuration, generated output, third-party inputs, and
+  machine-managed lockfiles use their native version surface plus Git unless a
+  project-specific contract requires embedded versions. Record `NOT REQUIRED`
+  with the scope reason rather than adding noisy headers.
+- The file owner controls its document version. Another role may propose the
+  next version but cannot edit the file or its history without write authority.
+
 ### Schema and interface contracts [OPTIONAL]
 
 - Keep canonical shared contracts in schemas/ or another documented authority.
@@ -409,8 +435,9 @@ gate may block but does not silently rewrite another role's work.
 
 ### Version surfaces and bump rules [OPTIONAL]
 
-- Keep product/package release, schema/interface, human deliverable,
-  migration/manifest, and Git source-revision identifiers distinct.
+- Keep document/content, product/package release, schema/interface,
+  human-deliverable filename, migration/manifest, and Git source-revision
+  identifiers distinct.
 - Document the identifier, authority, bump owner, and compatibility promise for
   each used surface in VERSIONING.md. Remove unused surfaces.
 - A version bump records an accepted change; it does not decide compatibility.
@@ -540,8 +567,9 @@ Every role guide should specify:
 - Collaboration handoffs and structured return format.
 - Escalation triggers and decisions reserved for humans.
 - Quality gates, prohibited actions, and suitable model/resource tier.
-- Schema read/write authority, version proposal/bump authority, and Git
-  authority when any could apply. Unassigned authority is read-only.
+- Schema read/write authority, document-version authority for owned outputs,
+  other version proposal/bump authority, and Git authority when any could
+  apply. Unassigned authority is read-only.
 
 When implementing a policy adoption or governance change, maintain a
 role-coverage table for every relevant role. Confirm that ownership,
@@ -568,8 +596,8 @@ Prefer current capability tiers over dated model IDs:
 - Serialize overlapping writes. Independent read-only reviews may run in
   parallel.
 - After each worker, validate path ownership, schema, privacy, duplicates,
-  context consistency, and checkpoint completeness before dispatching another
-  mutation.
+  document control, context consistency, and checkpoint completeness before
+  dispatching another mutation.
 - Specialists do not commit unless their role explicitly owns an isolated
   repository or branch.
 
@@ -658,6 +686,9 @@ Before declaring work complete:
       visual checks passed, or each unrun check is named with the reason.
 - [ ] Every new or changed reusable template retains valid schema metadata and
       no live artifact contains unresolved template placeholders.
+- [ ] Every new or materially changed durable human-authored file has one
+      current document version, a matching last-edited date and history row,
+      and preserved prior history.
 - [ ] The final diff and staged diff were reviewed.
 - [ ] Tracked work is committed on the correct feature branch.
 - [ ] The branch was pushed and a pull request opened when a remote/PR path
@@ -671,10 +702,12 @@ Before declaring work complete:
 Lead the final report with the outcome. Include:
 
 1. Files created or changed.
-2. Commit and branch.
-3. Pull request and CI state, or the explicit no-remote/no-CI limitation.
-4. Checks run and their results.
-5. Open risks, approval gates, and next action.
+2. Current document version for each durable authored output, or a scoped
+   `NOT REQUIRED` reason.
+3. Commit and branch.
+4. Pull request and CI state, or the explicit no-remote/no-CI limitation.
+5. Checks run and their results.
+6. Open risks, approval gates, and next action.
 
 Do not claim that everything is in place when bookings, credentials, external
 integrations, approvals, deadlines, or evidence remain unknown.
@@ -718,7 +751,7 @@ integrations, approvals, deadlines, or evidence remain unknown.
 
 | Surface | Identifier/authority | Bump owner | Compatibility or retention rule |
 | --- | --- | --- | --- |
-| [CUSTOMIZE: product/schema/deliverable/migration/Git] | | | |
+| [CUSTOMIZE: document/product/schema/deliverable/migration/Git] | | | |
 
 ### Restricted paths and prohibited actions
 
@@ -743,3 +776,13 @@ integrations, approvals, deadlines, or evidence remain unknown.
 ### Definition of done
 
 - [CUSTOMIZE: project-specific binary completion criteria]
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |

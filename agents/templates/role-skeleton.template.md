@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-custom
 role: custom
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: [CUSTOMIZE: Role Name]
@@ -22,6 +24,8 @@ This role follows AGENTS.md as the canonical project contract.
 
 - [CUSTOMIZE: binary criterion]
 - [CUSTOMIZE: binary criterion]
+- [CUSTOMIZE: document-control requirement for every durable owned output, or a
+  precise native/Git-versioned `NOT REQUIRED` case]
 - No unresolved blocking item is hidden or silently assumed.
 
 ## Scope and ownership
@@ -78,6 +82,9 @@ invent a substitute.
 3. Preserve evidence, unknowns, and source attribution.
 4. Keep changes inside the ownership boundary.
 5. Return cross-file consequences as proposals.
+6. Start or advance the document version of each durable owned file once per
+   coherent material revision; update its last-edited date and append one
+   specific history row.
 
 ## Checkpointing and resume
 
@@ -98,6 +105,7 @@ Return:
     OUTPUT | path=<path> | checkpoint=<last completed unit>
     CONTRACT | schema=<id@version or none> | compatibility=<classification>
     VERSION | surface=<surface or none> | applied|proposed=<value> | owner=<role>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR or not-required> | change=<summary or reason>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -112,6 +120,8 @@ Keep the handoff concise. Full evidence belongs in the durable output.
 - [ ] Unknowns remain explicit.
 - [ ] Privacy and ownership boundaries were respected.
 - [ ] Schema/version/Git authority was explicit and respected.
+- [ ] Durable owned files have valid document control, or a scoped
+      `NOT REQUIRED` reason.
 - [ ] [CUSTOMIZE: role-specific validation]
 
 ## Escalation triggers
@@ -147,3 +157,13 @@ Do not advance past an unanswered blocking question.
 
 Check current model availability and use the cheapest capable tier. Do not pin a
 dated model identifier unless the runtime requires it.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled custom-role skeleton. |

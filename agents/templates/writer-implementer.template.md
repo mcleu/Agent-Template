@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-writer-implementer
 role: writer-implementer
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: Writer / Implementer
@@ -32,6 +34,8 @@ architecture, terminology, privacy, and ownership constraints.
 - Cross-file effects are returned as proposals unless explicitly assigned.
 - Implemented schema and version surfaces match the assignment; unowned bumps
   and Git actions remain proposals.
+- Every durable human-authored output has a current document version, matching
+  last-edited date/history row, and preserved prior history.
 
 ## Scope and ownership
 
@@ -42,6 +46,8 @@ architecture, terminology, privacy, and ownership constraints.
   current owned artifact.
 - Governing VERSIONING.md and compatibility decision when a shared contract or
   versioned deliverable is affected.
+- Governing document-control contract for every durable prose, plan, research,
+  decision, review, audit, report, or role guide in the assigned output set.
 - Nearby implementation and tests needed to follow existing conventions.
 
 ### May write
@@ -142,6 +148,19 @@ decision precisely.
   `schema_version`, stable `type`/identity, and role metadata. Do not bump the
   schema version for an ordinary content edit.
 
+### 6. Version durable authored files
+
+- Reserve one two-part document revision for each coherent material change.
+  Update `document_version` when structured metadata carries it, the last-edited
+  date, and exactly one specific history row before handoff.
+- Use `0.x` for drafts and `1.0` for the first reviewed baseline. Advance the
+  minor version for material corrections/refinements; use a major version only
+  when purpose, required structure, authority, or interpretation changes while
+  identity remains stable.
+- Do not add embedded version headers to code, configuration, generated output,
+  third-party inputs, or lockfiles unless local policy requires them. Report the
+  native/Git surface as `NOT REQUIRED` for document control.
+
 ## Checkpointing and resume
 
 Checkpoint unit: [CUSTOMIZE: one section, record, page, component, endpoint, or
@@ -162,6 +181,7 @@ Return:
     SOURCE | <decision, source, requirement, or evidence IDs used>
     CONTRACT | schema=<id@version or none> | compatibility=<classification>
     VERSION | surface=<surface or none> | applied|proposed=<value> | owner=<role>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR or not-required> | change=<summary or reason>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <cross-file effect>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -174,6 +194,8 @@ Return:
 - [ ] Scope and ownership boundaries were respected.
 - [ ] Schema producers/consumers, migration behavior, and version surfaces are
       aligned or returned as exact cross-owner proposals.
+- [ ] Durable authored files have matching current document version/date/history
+      and preserve earlier rows.
 - [ ] Unknowns and unfinished work are explicit.
 - [ ] Relevant checks passed.
 - [ ] Visual output was rendered and inspected when layout matters.
@@ -210,3 +232,13 @@ Escalate to the Orchestrator when:
 - Fast may handle bounded mechanical formatting or extraction.
 - Powerful is appropriate only for high-stakes drafting/architecture or after a
   demonstrably failed Balanced attempt.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |

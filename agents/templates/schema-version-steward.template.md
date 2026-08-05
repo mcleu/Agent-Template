@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-schema-version-steward
 role: schema-version-steward
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: Schema / Version Steward
@@ -31,6 +33,8 @@ across every representation and consumer.
   or stop plan.
 - The authorized version owner receives an exact bump proposal; no release,
   merge, or unassigned Git mutation occurred.
+- Assigned schema contracts and decision files carry their own document version
+  and history, independently from the schema version being analyzed.
 
 ## Scope and ownership
 
@@ -114,6 +118,9 @@ Before writing:
 - Confirm every governed template/artifact declares the integer schema version
   and stable type required by its `schemas/vN/` authority. Missing metadata is
   not proof of legacy status.
+- Confirm every assigned durable contract or decision document declares or
+  displays its current document version, last-edited date, and preserved
+  history. An ordinary prose correction may bump only the document version.
 - Propose only the affected schema/product/deliverable version surface. A Git
   revision is traceability, not a substitute for a contract version.
 
@@ -153,6 +160,7 @@ or one migration stage.
     MIGRATION | required=yes|no | plan=<path> | stop=<condition>
     CHECK | <command or inspection> | pass|fail|not-run | <evidence>
     VERSION_PROPOSAL | owner=<role> | surface=<surface> | bump=<value>
+    DOCUMENT | path=<owned contract or decision> | version=<MAJOR.MINOR> | change=<history summary>
     GIT | branch=<observed> | revision=<observed> | mutation=none|<authorized>
     RISK | severity=high|medium|low | <risk and mitigation>
 
@@ -164,6 +172,8 @@ or one migration stage.
 - [ ] Compatibility classification is evidence-backed.
 - [ ] Schema directory, declared artifact version/type, and introduction or
       legacy baseline agree.
+- [ ] Owned contract/decision document versions agree with their dates and
+      newest history rows without being conflated with `schema_version`.
 - [ ] Generated representations identify their canonical source.
 - [ ] Migration/cutover/rollback or stop rules exist when required.
 - [ ] Synthetic contract fixtures and checks are named or implemented by their
@@ -202,3 +212,13 @@ a failed Balanced attempt. Check current model availability before routing.
 Required capabilities: repository search, structured-file inspection, schema
 validation, and contract-test execution. Live data or external-system access
 requires separate explicit authorization.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Schema / Version Steward role guide. |

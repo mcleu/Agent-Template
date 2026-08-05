@@ -26,13 +26,17 @@ format change is required.
 6. Decide and document the legacy policy. Missing `schema_version` is not enough
    evidence that a file is legacy; use an introduction marker, migration
    manifest, or another reviewable baseline.
+7. Apply [document-control.md](v1/document-control.md) to every durable
+   human-authored file. Keep its `document_version` independent of the
+   structured artifact's `schema_version`.
 
 ## Rules
 
 - Schema versions are positive integers and match their `schemas/vN/`
   directory. Product/package releases may use a different scheme.
-- Every reusable template has a required `schema_version`, stable `type`, and
-  `template_id`; agent roles also declare `role`.
+- Every reusable template has a required `schema_version`, stable `type`,
+  `template_id`, `document_version`, and `last_edited`; agent roles also declare
+  `role`.
 - A field keeps one meaning and type for the lifetime of a schema version.
 - Define required, optional, `unknown`, `not_applicable`, invalid, deprecated,
   and unknown-future-field behavior explicitly.
@@ -45,3 +49,13 @@ format change is required.
 - Follow the installed `VERSIONING.md`; the root
   [versioning template](../VERSIONING.template.md) remains guidance until it is
   customized for the downstream project.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the schema scaffold and linked per-file document control. |

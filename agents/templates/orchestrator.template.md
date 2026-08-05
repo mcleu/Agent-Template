@@ -3,6 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-orchestrator
 role: orchestrator
+document_version: "1.0"
+last_edited: "2026-08-05"
 ---
 
 # Agent: Orchestrator
@@ -31,6 +33,8 @@ cross-file effects.
 - Cross-file effects were validated and applied by their owner.
 - Schema compatibility and affected version surfaces have an evidence-backed
   classification and an authorized owner.
+- Every durable human-authored output reports a current document version,
+  matching last-edited date/history row, and file owner.
 - Relevant checks passed or are named as not run with a reason.
 - The final commit contains only validated in-scope files.
 - The handoff states confirmed facts, risks, open work, and explicit unknowns.
@@ -159,6 +163,9 @@ Before dispatch:
   request when a configured remote and policy require it.
 - Apply version bumps only when this role is the documented bump owner; otherwise
   preserve the steward's proposal for the authorized owner.
+- Validate each worker's document-control claim against the actual owned file.
+  Version coordinator-owned plans, decisions, audits, and handoff documents;
+  never edit another owner's content history merely to close the checklist.
 - Never merge or claim CI, external integration, or publication success that
   was not observed.
 
@@ -180,6 +187,7 @@ Require:
     OUTPUT | path=<path> | checkpoint=<last completed unit>
     CONTRACT | schema=<id@version or none> | compatibility=<classification>
     VERSION | surface=<surface or none> | proposal=<bump or none> | owner=<role>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR or not-required> | owner=<role> | change=<summary or reason>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -194,6 +202,8 @@ Require:
 - [ ] Prerequisite and approval gates are evidenced.
 - [ ] Schema, migration, version-bump, and Git ownership is explicit where
       applicable.
+- [ ] Every durable authored output has valid document control, or a scoped
+      `NOT REQUIRED` reason for a native/Git-versioned file.
 - [ ] No unresolved high-risk item is hidden.
 - [ ] Privacy and external-action boundaries were respected.
 - [ ] Checks and final diff support the completion claim.
@@ -227,3 +237,13 @@ Escalate to the user when:
 - Use Fast for mechanical routing, status, and diff summaries.
 - Use Powerful only for high-stakes architecture, safety/security, adversarial
   convergence, or after a demonstrably failed Balanced attempt.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |

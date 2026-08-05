@@ -6,9 +6,10 @@ placeholder, and keep the project's root AGENTS.md authoritative.
 
 Each role guide starts with v1 schema metadata. Preserve `schema_version: 1`,
 `type: agent_role`, and `template_id` when copying a role. Use the real stable
-`role` slug; do not bump the schema version for ordinary role-policy edits.
-A breaking change to required role metadata belongs in the next integer schema
-directory and requires adapter/consumer migration.
+`role` slug. Start the copied guide's own `document_version`, `last_edited`
+value, and change history; do not bump the schema version for an ordinary
+role-policy edit. A breaking change to required role metadata belongs in the
+next integer schema directory and requires adapter/consumer migration.
 
 ## Start small
 
@@ -75,6 +76,10 @@ Every project role must:
     mutate Git. Unassigned authority means proposal-only or read-only.
 13. Preserve the role guide's `schema_version`, `type`, `template_id`, and `role`
     metadata and validate it before handoff.
+14. Start or advance the `document_version` of every durable file the role
+    creates or materially revises, update its last-edited date, and append one
+    specific history row. Use Git/native versions for code, configuration,
+    generated output, and third-party inputs unless local policy says otherwise.
 
 ## Standard execution sequence
 
@@ -107,6 +112,7 @@ Suggested worker handoff:
     OUTPUT | path=<path> | checkpoint=<last completed unit>
     CONTRACT | schema=<id@version or none> | compatibility=<classification or none>
     VERSION | surface=<surface or none> | proposal=<bump or none> | owner=<role>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR or not-required> | change=<history summary or reason>
     CHECK | <check name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested cross-file change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -162,26 +168,28 @@ metadata and tool/model declarations that runtime needs.
   only for high-stakes reasoning, adversarial exit gates, or after a failed
   Balanced attempt.
 
-## Schema, version, and Git role coverage
+## Schema, document-version, and Git role coverage
 
 Customize this table whenever a project adopts the roles. `propose` is not
 permission to apply, publish, commit, or merge.
 
-| Role | Schema authority | Version authority | Git authority | Required contract handoff |
-| --- | --- | --- | --- | --- |
-| Orchestrator | Routes owner changes; integrates only when assigned | Confirms affected surfaces and authorized owner | Branch/commit/PR owner; never merges | Final schema/version impact and observed revision |
-| Schema / Version Steward | Owns named canonical contracts and registry | Classifies compatibility; proposes bumps unless explicitly authorized | Read-only by default | Schema ID, old/new version, impact, migration, checks |
-| Researcher | Read-only | Records governing external version/cutoff | None | Sources, checked date, governing version |
-| Writer / Implementer | Only exact assigned contract/test surfaces | Proposes affected bump; applies only when assigned | None by default | Implemented contract version, checks, cross-owner proposals |
-| Reviewer / Critic | Read-only | Reviews compatibility and release claims | Read-only | Anchored findings or no-findings result |
-| Validator / Auditor | Read-only | Verifies expected versions and compatibility gates | Read-only | Verdicts tied to final revision and observed CI |
-| Privacy / Risk Gate | Read-only; may veto sensitivity/retention changes | No bump authority | Read-only | Exact allowed/blocked stages and residual risk |
+| Role | Schema authority | Document-version authority | Other version authority | Git authority | Required contract handoff |
+| --- | --- | --- | --- | --- | --- |
+| Orchestrator | Routes owner changes; integrates only when assigned | Confirms each owned durable output reports its current revision; versions coordinator-owned documents | Confirms affected surfaces and authorized owner | Branch/commit/PR owner; never merges | Final schema/document/version impact and observed revision |
+| Schema / Version Steward | Owns named canonical contracts and registry | Versions only assigned contract/decision documents | Classifies compatibility; proposes bumps unless explicitly authorized | Read-only by default | Schema ID, document revision, old/new contract version, impact, migration, checks |
+| Researcher | Read-only | Versions the assigned durable research file | Records governing external version/cutoff | None | Sources, checked date, research-file version, governing version |
+| Writer / Implementer | Only exact assigned contract/test surfaces | Versions assigned durable prose/document outputs | Proposes affected bump; applies only when assigned | None by default | Implemented document/contract version, checks, cross-owner proposals |
+| Reviewer / Critic | Read-only | Versions its findings file only | Reviews compatibility and release claims | Read-only | Findings-file version and anchored result |
+| Validator / Auditor | Read-only | Versions its verdict/audit file only | Verifies expected versions and compatibility gates | Read-only | Verdict-file version tied to final revision and observed CI |
+| Privacy / Risk Gate | Read-only; may veto sensitivity/retention changes | Versions its gate record only | No bump authority | Read-only | Gate-record version, exact allowed/blocked stages, and residual risk |
 
 ## Customization checklist
 
 - [ ] Replace every [CUSTOMIZE] placeholder.
 - [ ] Preserve valid v1 template metadata and replace `role: custom` with the
       adopted role slug when starting from the role skeleton.
+- [ ] Start the copied guide's own document version/history and define which
+      durable role outputs require document control.
 - [ ] Delete roles and optional sections the project does not use.
 - [ ] Name exact input and output paths.
 - [ ] Define the role's checkpoint unit.
@@ -197,3 +205,13 @@ permission to apply, publish, commit, or merge.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |

@@ -2,6 +2,8 @@
 schema_version: 1
 type: pull_request
 template_id: pull-request
+document_version: "1.0"
+last_edited: "2026-08-05"
 -->
 
 ## Outcome and scope
@@ -20,12 +22,14 @@ leaving an applicable surface ambiguous.
 | --- | --- | --- | --- | --- |
 | Product/package release | | | | |
 | Schema/interface | | | | |
+| Durable document content | | | document owner | history preserved |
 | Human deliverable | | | | |
 | Migration/manifest | | | | |
 | Git source revision | | | | immutable traceability only |
 
 - Canonical schema(s):
 - Template/record `schema_version` and stable `type`:
+- Durable documents and current `document_version` values:
 - Introduction marker or legacy baseline:
 - Producers/consumers changed:
 - Migration, cutover, support window, and rollback/stop plan:
@@ -36,7 +40,10 @@ leaving an applicable surface ambiguous.
 - [ ] Required schema and version decisions are reflected in authoritative
       files.
 - [ ] Every new or changed reusable template/structured artifact declares the
-      version, type, and identity required by its versioned schema directory.
+      schema version, document version/date, type, and identity required by its
+      versioned schema and document-control contracts.
+- [ ] Every new or materially changed durable human-authored file has a matching
+      current document version, last-edited date, and append-only history row.
 - [ ] Producers, consumers, fixtures, tests, migrations, examples, and
       documentation are aligned or explicitly gated.
 - [ ] Synthetic fixtures cover old/new and missing/unknown/invalid behavior as
@@ -74,3 +81,14 @@ Checks and evidence:
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
+
+<!--
+## Document control
+
+Last edited: 2026-08-05
+Current version: 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled pull-request template. |
+-->
