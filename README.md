@@ -83,22 +83,8 @@ as a failure.
 
 ## Review basis
 
-The synthesis reviewed root contracts and the agent, workflow, command, skill,
-schema, and collaboration guides one to two relevant guide layers deep in:
-
-- HSA-Tracking
-- mcleu.github.io
-- ProductAgent
-- PropertyAgent
-- TripAgent
-- PatentAgent
-- mVault
-
-The requested roots contained no authored ROBOTS.md operating guide. The only
-robots.md found was framework documentation inside a Next.js dependency under
-node_modules; it was inspected and excluded from the synthesis because it
-describes search-engine metadata rather than project-working preferences.
-
-Domain-specific details were not copied into the general contract. Patent,
-travel, property, portfolio, medical-device, and vault rules appear only as
-portable practices or optional modules.
+This template synthesizes repeated practices observed across multiple projects.
+The source corpus and repository identities are intentionally not published.
+Only portable, project-neutral working agreements belong in this public
+scaffold; project-specific facts, paths, and operating details stay in their
+source repositories.
