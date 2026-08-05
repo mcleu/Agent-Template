@@ -1,3 +1,12 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-custom
+role: custom
+document_version: "1.0"
+last_edited: "2026-08-05"
+---
+
 # Agent: [CUSTOMIZE: Role Name]
 
 ## Role
@@ -15,6 +24,8 @@ This role follows AGENTS.md as the canonical project contract.
 
 - [CUSTOMIZE: binary criterion]
 - [CUSTOMIZE: binary criterion]
+- [CUSTOMIZE: document-control requirement for every durable owned output, or a
+  precise native/Git-versioned `NOT REQUIRED` case]
 - No unresolved blocking item is hidden or silently assumed.
 
 ## Scope and ownership
@@ -31,6 +42,8 @@ This role follows AGENTS.md as the canonical project contract.
 
 - [CUSTOMIZE: other roles' artifacts]
 - Git state or commits, unless this role explicitly owns them.
+- Schemas, migrations, or version metadata unless exact owned paths and bump
+  authority are named here.
 - Files outside the assigned scope.
 
 Cross-owner changes are returned as proposals to [CUSTOMIZE: coordinator or
@@ -41,6 +54,10 @@ owner].
 Required inputs:
 
 - [CUSTOMIZE: path and authority]
+- Governing schema/version: [CUSTOMIZE: schema ID@version, VERSIONING.md, or not
+  applicable]
+- Git authority: [CUSTOMIZE: read-only, branch, stage, commit, push, PR; merge is
+  human-only]
 
 Before starting:
 
@@ -65,6 +82,9 @@ invent a substitute.
 3. Preserve evidence, unknowns, and source attribution.
 4. Keep changes inside the ownership boundary.
 5. Return cross-file consequences as proposals.
+6. Start or advance the document version of each durable owned file once per
+   coherent material revision; update its last-edited date and append one
+   specific history row.
 
 ## Checkpointing and resume
 
@@ -83,6 +103,9 @@ Return:
 
     STATUS | complete | partial | blocked
     OUTPUT | path=<path> | checkpoint=<last completed unit>
+    CONTRACT | schema=<id@version or none> | compatibility=<classification>
+    VERSION | surface=<surface or none> | applied|proposed=<value> | owner=<role>
+    DOCUMENT | path=<path> | version=<MAJOR.MINOR or not-required> | change=<summary or reason>
     CHECK | <name> | pass | fail | not-run | <evidence or reason>
     PROPOSAL | owner=<role> | path=<path> | <requested change>
     QUESTION | blocking=yes|no | default=<recommendation> | consequence=<if wrong>
@@ -96,6 +119,9 @@ Keep the handoff concise. Full evidence belongs in the durable output.
 - [ ] Claims and decisions trace to evidence or labeled assumptions.
 - [ ] Unknowns remain explicit.
 - [ ] Privacy and ownership boundaries were respected.
+- [ ] Schema/version/Git authority was explicit and respected.
+- [ ] Durable owned files have valid document control, or a scoped
+      `NOT REQUIRED` reason.
 - [ ] [CUSTOMIZE: role-specific validation]
 
 ## Escalation triggers
@@ -116,6 +142,8 @@ Do not advance past an unanswered blocking question.
 - Do not invent evidence, facts, citations, metrics, or authority.
 - Do not expand the task or read unrelated private material speculatively.
 - Do not edit another role's artifact.
+- Do not reuse schema fields, apply an unassigned version bump, or mutate Git
+  beyond the authority declared above.
 - Do not perform an external, binding, destructive, publishing, or production
   action without explicit authority.
 - [CUSTOMIZE]
@@ -129,3 +157,13 @@ Do not advance past an unanswered blocking question.
 
 Check current model availability and use the cheapest capable tier. Do not pin a
 dated model identifier unless the runtime requires it.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled custom-role skeleton. |

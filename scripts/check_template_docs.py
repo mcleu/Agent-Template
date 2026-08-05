@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Validate repository Markdown links and active agent-folder references."""
+"""Validate Markdown links, agent paths, schemas, and document controls."""
 
 from __future__ import annotations
 
 import os
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -30,6 +31,38 @@ APPROVED_HIDDEN_AGENT_REFERENCES = {
     ),
 }
 
+REQUIRED_SCAFFOLD_PATHS = (
+    "AGENTS.template.md",
+    "VERSIONING.template.md",
+    "schemas/README.md",
+    "schemas/v1/README.md",
+    "schemas/v1/INTRODUCED.md",
+    "schemas/v1/document-control.md",
+    "schemas/v1/template-metadata.md",
+    "schemas/v1/schema-contract.template.md",
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    "agents/README.md",
+    "agents/templates/schema-version-steward.template.md",
+)
+
+TEMPLATE_SCHEMA_VERSION = "1"
+TEMPLATE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+DOCUMENT_VERSION = re.compile(r"^[0-9]+\.[0-9]+$")
+ISO_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
+ALLOWED_TEMPLATE_TYPES = {
+    "agent_contract",
+    "versioning_policy",
+    "agent_role",
+    "schema_contract",
+    "pull_request",
+}
+EXPECTED_TEMPLATE_TYPES = {
+    "AGENTS.template.md": "agent_contract",
+    "VERSIONING.template.md": "versioning_policy",
+    ".github/PULL_REQUEST_TEMPLATE.md": "pull_request",
+    "schemas/v1/schema-contract.template.md": "schema_contract",
+}
+
 
 def markdown_files() -> list[Path]:
     return sorted(
@@ -37,6 +70,18 @@ def markdown_files() -> list[Path]:
         for path in ROOT.rglob("*.md")
         if ".git" not in path.relative_to(ROOT).parts
     )
+
+
+def template_files() -> list[Path]:
+    files = {
+        path
+        for path in ROOT.rglob("*.template.md")
+        if ".git" not in path.relative_to(ROOT).parts
+    }
+    pull_request_template = ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md"
+    if pull_request_template.is_file():
+        files.add(pull_request_template)
+    return sorted(files)
 
 
 def rendered_lines(path: Path):
@@ -154,11 +199,211 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
     return candidates, approved, failures
 
 
+def check_required_scaffolds() -> tuple[int, list[str]]:
+    failures: list[str] = []
+
+    for relative_path in REQUIRED_SCAFFOLD_PATHS:
+        path = ROOT / relative_path
+        if not path.is_file():
+            failures.append(f"{relative_path}: required scaffold file is missing")
+
+    return len(REQUIRED_SCAFFOLD_PATHS), failures
+
+
+def parse_document_control(path: Path) -> tuple[str, str, str | None]:
+    text = path.read_text(encoding="utf-8")
+    heading_offsets = [
+        index
+        for index, line in rendered_lines(path)
+        if line.strip() == "## Document control"
+    ]
+    if not heading_offsets:
+        return "", "", "missing Document control section"
+
+    lines = text.splitlines()
+    control_start = heading_offsets[-1] - 1
+    control = lines[control_start:]
+    version = ""
+    last_edited = ""
+
+    for line in control:
+        plain = line.strip().replace("**", "")
+        if plain.startswith("Last edited:"):
+            last_edited = plain.split(":", 1)[1].strip()
+        elif plain.startswith("Current version:"):
+            version = plain.split(":", 1)[1].strip()
+
+    if not DOCUMENT_VERSION.fullmatch(version):
+        return version, last_edited, "current document version must use MAJOR.MINOR"
+    if not ISO_DATE.fullmatch(last_edited):
+        return version, last_edited, "last-edited date must use YYYY-MM-DD"
+    try:
+        date.fromisoformat(last_edited)
+    except ValueError:
+        return version, last_edited, "last-edited date is not a real calendar date"
+
+    matching_history_rows = 0
+    history_versions: dict[str, str] = {}
+    for line in control:
+        if not line.strip().startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) < 3:
+            continue
+        if DOCUMENT_VERSION.fullmatch(cells[0]):
+            if cells[0] in history_versions:
+                return version, last_edited, f"history reuses document version {cells[0]}"
+            if not ISO_DATE.fullmatch(cells[1]):
+                return version, last_edited, f"history date for {cells[0]} must use YYYY-MM-DD"
+            try:
+                date.fromisoformat(cells[1])
+            except ValueError:
+                return version, last_edited, f"history date for {cells[0]} is not real"
+            if not cells[2]:
+                return version, last_edited, f"history summary for {cells[0]} is empty"
+            history_versions[cells[0]] = cells[1]
+        if cells[0] == version and cells[1] == last_edited and cells[2]:
+            matching_history_rows += 1
+
+    if matching_history_rows != 1:
+        return (
+            version,
+            last_edited,
+            "current version/date must have exactly one matching non-empty history row",
+        )
+
+    current_parts = tuple(int(part) for part in version.split("."))
+    newest_parts = max(
+        tuple(int(part) for part in historical_version.split("."))
+        for historical_version in history_versions
+    )
+    if current_parts != newest_parts:
+        return version, last_edited, "current document version is not the highest history version"
+
+    return version, last_edited, None
+
+
+def check_document_controls(files: list[Path]) -> tuple[int, list[str]]:
+    failures: list[str] = []
+
+    for path in files:
+        _, _, error = parse_document_control(path)
+        if error:
+            failures.append(f"{path.relative_to(ROOT)}: {error}")
+
+    return len(files), failures
+
+
+def parse_template_metadata(path: Path) -> tuple[dict[str, str], str | None]:
+    text = path.read_text(encoding="utf-8")
+    if text.startswith("---\n"):
+        end = text.find("\n---\n", 4)
+        if end == -1:
+            return {}, "missing closing YAML frontmatter delimiter"
+        block = text[4:end]
+    elif text.startswith("<!--\n"):
+        end = text.find("\n-->\n", 5)
+        if end == -1:
+            return {}, "missing closing metadata-comment delimiter"
+        block = text[5:end]
+    else:
+        return {}, "missing leading schema metadata"
+
+    metadata: dict[str, str] = {}
+    for line in block.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if ":" not in line:
+            return {}, f"unsupported metadata line: {line}"
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if not key or key in metadata:
+            return {}, f"invalid or duplicate metadata key: {key or '<blank>'}"
+        metadata[key] = value
+
+    return metadata, None
+
+
+def check_template_versions() -> tuple[int, list[str]]:
+    files = template_files()
+    failures: list[str] = []
+
+    for path in files:
+        relative_path = str(path.relative_to(ROOT))
+        metadata, error = parse_template_metadata(path)
+        if error:
+            failures.append(f"{relative_path}: {error}")
+            continue
+
+        schema_version = metadata.get("schema_version")
+        if schema_version != TEMPLATE_SCHEMA_VERSION:
+            failures.append(
+                f"{relative_path}: schema_version must be {TEMPLATE_SCHEMA_VERSION}"
+            )
+
+        template_type = metadata.get("type", "")
+        if template_type not in ALLOWED_TEMPLATE_TYPES:
+            failures.append(f"{relative_path}: unsupported or missing template type")
+
+        expected_type = EXPECTED_TEMPLATE_TYPES.get(relative_path)
+        if relative_path.startswith("agents/templates/"):
+            expected_type = "agent_role"
+        if expected_type and template_type != expected_type:
+            failures.append(
+                f"{relative_path}: type must be {expected_type} (received {template_type or '<missing>'})"
+            )
+
+        template_id = metadata.get("template_id", "")
+        if not TEMPLATE_ID.fullmatch(template_id):
+            failures.append(f"{relative_path}: template_id must be a stable lower-case slug")
+
+        document_version = metadata.get("document_version", "")
+        if not DOCUMENT_VERSION.fullmatch(document_version):
+            failures.append(f"{relative_path}: document_version must use MAJOR.MINOR")
+
+        last_edited = metadata.get("last_edited", "")
+        if not ISO_DATE.fullmatch(last_edited):
+            failures.append(f"{relative_path}: last_edited must use YYYY-MM-DD")
+        else:
+            try:
+                date.fromisoformat(last_edited)
+            except ValueError:
+                failures.append(f"{relative_path}: last_edited is not a real date")
+
+        controlled_version, controlled_date, control_error = parse_document_control(path)
+        if control_error is None:
+            if document_version != controlled_version:
+                failures.append(
+                    f"{relative_path}: metadata and control-block document versions differ"
+                )
+            if last_edited != controlled_date:
+                failures.append(
+                    f"{relative_path}: metadata and control-block last-edited dates differ"
+                )
+
+        if template_type == "agent_role":
+            role = metadata.get("role", "")
+            if not TEMPLATE_ID.fullmatch(role):
+                failures.append(f"{relative_path}: agent_role requires a lower-case role slug")
+
+    return len(files), failures
+
+
 def main() -> int:
     files = markdown_files()
     link_count, link_failures = check_links(files)
     path_candidates, approved_candidates, path_failures = check_agent_paths(files)
-    failures = link_failures + path_failures
+    scaffold_count, scaffold_failures = check_required_scaffolds()
+    document_count, document_failures = check_document_controls(files)
+    template_count, template_failures = check_template_versions()
+    failures = (
+        link_failures
+        + path_failures
+        + scaffold_failures
+        + document_failures
+        + template_failures
+    )
 
     print(f"Markdown files scanned: {len(files)}")
     print(f"Relative Markdown links resolved: {link_count}")
@@ -166,6 +411,10 @@ def main() -> int:
         "Hidden agent-path candidates: "
         f"{path_candidates} ({approved_candidates} approved exceptions)"
     )
+    present_count = scaffold_count - len(scaffold_failures)
+    print(f"Required scaffold files present: {present_count}/{scaffold_count}")
+    print(f"Document controls checked: {document_count}")
+    print(f"Versioned reusable templates checked: {template_count}")
 
     if failures:
         print("\nDocumentation validation failed:", file=sys.stderr)

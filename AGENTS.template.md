@@ -1,3 +1,11 @@
+---
+schema_version: 1
+type: agent_contract
+template_id: root-agent-contract
+document_version: "1.0"
+last_edited: "2026-08-05"
+---
+
 # AGENTS.md Template — Project Operating Contract
 
 > Copy this file to the repository root as AGENTS.md. Replace every
@@ -14,6 +22,13 @@
   same change when runtime metadata must stay aligned.
 - README.md explains the project to users. AGENTS.md governs how humans and
   agents work in the repository. Do not make either file carry both jobs.
+- VERSIONING.md defines the project's version surfaces, compatibility promises,
+  and bump owners. It supplements this contract and does not grant release,
+  publication, merge, or Git authority.
+- This contract's leading `schema_version`, `type`, and `template_id` identify
+  its document shape under `schemas/vN/`. Preserve them when instantiating the
+  template. Ordinary policy edits do not bump the schema version; a breaking
+  metadata/structure change requires the next integer schema directory.
 - Remove examples and optional clauses that do not fit this project. A shorter,
   accurate contract is safer than a comprehensive contract nobody follows.
 - If this contract conflicts with the actual repository, stop, report the
@@ -73,6 +88,7 @@ private inputs, working state, generated output, and archived history.
     AGENTS.md             Canonical operating contract
     CLAUDE.md             Thin compatibility pointer to AGENTS.md
     README.md             User-facing purpose, setup, and entry points
+    VERSIONING.md         Version surfaces, compatibility, and bump ownership
     src/                  Product or application source
     lib/                  Reusable libraries with stable interfaces
     tests/                Automated tests mirroring owned code surfaces
@@ -81,7 +97,7 @@ private inputs, working state, generated output, and archived history.
     templates/            Blank, reusable, non-sensitive starting artifacts
     examples/             Synthetic examples safe to commit and publish
     scripts/              Deterministic validation, export, and maintenance tools
-    schemas/              Versioned data and interface contracts
+    schemas/vN/           Immutable integer-versioned contracts and indexes
     plans/                Reviewable implementation plans and decision records
     memory/               Optional durable local context; private by default
     .github/workflows/    CI checks that enforce repository contracts
@@ -113,7 +129,10 @@ Before the first write:
 
 1. Read this file and every more-specific AGENTS.md governing the target paths.
 2. Read the relevant schema, role definition, skill, README section, and source
-   of truth. Do not load unrelated private context speculatively.
+   of truth. Read VERSIONING.md when schemas, releases, migrations, or versioned
+   deliverables are in scope. Read the repository's document-control contract
+   before creating or materially revising a durable human-authored file. Do not
+   load unrelated private context speculatively.
 3. Inspect git status, the current branch/worktree, upstream, remotes, and
    unrelated changes. Preserve all pre-existing work.
 4. Fetch origin. If the worktree is clean, fast-forward the working branch and
@@ -317,6 +336,21 @@ gate may block but does not silently rewrite another role's work.
 - If a local/private workspace is its own Git repository, commit there and keep
   it separate from the shareable framework repository.
 
+### Git authority and traceability
+
+- Name the role that may create branches, stage, commit, push, open pull
+  requests, tag, release, and merge. Unassigned Git authority is read-only.
+- In multi-agent work, specialists return diffs and version proposals to the
+  coordinator unless their role explicitly owns an isolated branch or
+  repository.
+- A Git commit or tag identifies source state. It does not replace a document,
+  schema, migration, product, or human-deliverable version.
+- Keep traceability from requirement/decision through schema or version impact,
+  feature-branch commits, pull request checks, merge commit, and release tag or
+  deployed revision when applicable.
+- Never rewrite shared history, move an existing release tag, or force-push
+  without explicit human authorization and a documented recovery plan.
+
 ### Pull requests
 
 - Push the feature branch and open a descriptive pull request before merging to
@@ -347,6 +381,73 @@ gate may block but does not silently rewrite another role's work.
   before producing derived analysis.
 - Do not delete merely because a file appears unused. Check references,
   generated consumers, alternate tools, and archival rules.
+
+### Durable file and document control
+
+- Every durable human-authored file an agent creates or materially revises has
+  one content revision, last-edited date, and append-only history under the
+  project's document-control contract. This includes operating guides, role
+  guides, plans, research, decisions, reviews, audits, and reports.
+- Use the v1 [document-control contract](schemas/v1/document-control.md) when the
+  project has not adopted a stricter local equivalent. Begin drafts at `0.1`,
+  mark the first reviewed baseline `1.0`, and advance the two-part document
+  version once per coherent material revision.
+- Update the version, date, and one specific history row in the same change as
+  the content. Do not rewrite or delete earlier history rows. A correction to a
+  dated or approved record is a new version and clearly labeled amendment.
+- A copied reusable template starts its own document history. Preserve the
+  template's schema identity, but reset `document_version`, `last_edited`, and
+  the history block to the new artifact's governed draft or baseline values.
+- Source code, configuration, generated output, third-party inputs, and
+  machine-managed lockfiles use their native version surface plus Git unless a
+  project-specific contract requires embedded versions. Record `NOT REQUIRED`
+  with the scope reason rather than adding noisy headers.
+- The file owner controls its document version. Another role may propose the
+  next version but cannot edit the file or its history without write authority.
+
+### Schema and interface contracts [OPTIONAL]
+
+- Keep canonical shared contracts in schemas/ or another documented authority.
+  Default to immutable integer version directories such as `schemas/v1/`.
+  Register each stable schema ID, current version, owner, producers, consumers,
+  validator, generated representations, introduction marker, and migration path.
+- Every new or changed structured template/artifact declares an integer
+  `schema_version` matching its `schemas/vN/` authority and a stable `type`.
+  Missing version metadata is legacy only when repository history, an
+  introduction marker, or an approved migration manifest proves it.
+- Every field keeps one meaning and type. Define requiredness, defaults,
+  invariants, lifecycle transitions, and missing/unknown/null/invalid/deprecated
+  behavior explicitly. Do not silently coerce unknown values.
+- Generated models, API documentation, examples, and storage layouts identify
+  their canonical source; they do not become competing schema authorities.
+- Before editing, compare old and proposed behavior and classify compatibility
+  using VERSIONING.md. A clarification keeps the version; an optional extension
+  stays in the same version only when unknown future fields are explicitly safe;
+  a breaking change creates the next integer schema directory.
+- Update the canonical schema, producers, consumers, generated representations,
+  fixtures, validators, tests, migrations, examples, and documentation in one
+  reviewed change, or document prerequisite gates and a safe release order.
+- Breaking changes require a migration/backfill owner, consumer cutover order,
+  support window, rollback or stop condition, preserved prior schema definition,
+  and audit evidence.
+- Validate with synthetic fixtures and contract tests. Never put live private or
+  customer records in a shareable schema fixture.
+
+### Version surfaces and bump rules [OPTIONAL]
+
+- Keep document/content, product/package release, schema/interface,
+  human-deliverable filename, migration/manifest, and Git source-revision
+  identifiers distinct.
+- Document the identifier, authority, bump owner, and compatibility promise for
+  each used surface in VERSIONING.md. Remove unused surfaces.
+- A version bump records an accepted change; it does not decide compatibility.
+  Roles without bump authority return an exact proposal to the named owner.
+- Change only affected version surfaces. Keep the bump with the behavior it
+  describes unless release automation requires a separate release pull request.
+- Version claims must come from authoritative files and actual tags/releases,
+  not filenames, branch names, prior prose, or memory.
+- Publication, package release, deployment, tagging, and merge remain explicit
+  approval gates even when an agent may prepare their artifacts.
 
 ### Versioned human deliverables [OPTIONAL]
 
@@ -466,6 +567,9 @@ Every role guide should specify:
 - Collaboration handoffs and structured return format.
 - Escalation triggers and decisions reserved for humans.
 - Quality gates, prohibited actions, and suitable model/resource tier.
+- Schema read/write authority, document-version authority for owned outputs,
+  other version proposal/bump authority, and Git authority when any could
+  apply. Unassigned authority is read-only.
 
 When implementing a policy adoption or governance change, maintain a
 role-coverage table for every relevant role. Confirm that ownership,
@@ -492,8 +596,8 @@ Prefer current capability tiers over dated model IDs:
 - Serialize overlapping writes. Independent read-only reviews may run in
   parallel.
 - After each worker, validate path ownership, schema, privacy, duplicates,
-  context consistency, and checkpoint completeness before dispatching another
-  mutation.
+  document control, context consistency, and checkpoint completeness before
+  dispatching another mutation.
 - Specialists do not commit unless their role explicitly owns an isolated
   repository or branch.
 
@@ -502,6 +606,7 @@ Customize the ownership table:
 | Role | May read | May write | Must not write | Checkpoint unit |
 | --- | --- | --- | --- | --- |
 | coordinator | Task-scoped context | Validated cross-file updates and commits | Specialist-owned content | One validated handoff |
+| schema/version steward | Canonical schemas and affected interfaces | Named contracts, registry, and version proposals | Unassigned implementation, live data, release/Git | One field, consumer, or migration stage |
 | researcher | Assigned sources and context | One research topic | Product state, decisions, Git | One completed question |
 | implementer | Assigned code surface | Owned implementation and tests | Unrelated modules | One coherent change |
 | reviewer | Relevant diff and sources | Findings only, or nothing | Product files and commits | One finding |
@@ -579,6 +684,11 @@ Before declaring work complete:
 - [ ] No private, generated, vendor, or unrelated file was accidentally added.
 - [ ] Relevant format, lint, type, test, build, schema, privacy, branch, and
       visual checks passed, or each unrun check is named with the reason.
+- [ ] Every new or changed reusable template retains valid schema metadata and
+      no live artifact contains unresolved template placeholders.
+- [ ] Every new or materially changed durable human-authored file has one
+      current document version, a matching last-edited date and history row,
+      and preserved prior history.
 - [ ] The final diff and staged diff were reviewed.
 - [ ] Tracked work is committed on the correct feature branch.
 - [ ] The branch was pushed and a pull request opened when a remote/PR path
@@ -592,10 +702,12 @@ Before declaring work complete:
 Lead the final report with the outcome. Include:
 
 1. Files created or changed.
-2. Commit and branch.
-3. Pull request and CI state, or the explicit no-remote/no-CI limitation.
-4. Checks run and their results.
-5. Open risks, approval gates, and next action.
+2. Current document version for each durable authored output, or a scoped
+   `NOT REQUIRED` reason.
+3. Commit and branch.
+4. Pull request and CI state, or the explicit no-remote/no-CI limitation.
+5. Checks run and their results.
+6. Open risks, approval gates, and next action.
 
 Do not claim that everything is in place when bookings, credentials, external
 integrations, approvals, deadlines, or evidence remain unknown.
@@ -635,6 +747,12 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | [CUSTOMIZE] | | |
 
+### Version surfaces and ownership
+
+| Surface | Identifier/authority | Bump owner | Compatibility or retention rule |
+| --- | --- | --- | --- |
+| [CUSTOMIZE: document/product/schema/deliverable/migration/Git] | | | |
+
 ### Restricted paths and prohibited actions
 
 - [CUSTOMIZE]
@@ -658,3 +776,13 @@ integrations, approvals, deadlines, or evidence remain unknown.
 ### Definition of done
 
 - [CUSTOMIZE: project-specific binary completion criteria]
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |

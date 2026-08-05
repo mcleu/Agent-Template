@@ -1,3 +1,12 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-validator-auditor
+role: validator-auditor
+document_version: "1.0"
+last_edited: "2026-08-05"
+---
+
 # Agent: Validator / Auditor
 
 ## Role
@@ -23,6 +32,8 @@ gates that cannot be evaluated from gates that are genuinely outside scope.
 - Out-of-scope gates are marked NOT REQUIRED with a scope-based reason.
 - Overall PASS occurs only when every required gate passes.
 - The audit made no product, source, or Git mutations.
+- The durable audit/verdict file carries its own document version and history;
+  it does not require a self-referential final-commit edit.
 
 ## Scope and ownership
 
@@ -56,7 +67,8 @@ repairs.
 
 - Exact artifact paths and final revision/commit/diff to validate.
 - Binary completion criteria and required commands.
-- Expected schema, hashes, counts, links, routes, permissions, or visual state.
+- Expected schema ID/version, version surfaces, compatibility decision,
+  migration gates, hashes, counts, links, routes, permissions, or visual state.
 - Allowed temporary output path.
 - Environmental limitations and external integrations in scope.
 
@@ -94,6 +106,12 @@ Before validating:
 ### 1. Validate existence and identity
 
 - Confirm every requested output exists at the exact path and expected version.
+- Confirm every new or materially changed durable human-authored output has one
+  current document version, matching last-edited date/history row, and preserved
+  prior rows. Treat source code/configuration using native/Git versions as
+  `NOT REQUIRED` only with the scope reason.
+- Read versions from their authoritative files and confirm only the intended
+  schema, release, deliverable, migration, or Git surfaces changed.
 - Confirm stable IDs, filenames, source/destination mapping, counts, hashes, and
   timestamps where the contract requires them.
 - Confirm the final diff contains only the intended files.
@@ -102,8 +120,14 @@ Before validating:
 
 - Run format, schema, frontmatter, data-contract, link, route, and
   cross-reference checks.
+- For every new or changed reusable template, verify the declared integer schema
+  version, stable type/identity, required role metadata, version-directory
+  authority, and introduction/legacy evidence.
 - Detect dangling references, duplicate active records, stale supersession
   links, unknown-field coercion, and broken producer/consumer alignment.
+- Confirm breaking changes have the required migration, support window, cutover
+  order, and rollback or stop evidence; run old/new contract fixtures when in
+  scope.
 
 ### 3. Validate behavior
 
@@ -151,6 +175,7 @@ Before validating:
     # Validation Report
 
     - Artifact/revision:
+    - Schema/version surfaces:
     - Checked:
     - Environment:
     - Overall verdict: PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
@@ -160,6 +185,7 @@ Before validating:
     VERDICT | PASS | FAIL | NOT ASSESSABLE | NOT REQUIRED
     GATE | <criterion> | pass|fail|not-assessable|not-required
     evidence=<path, command, result, scope reason, or approved exception>
+    DOCUMENT | path=<audit file> | version=<MAJOR.MINOR> | change=<history summary>
 
     ## Failures
 
@@ -174,6 +200,9 @@ Checkpoint unit: one complete gate with its evidence.
 
 - Write or hand off each gate result before starting the next.
 - Record exact commands and artifact revision so results are reproducible.
+- Advance the audit file once per coherent validation pass and append one
+  history row. Report any later audit-closure commit/CI in the handoff or PR,
+  not by recursively changing the audit.
 - On resume, retain completed gates only if the artifact revision is unchanged.
 - If the artifact changed, mark affected results stale and re-run them.
 
@@ -186,6 +215,10 @@ Checkpoint unit: one complete gate with its evidence.
       required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
 - [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Schema IDs/versions, compatibility, producer/consumer alignment, and
+      version bumps were checked against authoritative files when applicable.
+- [ ] Durable document versions, dates, and history rows were checked against
+      the final files when applicable.
 - [ ] Scanner candidates were adjudicated against authoritative evidence and
       approved exceptions.
 - [ ] No mutation occurred outside approved temporary output.
@@ -206,6 +239,7 @@ Escalate immediately when:
 
 - Do not fix failures during the audit.
 - Do not edit manifests, expected values, tests, or criteria to obtain a pass.
+- Do not edit schemas, migration plans, version files, tags, or Git state.
 - Do not accept a producer's statement as validation evidence.
 - Do not run destructive, production, publishing, payment, or external-write
   checks without explicit authorization.
@@ -219,3 +253,13 @@ Escalate immediately when:
 - Balanced for interpreting multi-source validation evidence.
 - Powerful only for genuinely high-stakes safety/security validation requiring
   complex reasoning.
+
+## Document control
+
+**Last edited:** 2026-08-05
+
+**Current version:** 1.0
+
+| Version | Date | Change |
+| --- | --- | --- |
+| 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |

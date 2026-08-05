@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   documentation:
-    name: Relative links and agent paths
+    name: Template schemas, links, and agent paths
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
