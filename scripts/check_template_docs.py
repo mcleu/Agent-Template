@@ -7,6 +7,7 @@ import os
 import re
 import sys
 from datetime import date
+from json import JSONDecodeError, loads as json_loads
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -32,6 +33,7 @@ APPROVED_HIDDEN_AGENT_REFERENCES = {
 }
 
 REQUIRED_SCAFFOLD_PATHS = (
+    "AGENTS.md",
     "AGENTS.template.md",
     "VERSIONING.template.md",
     "schemas/README.md",
@@ -45,7 +47,11 @@ REQUIRED_SCAFFOLD_PATHS = (
     "agents/templates/schema-version-steward.template.md",
 )
 
-TEMPLATE_SCHEMA_VERSION = "1"
+SCHEMA_DIRECTORY = re.compile(r"^v([1-9][0-9]*)$")
+PLAIN_INTEGER = re.compile(r"[-+]?(?:0|[1-9][0-9]*)$")
+PLAIN_FLOAT = re.compile(
+    r"[-+]?(?:(?:0|[1-9][0-9]*)\.[0-9]+|(?:0|[1-9][0-9]*)[eE][-+]?[0-9]+)$"
+)
 TEMPLATE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 DOCUMENT_VERSION = re.compile(r"^[0-9]+\.[0-9]+$")
 ISO_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
@@ -60,7 +66,6 @@ EXPECTED_TEMPLATE_TYPES = {
     "AGENTS.template.md": "agent_contract",
     "VERSIONING.template.md": "versioning_policy",
     ".github/PULL_REQUEST_TEMPLATE.md": "pull_request",
-    "schemas/v1/schema-contract.template.md": "schema_contract",
 }
 
 
@@ -116,14 +121,19 @@ def extract_target(raw_target: str) -> str:
 
 def exact_relative_path(source: Path, target: str) -> tuple[bool, str]:
     parsed = urlsplit(target)
-    if parsed.scheme or parsed.netloc or target.startswith(("#", "/")):
-        return True, "external, anchor, or repository-absolute target"
-
-    decoded_path = unquote(parsed.path)
-    if not decoded_path:
+    if parsed.scheme or parsed.netloc:
+        return True, "external target"
+    if target.startswith("#"):
         return True, "anchor-only target"
 
-    source_dir = source.parent.relative_to(ROOT)
+    repository_absolute = target.startswith("/")
+    decoded_path = unquote(
+        parsed.path.lstrip("/") if repository_absolute else parsed.path
+    )
+    if not decoded_path:
+        return True, "repository root" if repository_absolute else "anchor-only target"
+
+    source_dir = Path() if repository_absolute else source.parent.relative_to(ROOT)
     normalized = Path(os.path.normpath(source_dir / decoded_path))
     if normalized.parts and normalized.parts[0] == "..":
         return False, f"target escapes repository: {target}"
@@ -219,9 +229,11 @@ def parse_document_control(path: Path) -> tuple[str, str, str | None]:
     ]
     if not heading_offsets:
         return "", "", "missing Document control section"
+    if len(heading_offsets) != 1:
+        return "", "", "must contain exactly one Document control section"
 
     lines = text.splitlines()
-    control_start = heading_offsets[-1] - 1
+    control_start = heading_offsets[0] - 1
     control = lines[control_start:]
     version = ""
     last_edited = ""
@@ -294,7 +306,49 @@ def check_document_controls(files: list[Path]) -> tuple[int, list[str]]:
     return len(files), failures
 
 
-def parse_template_metadata(path: Path) -> tuple[dict[str, str], str | None]:
+def parse_metadata_scalar(value: str) -> tuple[object, str | None]:
+    """Parse the simple YAML scalar subset allowed in template metadata."""
+    if not value:
+        return "", None
+
+    if value.startswith('"'):
+        if not value.endswith('"'):
+            return "", "unterminated double-quoted string"
+        try:
+            parsed = json_loads(value)
+        except JSONDecodeError as exc:
+            return "", f"invalid double-quoted string: {exc.msg}"
+        if not isinstance(parsed, str):
+            return "", "double-quoted metadata values must be strings"
+        return parsed, None
+
+    if value.startswith("'"):
+        if not value.endswith("'"):
+            return "", "unterminated single-quoted string"
+        return value[1:-1].replace("''", "'"), None
+
+    if value.endswith(('"', "'")):
+        return "", "unmatched quote in metadata value"
+
+    lowered = value.casefold()
+    if lowered in {"true", "false"}:
+        return lowered == "true", None
+    if lowered in {"null", "~"}:
+        return None, None
+    if PLAIN_INTEGER.fullmatch(value):
+        return int(value), None
+    if PLAIN_FLOAT.fullmatch(value):
+        return float(value), None
+    if ISO_DATE.fullmatch(value):
+        try:
+            return date.fromisoformat(value), None
+        except ValueError:
+            return value, None
+
+    return value, None
+
+
+def parse_template_metadata(path: Path) -> tuple[dict[str, object], str | None]:
     text = path.read_text(encoding="utf-8")
     if text.startswith("---\n"):
         end = text.find("\n---\n", 4)
@@ -309,7 +363,7 @@ def parse_template_metadata(path: Path) -> tuple[dict[str, str], str | None]:
     else:
         return {}, "missing leading schema metadata"
 
-    metadata: dict[str, str] = {}
+    metadata: dict[str, object] = {}
     for line in block.splitlines():
         if not line.strip() or line.lstrip().startswith("#"):
             continue
@@ -317,17 +371,53 @@ def parse_template_metadata(path: Path) -> tuple[dict[str, str], str | None]:
             return {}, f"unsupported metadata line: {line}"
         key, value = line.split(":", 1)
         key = key.strip()
-        value = value.strip().strip('"').strip("'")
+        raw_value = value.strip()
         if not key or key in metadata:
             return {}, f"invalid or duplicate metadata key: {key or '<blank>'}"
-        metadata[key] = value
+        parsed_value, value_error = parse_metadata_scalar(raw_value)
+        if value_error:
+            return {}, f"{key}: {value_error}"
+        metadata[key] = parsed_value
 
     return metadata, None
 
 
-def check_template_versions() -> tuple[int, list[str]]:
-    files = template_files()
+def discover_schema_versions() -> tuple[set[int], list[str]]:
+    versions: set[int] = set()
     failures: list[str] = []
+    schemas_root = ROOT / "schemas"
+
+    if not schemas_root.is_dir():
+        return versions, ["schemas/: schema directory is missing"]
+
+    for path in sorted(schemas_root.iterdir()):
+        match = SCHEMA_DIRECTORY.fullmatch(path.name)
+        if not path.is_dir() or not match:
+            continue
+        version = int(match.group(1))
+        versions.add(version)
+        required_files = ("README.md", "INTRODUCED.md", "schema-contract.template.md")
+        for required_name in required_files:
+            if not (path / required_name).is_file():
+                failures.append(
+                    f"schemas/{path.name}/{required_name}: required version scaffold is missing"
+                )
+
+    if not versions:
+        failures.append("schemas/: no supported vN schema directories found")
+        return versions, failures
+
+    expected_versions = set(range(1, max(versions) + 1))
+    for missing_version in sorted(expected_versions - versions):
+        failures.append(f"schemas/v{missing_version}/: schema version sequence has a gap")
+
+    return versions, failures
+
+
+def check_template_versions() -> tuple[int, int, list[str]]:
+    files = template_files()
+    supported_versions, failures = discover_schema_versions()
+    latest_version = max(supported_versions) if supported_versions else 0
 
     for path in files:
         relative_path = str(path.relative_to(ROOT))
@@ -337,33 +427,60 @@ def check_template_versions() -> tuple[int, list[str]]:
             continue
 
         schema_version = metadata.get("schema_version")
-        if schema_version != TEMPLATE_SCHEMA_VERSION:
+        if type(schema_version) is not int:
             failures.append(
-                f"{relative_path}: schema_version must be {TEMPLATE_SCHEMA_VERSION}"
+                f"{relative_path}: schema_version must be an unquoted integer"
+            )
+        elif schema_version not in supported_versions:
+            failures.append(
+                f"{relative_path}: unsupported schema_version {schema_version}; "
+                f"available versions are {sorted(supported_versions)}"
             )
 
-        template_type = metadata.get("type", "")
-        if template_type not in ALLOWED_TEMPLATE_TYPES:
+        versioned_schema_path = re.fullmatch(
+            r"schemas/v([1-9][0-9]*)/schema-contract\.template\.md", relative_path
+        )
+        if versioned_schema_path and type(schema_version) is int:
+            directory_version = int(versioned_schema_path.group(1))
+            if schema_version != directory_version:
+                failures.append(
+                    f"{relative_path}: schema_version must match its v{directory_version} directory"
+                )
+
+        template_type = metadata.get("type")
+        if not isinstance(template_type, str):
+            failures.append(f"{relative_path}: type must be a string")
+        elif template_type not in ALLOWED_TEMPLATE_TYPES:
             failures.append(f"{relative_path}: unsupported or missing template type")
 
         expected_type = EXPECTED_TEMPLATE_TYPES.get(relative_path)
         if relative_path.startswith("agents/templates/"):
             expected_type = "agent_role"
+        elif versioned_schema_path:
+            expected_type = "schema_contract"
         if expected_type and template_type != expected_type:
             failures.append(
                 f"{relative_path}: type must be {expected_type} (received {template_type or '<missing>'})"
             )
 
-        template_id = metadata.get("template_id", "")
-        if not TEMPLATE_ID.fullmatch(template_id):
+        template_id = metadata.get("template_id")
+        if not isinstance(template_id, str):
+            failures.append(f"{relative_path}: template_id must be a string")
+        elif not TEMPLATE_ID.fullmatch(template_id):
             failures.append(f"{relative_path}: template_id must be a stable lower-case slug")
 
-        document_version = metadata.get("document_version", "")
-        if not DOCUMENT_VERSION.fullmatch(document_version):
+        document_version = metadata.get("document_version")
+        if not isinstance(document_version, str):
+            failures.append(
+                f"{relative_path}: document_version must be a quoted string"
+            )
+        elif not DOCUMENT_VERSION.fullmatch(document_version):
             failures.append(f"{relative_path}: document_version must use MAJOR.MINOR")
 
-        last_edited = metadata.get("last_edited", "")
-        if not ISO_DATE.fullmatch(last_edited):
+        last_edited = metadata.get("last_edited")
+        if not isinstance(last_edited, str):
+            failures.append(f"{relative_path}: last_edited must be a quoted date string")
+        elif not ISO_DATE.fullmatch(last_edited):
             failures.append(f"{relative_path}: last_edited must use YYYY-MM-DD")
         else:
             try:
@@ -383,11 +500,13 @@ def check_template_versions() -> tuple[int, list[str]]:
                 )
 
         if template_type == "agent_role":
-            role = metadata.get("role", "")
-            if not TEMPLATE_ID.fullmatch(role):
+            role = metadata.get("role")
+            if not isinstance(role, str):
+                failures.append(f"{relative_path}: agent_role role must be a string")
+            elif not TEMPLATE_ID.fullmatch(role):
                 failures.append(f"{relative_path}: agent_role requires a lower-case role slug")
 
-    return len(files), failures
+    return len(files), latest_version, failures
 
 
 def main() -> int:
@@ -396,7 +515,7 @@ def main() -> int:
     path_candidates, approved_candidates, path_failures = check_agent_paths(files)
     scaffold_count, scaffold_failures = check_required_scaffolds()
     document_count, document_failures = check_document_controls(files)
-    template_count, template_failures = check_template_versions()
+    template_count, latest_schema_version, template_failures = check_template_versions()
     failures = (
         link_failures
         + path_failures
@@ -415,6 +534,7 @@ def main() -> int:
     print(f"Required scaffold files present: {present_count}/{scaffold_count}")
     print(f"Document controls checked: {document_count}")
     print(f"Versioned reusable templates checked: {template_count}")
+    print(f"Latest supported schema version: {latest_schema_version or 'none'}")
 
     if failures:
         print("\nDocumentation validation failed:", file=sys.stderr)

@@ -3,7 +3,7 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-writer-implementer
 role: writer-implementer
-document_version: "1.0"
+document_version: "1.1"
 last_edited: "2026-08-05"
 ---
 
@@ -59,8 +59,9 @@ architecture, terminology, privacy, and ownership constraints.
 
 - Another role's research, review, validation, privacy verdict, decision log, or
   source evidence.
-- Unrelated modules, content, schemas, generated files, version metadata, or
-  migrations.
+- Unrelated modules, content, schemas, generated files, or migrations.
+- Version metadata outside explicitly assigned durable outputs or exact
+  schema/release/migration surfaces with named bump authority.
 - Git state or commits unless explicitly assigned.
 
 Return todo, lifecycle, schema, or other cross-owner effects as proposals.
@@ -237,8 +238,9 @@ Escalate to the Orchestrator when:
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
+| 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |

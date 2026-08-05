@@ -4,14 +4,18 @@ on:
   pull_request:
     paths:
       - "**/*.md"
+      - "LICENSE"
       - "scripts/check_template_docs.py"
+      - "tests/**/*.py"
       - ".github/workflows/template-docs.yml"
   push:
     branches:
       - main
     paths:
       - "**/*.md"
+      - "LICENSE"
       - "scripts/check_template_docs.py"
+      - "tests/**/*.py"
       - ".github/workflows/template-docs.yml"
   workflow_dispatch:
 
@@ -33,3 +37,6 @@ jobs:
 
       - name: Validate documentation
         run: python3 scripts/check_template_docs.py
+
+      - name: Test documentation validator
+        run: python3 -m unittest discover -s tests -v

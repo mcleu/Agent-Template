@@ -20,9 +20,10 @@ format change is required.
 3. Replace every `[CUSTOMIZE]` value and add the schema to that version's index.
 4. Put the matching `schema_version: N` and stable `type` in every structured
    template and generated record governed by the schema.
-5. Add a validator that rejects unsupported versions, missing required fields,
-   invalid closed-vocabulary values, and unresolved template placeholders in
-   instantiated artifacts.
+5. Add a validator that discovers supported `schemas/vN/` directories, reports
+   the latest supported version, and rejects unsupported or gapped versions,
+   incorrect field types, missing required fields, invalid closed-vocabulary
+   values, and unresolved template placeholders in instantiated artifacts.
 6. Decide and document the legacy policy. Missing `schema_version` is not enough
    evidence that a file is legacy; use an introduction marker, migration
    manifest, or another reviewable baseline.
@@ -37,6 +38,9 @@ format change is required.
 - Every reusable template has a required `schema_version`, stable `type`,
   `template_id`, `document_version`, and `last_edited`; agent roles also declare
   `role`.
+- Serialize `schema_version` as an unquoted integer. Serialize
+  `document_version` and `last_edited` as quoted strings so YAML readers do not
+  reinterpret them as a number or date value.
 - A field keeps one meaning and type for the lifetime of a schema version.
 - Define required, optional, `unknown`, `not_applicable`, invalid, deprecated,
   and unknown-future-field behavior explicitly.
@@ -54,8 +58,9 @@ format change is required.
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the schema scaffold and linked per-file document control. |
+| 1.1 | 2026-08-05 | Defined dynamic version discovery and strict metadata scalar serialization. |

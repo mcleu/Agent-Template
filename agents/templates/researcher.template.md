@@ -3,7 +3,7 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-researcher
 role: researcher
-document_version: "1.0"
+document_version: "1.1"
 last_edited: "2026-08-05"
 ---
 
@@ -47,7 +47,9 @@ remaining unknowns in the assigned durable research file.
 ### Must not write
 
 - Other research topics, product state, plans, decisions, todos, evidence
-  records, schemas, version metadata, specialist outputs, or Git state.
+  records, schemas, specialist outputs, or Git state.
+- Version metadata outside the assigned research file's own document-control
+  fields and history.
 - A broader report than the assigned question requires.
 
 Return all downstream actions as proposals to the Orchestrator.
@@ -211,8 +213,9 @@ Escalate to the Orchestrator when:
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Researcher role guide. |
+| 1.1 | 2026-08-05 | Clarified that document-version authority is limited to the owned research file. |

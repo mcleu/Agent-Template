@@ -3,7 +3,7 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-reviewer-critic
 role: reviewer-critic
-document_version: "1.0"
+document_version: "1.1"
 last_edited: "2026-08-05"
 ---
 
@@ -60,7 +60,9 @@ with specific resolutions and no unrequested edits.
 ### Must not write
 
 - The reviewed artifact, source evidence, decisions, implementation, schemas,
-  versions, Git state, or another reviewer's findings.
+  Git state, or another reviewer's findings.
+- Version metadata outside the assigned findings file's own document-control
+  fields and history.
 
 If asked to fix findings, switch to a separately authorized Writer/Implementer
 assignment after the review is complete.
@@ -227,8 +229,9 @@ Escalate to the Orchestrator when:
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
+| 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |

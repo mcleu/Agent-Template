@@ -38,6 +38,18 @@ last_edited: "2026-08-05"
 | `document_version` | string | Two-part `MAJOR.MINOR` content revision matching the document-control block |
 | `last_edited` | date string | ISO `YYYY-MM-DD`, matching the document-control block and current history row |
 
+## Scalar serialization
+
+- Write `schema_version` as an unquoted integer, for example
+  `schema_version: 1`. A quoted value such as `"1"` is a string and is invalid.
+- Write `document_version` and `last_edited` as quoted strings. Unquoted `1.0`
+  may be interpreted as a number, and an unquoted ISO date may be interpreted as
+  a date object rather than the required string.
+- `type`, `template_id`, and `role` are strings. Values that resemble YAML
+  booleans, nulls, numbers, or dates must be quoted when used as strings.
+- Validators must check both the value and its scalar type. Coercing a mismatched
+  scalar into the expected type is not validation.
+
 Allowed `type` values:
 
 - `agent_contract`
@@ -76,8 +88,9 @@ a breaking metadata change and requires a new version directory.
 
 **Last edited:** 2026-08-05
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added distinct schema and per-file document metadata for reusable templates. |
+| 1.1 | 2026-08-05 | Required type-preserving scalar serialization and validation without coercion. |
