@@ -1,3 +1,9 @@
+---
+schema_version: 1
+type: versioning_policy
+template_id: versioning-policy
+---
+
 # Versioning Policy Template
 
 > Copy this file to `VERSIONING.md`, replace every `[CUSTOMIZE]` field, and
@@ -11,7 +17,7 @@ Do not use one number to mean several kinds of change.
 | Surface | Identifier and location | Authority | Bump owner | Compatibility promise |
 | --- | --- | --- | --- | --- |
 | Product or package release | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] |
-| Data or interface schema | `schema_id` + `schema_version` in `schemas/` | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] |
+| Data or interface schema | Integer `schema_version` + `schemas/vN/` | [CUSTOMIZE] | [CUSTOMIZE] | [CUSTOMIZE] |
 | Human-facing deliverable | [CUSTOMIZE: for example, filename `vNN`] | [CUSTOMIZE] | [CUSTOMIZE] | Prior versions preserved |
 | Migration or manifest | [CUSTOMIZE: stable ID or digest] | [CUSTOMIZE] | [CUSTOMIZE] | Immutable once approved/applied |
 | Source revision | Git commit SHA and release tag | Git | Authorized integrator | Immutable revision identity |
@@ -33,17 +39,22 @@ Do not use one number to mean several kinds of change.
 
 ### Schema and interface contracts
 
-Default to semantic versions unless the repository documents another scheme:
+Use positive integer schema versions by default. Version `N` lives under
+`schemas/vN/`, and every governed structured artifact declares
+`schema_version: N` plus a stable `type`.
 
-- **MAJOR**: removes or renames a field, changes its type or meaning, narrows an
-  accepted value, changes identity/lifecycle semantics, or otherwise requires a
-  consumer migration.
-- **MINOR**: adds a backward-compatible optional field, value, or capability.
-- **PATCH**: clarifies documentation or validation without changing accepted or
-  emitted data. A supposed patch that changes observable behavior is not a
-  patch.
+- **Clarification**: accepted/emitted structure and behavior do not change. Keep
+  the current schema version.
+- **Additive-compatible**: adds an optional field or value. Keep the current
+  version only when that schema explicitly permits unknown future fields and
+  every existing consumer preserves or safely ignores the extension.
+- **Breaking**: removes/renames a required field, changes a field's type or
+  meaning, narrows accepted values, changes identity/lifecycle rules, or
+  requires consumer migration. Create the next integer version directory.
 
-The project's actual compatibility window is: [CUSTOMIZE].
+Never edit a released `schemas/vN/` definition into a different contract,
+reuse/decrement a schema version, or treat a product SemVer bump as a schema
+version. The project's actual compatibility window is: [CUSTOMIZE].
 
 ### Human-facing deliverables [OPTIONAL]
 
@@ -60,18 +71,23 @@ For every schema or shared-interface change:
 
 1. Identify the canonical schema, current version, owner, producers, consumers,
    fixtures, generated representations, and validators.
-2. State the old and proposed contract. Classify the change as major, minor, or
-   patch with evidence from the compatibility rules above.
+2. State the old and proposed contract. Classify the change as clarification,
+   additive-compatible, breaking, or a documented project-specific class.
 3. Define behavior for missing, unknown, null, invalid, and deprecated values.
    Do not silently coerce an unknown value or reuse a field for a new meaning.
-4. For a breaking change, provide a migration/backfill plan, rollback or stop
-   condition, support window, and consumer cutover order.
-5. Update the canonical schema, producers, consumers, fixtures, tests,
+4. Verify the version directory, artifact `schema_version`, stable `type`, and
+   introduction baseline. Missing version metadata is not proof of legacy
+   status.
+5. For a breaking change, create the next integer schema directory and provide
+   a migration/backfill plan, rollback or stop condition, support window, and
+   consumer cutover order. Preserve the prior version definition.
+6. Update the canonical schema, producers, consumers, fixtures, tests,
    documentation, compatibility matrix, and migration tooling in one reviewed
    change—or explicitly gate the safe sequence when atomic release is
    impossible.
-6. Run schema validation and consumer contract tests with synthetic fixtures.
-7. Record the version decision and compatibility result in the pull request.
+7. Run schema validation and consumer contract tests with synthetic fixtures,
+   including prior-version and missing/unknown/not-applicable cases.
+8. Record the version decision and compatibility result in the pull request.
 
 Generated code or documentation is never the schema authority. Regenerate it
 from the canonical contract and verify that no unreviewed drift remains.
@@ -119,11 +135,15 @@ Every versioned change should be traceable through:
 
 - [ ] The affected version surface and its owner are identified.
 - [ ] Current versions were read from authoritative files, not recalled.
+- [ ] Every new or changed structured template/artifact declares the schema
+      version and stable type required by its versioned schema directory.
 - [ ] Compatibility classification and rationale are recorded.
 - [ ] Canonical schemas and every producer/consumer remain aligned.
 - [ ] Migration, rollback/stop conditions, and deprecation window are defined
       when required.
 - [ ] Synthetic fixtures and contract tests cover the old and new behavior.
+- [ ] Legacy treatment is supported by an introduction marker, manifest, or
+      equivalent baseline rather than inferred from a missing field.
 - [ ] Only the authorized version surface was bumped.
 - [ ] Git diff, staged diff, branch, commit, PR, and CI state were verified.
 - [ ] Publication, deployment, release, and merge gates remain human-controlled.

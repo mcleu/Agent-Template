@@ -10,8 +10,9 @@ A reusable, tool-neutral operating-contract template for future projects.
 4. Copy VERSIONING.template.md to VERSIONING.md when the project has schemas,
    releases, migrations, or versioned deliverables; customize its version
    surfaces and owners.
-5. Copy schemas/schema.template.md for each shared data or interface contract
-   and register it in schemas/README.md.
+5. Keep the versioned [schemas/v1/](schemas/v1/) baseline. Copy
+   [schema-contract.template.md](schemas/v1/schema-contract.template.md) for each
+   shared data or interface contract and register it in the version index.
 6. Keep AGENTS.md canonical. Make CLAUDE.md and other runtime entry files thin
    pointers rather than divergent copies.
 7. Commit the customized contract on a feature branch and review it like code.
@@ -24,6 +25,8 @@ Example:
 
     cp AGENTS.template.md /path/to/project/AGENTS.md
     cp VERSIONING.template.md /path/to/project/VERSIONING.md
+    mkdir -p /path/to/project/schemas/v1
+    cp schemas/v1/schema-contract.template.md /path/to/project/schemas/v1/example.md
 
 ## Improve an existing repository
 
@@ -40,6 +43,11 @@ branch, with `AGENTS.md` updated before its tool-specific adapters.
 
 Reusable role guides live under [agents/templates/](agents/templates/). Start
 with the smallest team that has distinct owned outputs.
+
+Every role template carries v1 YAML metadata. Preserve `schema_version`, `type`,
+`template_id`, and `role` when copying it. Replace the role identity only when
+customizing the role skeleton; create a new schema version rather than silently
+changing what an existing metadata field means.
 
 | Role | Best used for |
 | --- | --- |
@@ -68,8 +76,11 @@ Example:
   follow-through, and no agent-initiated merge.
 - Distinct schema, release, deliverable, migration, and Git version surfaces
   with explicit owners, compatibility rules, and traceability.
-- Canonical schema contracts with producer/consumer inventories, synthetic
-  fixtures, migration gates, and generated-drift checks.
+- Integer-versioned `schemas/vN/` contracts; every reusable template declares
+  its `schema_version`, stable `type`, and identity.
+- Canonical schema contracts with producer/consumer inventories, explicit
+  unknown/legacy behavior, synthetic fixtures, migration gates, and
+  generated-drift checks.
 - A pull-request checklist that makes version decisions, checks, release state,
   and human-only merge authority reviewable.
 - Durable checkpoints after each natural unit and interruption-safe resume.
@@ -97,7 +108,7 @@ visible `agents/` template tree, rejects doubled separators and unapproved hidde
 agent-folder references, and adjudicates intentional `.agents/` discussion
 through explicit approved exceptions rather than treating every scanner match
 as a failure. It also requires the schema, versioning, and schema-steward
-scaffold files used by this public template.
+scaffold files and verifies the v1 metadata on every reusable template.
 
 ## Review basis
 

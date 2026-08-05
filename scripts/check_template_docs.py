@@ -34,11 +34,30 @@ REQUIRED_SCAFFOLD_PATHS = (
     "AGENTS.template.md",
     "VERSIONING.template.md",
     "schemas/README.md",
-    "schemas/schema.template.md",
+    "schemas/v1/README.md",
+    "schemas/v1/INTRODUCED.md",
+    "schemas/v1/template-metadata.md",
+    "schemas/v1/schema-contract.template.md",
     ".github/PULL_REQUEST_TEMPLATE.md",
     "agents/README.md",
     "agents/templates/schema-version-steward.template.md",
 )
+
+TEMPLATE_SCHEMA_VERSION = "1"
+TEMPLATE_ID = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+ALLOWED_TEMPLATE_TYPES = {
+    "agent_contract",
+    "versioning_policy",
+    "agent_role",
+    "schema_contract",
+    "pull_request",
+}
+EXPECTED_TEMPLATE_TYPES = {
+    "AGENTS.template.md": "agent_contract",
+    "VERSIONING.template.md": "versioning_policy",
+    ".github/PULL_REQUEST_TEMPLATE.md": "pull_request",
+    "schemas/v1/schema-contract.template.md": "schema_contract",
+}
 
 
 def markdown_files() -> list[Path]:
@@ -47,6 +66,18 @@ def markdown_files() -> list[Path]:
         for path in ROOT.rglob("*.md")
         if ".git" not in path.relative_to(ROOT).parts
     )
+
+
+def template_files() -> list[Path]:
+    files = {
+        path
+        for path in ROOT.rglob("*.template.md")
+        if ".git" not in path.relative_to(ROOT).parts
+    }
+    pull_request_template = ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md"
+    if pull_request_template.is_file():
+        files.add(pull_request_template)
+    return sorted(files)
 
 
 def rendered_lines(path: Path):
@@ -175,12 +206,85 @@ def check_required_scaffolds() -> tuple[int, list[str]]:
     return len(REQUIRED_SCAFFOLD_PATHS), failures
 
 
+def parse_template_metadata(path: Path) -> tuple[dict[str, str], str | None]:
+    text = path.read_text(encoding="utf-8")
+    if text.startswith("---\n"):
+        end = text.find("\n---\n", 4)
+        if end == -1:
+            return {}, "missing closing YAML frontmatter delimiter"
+        block = text[4:end]
+    elif text.startswith("<!--\n"):
+        end = text.find("\n-->\n", 5)
+        if end == -1:
+            return {}, "missing closing metadata-comment delimiter"
+        block = text[5:end]
+    else:
+        return {}, "missing leading schema metadata"
+
+    metadata: dict[str, str] = {}
+    for line in block.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if ":" not in line:
+            return {}, f"unsupported metadata line: {line}"
+        key, value = line.split(":", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if not key or key in metadata:
+            return {}, f"invalid or duplicate metadata key: {key or '<blank>'}"
+        metadata[key] = value
+
+    return metadata, None
+
+
+def check_template_versions() -> tuple[int, list[str]]:
+    files = template_files()
+    failures: list[str] = []
+
+    for path in files:
+        relative_path = str(path.relative_to(ROOT))
+        metadata, error = parse_template_metadata(path)
+        if error:
+            failures.append(f"{relative_path}: {error}")
+            continue
+
+        schema_version = metadata.get("schema_version")
+        if schema_version != TEMPLATE_SCHEMA_VERSION:
+            failures.append(
+                f"{relative_path}: schema_version must be {TEMPLATE_SCHEMA_VERSION}"
+            )
+
+        template_type = metadata.get("type", "")
+        if template_type not in ALLOWED_TEMPLATE_TYPES:
+            failures.append(f"{relative_path}: unsupported or missing template type")
+
+        expected_type = EXPECTED_TEMPLATE_TYPES.get(relative_path)
+        if relative_path.startswith("agents/templates/"):
+            expected_type = "agent_role"
+        if expected_type and template_type != expected_type:
+            failures.append(
+                f"{relative_path}: type must be {expected_type} (received {template_type or '<missing>'})"
+            )
+
+        template_id = metadata.get("template_id", "")
+        if not TEMPLATE_ID.fullmatch(template_id):
+            failures.append(f"{relative_path}: template_id must be a stable lower-case slug")
+
+        if template_type == "agent_role":
+            role = metadata.get("role", "")
+            if not TEMPLATE_ID.fullmatch(role):
+                failures.append(f"{relative_path}: agent_role requires a lower-case role slug")
+
+    return len(files), failures
+
+
 def main() -> int:
     files = markdown_files()
     link_count, link_failures = check_links(files)
     path_candidates, approved_candidates, path_failures = check_agent_paths(files)
     scaffold_count, scaffold_failures = check_required_scaffolds()
-    failures = link_failures + path_failures + scaffold_failures
+    template_count, template_failures = check_template_versions()
+    failures = link_failures + path_failures + scaffold_failures + template_failures
 
     print(f"Markdown files scanned: {len(files)}")
     print(f"Relative Markdown links resolved: {link_count}")
@@ -190,6 +294,7 @@ def main() -> int:
     )
     present_count = scaffold_count - len(scaffold_failures)
     print(f"Required scaffold files present: {present_count}/{scaffold_count}")
+    print(f"Versioned reusable templates checked: {template_count}")
 
     if failures:
         print("\nDocumentation validation failed:", file=sys.stderr)

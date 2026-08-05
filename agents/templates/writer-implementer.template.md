@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-writer-implementer
+role: writer-implementer
+---
+
 # Agent: Writer / Implementer
 
 ## Role
@@ -131,6 +138,9 @@ decision precisely.
 - When assigned a contract change, implement the approved schema, migration,
   fixtures, producer/consumer surfaces, and version bump only within the exact
   owned paths and gated release sequence.
+- When creating or changing a reusable template, preserve its required
+  `schema_version`, stable `type`/identity, and role metadata. Do not bump the
+  schema version for an ordinary content edit.
 
 ## Checkpointing and resume
 

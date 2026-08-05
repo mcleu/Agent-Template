@@ -1,3 +1,9 @@
+---
+schema_version: 1
+type: agent_contract
+template_id: root-agent-contract
+---
+
 # AGENTS.md Template — Project Operating Contract
 
 > Copy this file to the repository root as AGENTS.md. Replace every
@@ -17,6 +23,10 @@
 - VERSIONING.md defines the project's version surfaces, compatibility promises,
   and bump owners. It supplements this contract and does not grant release,
   publication, merge, or Git authority.
+- This contract's leading `schema_version`, `type`, and `template_id` identify
+  its document shape under `schemas/vN/`. Preserve them when instantiating the
+  template. Ordinary policy edits do not bump the schema version; a breaking
+  metadata/structure change requires the next integer schema directory.
 - Remove examples and optional clauses that do not fit this project. A shorter,
   accurate contract is safer than a comprehensive contract nobody follows.
 - If this contract conflicts with the actual repository, stop, report the
@@ -85,7 +95,7 @@ private inputs, working state, generated output, and archived history.
     templates/            Blank, reusable, non-sensitive starting artifacts
     examples/             Synthetic examples safe to commit and publish
     scripts/              Deterministic validation, export, and maintenance tools
-    schemas/              Versioned data and interface contracts
+    schemas/vN/           Immutable integer-versioned contracts and indexes
     plans/                Reviewable implementation plans and decision records
     memory/               Optional durable local context; private by default
     .github/workflows/    CI checks that enforce repository contracts
@@ -372,22 +382,28 @@ gate may block but does not silently rewrite another role's work.
 ### Schema and interface contracts [OPTIONAL]
 
 - Keep canonical shared contracts in schemas/ or another documented authority.
+  Default to immutable integer version directories such as `schemas/v1/`.
   Register each stable schema ID, current version, owner, producers, consumers,
-  validator, generated representations, and migration path.
+  validator, generated representations, introduction marker, and migration path.
+- Every new or changed structured template/artifact declares an integer
+  `schema_version` matching its `schemas/vN/` authority and a stable `type`.
+  Missing version metadata is legacy only when repository history, an
+  introduction marker, or an approved migration manifest proves it.
 - Every field keeps one meaning and type. Define requiredness, defaults,
   invariants, lifecycle transitions, and missing/unknown/null/invalid/deprecated
   behavior explicitly. Do not silently coerce unknown values.
 - Generated models, API documentation, examples, and storage layouts identify
   their canonical source; they do not become competing schema authorities.
 - Before editing, compare old and proposed behavior and classify compatibility
-  using VERSIONING.md. Default semantic meaning is major for breaking changes,
-  minor for backward-compatible additions, and patch only when observable
-  accepted/emitted behavior does not change.
+  using VERSIONING.md. A clarification keeps the version; an optional extension
+  stays in the same version only when unknown future fields are explicitly safe;
+  a breaking change creates the next integer schema directory.
 - Update the canonical schema, producers, consumers, generated representations,
   fixtures, validators, tests, migrations, examples, and documentation in one
   reviewed change, or document prerequisite gates and a safe release order.
 - Breaking changes require a migration/backfill owner, consumer cutover order,
-  support window, rollback or stop condition, and preserved audit evidence.
+  support window, rollback or stop condition, preserved prior schema definition,
+  and audit evidence.
 - Validate with synthetic fixtures and contract tests. Never put live private or
   customer records in a shareable schema fixture.
 
@@ -640,6 +656,8 @@ Before declaring work complete:
 - [ ] No private, generated, vendor, or unrelated file was accidentally added.
 - [ ] Relevant format, lint, type, test, build, schema, privacy, branch, and
       visual checks passed, or each unrun check is named with the reason.
+- [ ] Every new or changed reusable template retains valid schema metadata and
+      no live artifact contains unresolved template placeholders.
 - [ ] The final diff and staged diff were reviewed.
 - [ ] Tracked work is committed on the correct feature branch.
 - [ ] The branch was pushed and a pull request opened when a remote/PR path

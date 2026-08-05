@@ -1,3 +1,9 @@
+<!--
+schema_version: 1
+type: pull_request
+template_id: pull-request
+-->
+
 ## Outcome and scope
 
 - Outcome:
@@ -19,6 +25,8 @@ leaving an applicable surface ambiguous.
 | Git source revision | | | | immutable traceability only |
 
 - Canonical schema(s):
+- Template/record `schema_version` and stable `type`:
+- Introduction marker or legacy baseline:
 - Producers/consumers changed:
 - Migration, cutover, support window, and rollback/stop plan:
 - Generated representations and drift check:
@@ -27,6 +35,8 @@ leaving an applicable surface ambiguous.
 
 - [ ] Required schema and version decisions are reflected in authoritative
       files.
+- [ ] Every new or changed reusable template/structured artifact declares the
+      version, type, and identity required by its versioned schema directory.
 - [ ] Producers, consumers, fixtures, tests, migrations, examples, and
       documentation are aligned or explicitly gated.
 - [ ] Synthetic fixtures cover old/new and missing/unknown/invalid behavior as

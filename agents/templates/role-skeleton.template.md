@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-custom
+role: custom
+---
+
 # Agent: [CUSTOMIZE: Role Name]
 
 ## Role

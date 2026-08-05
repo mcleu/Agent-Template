@@ -153,7 +153,7 @@ these practice families:
 | Privacy and publication | Are private inputs, public output, synthetic examples, secret/PII scans, approval gates, and publication surfaces defined? |
 | Planning and ambiguity | Are prerequisite gates, decision owners, approval boundaries, reversibility, and one-question-at-a-time escalation clear? |
 | Multi-agent operation | Are roles bounded by exact reads/writes, checkpoints, handoffs, model tiers, and serialized overlapping writes? |
-| Schemas and versioning | Are canonical contracts, stable IDs, versions, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority explicit? Are schema, release, deliverable, migration, and Git revisions kept distinct? |
+| Schemas and versioning | Are canonical contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Are schema, release, deliverable, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
@@ -304,6 +304,9 @@ After the final edit:
 - Confirm each affected schema has one authority, stable ID/version, verified
   producers/consumers, compatibility classification, migration path when
   required, and an authorized bump owner.
+- Confirm every new or changed reusable template declares the schema version,
+  stable type/identity, and any role-specific metadata required by its versioned
+  contract. Do not infer legacy status from missing metadata alone.
 - Confirm schema, product/release, deliverable, migration/manifest, and Git
   revision identifiers are not conflated.
 - Verify trunk, deployment target, hosting/runtime, CI, and release claims

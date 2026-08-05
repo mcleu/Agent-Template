@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-orchestrator
+role: orchestrator
+---
+
 # Agent: Orchestrator
 
 ## Role
@@ -120,6 +127,9 @@ Before dispatch:
   duplicates/collisions, consistency, and the named checkpoint.
 - Confirm reported schema IDs/versions, compatibility, migration gates, and
   version proposals against authoritative files.
+- Confirm new/changed templates declare the version, type, identity, and role
+  required by their `schemas/vN/` authority; do not accept missing metadata as
+  legacy without an introduction baseline.
 - Accept only cross-file proposals supported by the worker's owned artifact.
 - Return invalid work with a precise defect and expected correction.
 

@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-reviewer-critic
+role: reviewer-critic
+---
+
 # Agent: Reviewer / Critic
 
 ## Role
@@ -134,8 +141,11 @@ The project's rubric overrides this example.
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
-- Verify that major/minor/patch or project-specific classification matches the
-  actual old and new behavior; a version bump does not prove compatibility.
+- Verify that clarification/additive-compatible/breaking or project-specific
+  classification matches the actual old and new behavior; a version bump does
+  not prove compatibility.
+- Confirm the versioned schema directory, artifact `schema_version`, stable
+  `type`, and legacy/introduction evidence agree.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 

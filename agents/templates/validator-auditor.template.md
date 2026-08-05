@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-validator-auditor
+role: validator-auditor
+---
+
 # Agent: Validator / Auditor
 
 ## Role
@@ -105,6 +112,9 @@ Before validating:
 
 - Run format, schema, frontmatter, data-contract, link, route, and
   cross-reference checks.
+- For every new or changed reusable template, verify the declared integer schema
+  version, stable type/identity, required role metadata, version-directory
+  authority, and introduction/legacy evidence.
 - Detect dangling references, duplicate active records, stale supersession
   links, unknown-field coercion, and broken producer/consumer alignment.
 - Confirm breaking changes have the required migration, support window, cutover

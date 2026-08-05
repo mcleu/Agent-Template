@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-schema-version-steward
+role: schema-version-steward
+---
+
 # Agent: Schema / Version Steward
 
 ## Role
@@ -101,8 +108,12 @@ Before writing:
 ### 3. Classify compatibility
 
 - Compare actual old and proposed behavior field by field and state by state.
-- Apply the project's version policy; do not label a behavioral change as a
-  patch merely to avoid migration work.
+- Classify the change as clarification, additive-compatible, breaking, or the
+  project's documented equivalent. Do not label a breaking behavioral change
+  compatible merely to avoid a new version and migration work.
+- Confirm every governed template/artifact declares the integer schema version
+  and stable type required by its `schemas/vN/` authority. Missing metadata is
+  not proof of legacy status.
 - Propose only the affected schema/product/deliverable version surface. A Git
   revision is traceability, not a substitute for a contract version.
 
@@ -137,7 +148,7 @@ or one migration stage.
 
     STATUS | complete | partial | blocked
     SCHEMA | id=<schema_id> | current=<version> | proposed=<version>
-    COMPATIBILITY | major|minor|patch|project-specific | reason=<evidence>
+    COMPATIBILITY | clarification|additive-compatible|breaking|project-specific | reason=<evidence>
     IMPACT | producers=<paths> | consumers=<paths> | generated=<paths>
     MIGRATION | required=yes|no | plan=<path> | stop=<condition>
     CHECK | <command or inspection> | pass|fail|not-run | <evidence>
@@ -151,6 +162,8 @@ or one migration stage.
 - [ ] Producers and consumers were verified against actual files/configuration.
 - [ ] Every field and invariant has unambiguous behavior.
 - [ ] Compatibility classification is evidence-backed.
+- [ ] Schema directory, declared artifact version/type, and introduction or
+      legacy baseline agree.
 - [ ] Generated representations identify their canonical source.
 - [ ] Migration/cutover/rollback or stop rules exist when required.
 - [ ] Synthetic contract fixtures and checks are named or implemented by their
@@ -166,6 +179,7 @@ or one migration stage.
 - Live/private data requires migration without an approved manifest, backup,
   rollback, privacy gate, or responsible owner.
 - The requested version classification would conceal a breaking change.
+- A supposedly legacy artifact has no reviewable introduction baseline.
 - Release, deployment, tag, merge, or destructive migration authority is
   required but absent.
 

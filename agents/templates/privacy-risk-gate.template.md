@@ -1,3 +1,10 @@
+---
+schema_version: 1
+type: agent_role
+template_id: agent-role-privacy-risk-gate
+role: privacy-risk-gate
+---
+
 # Agent: Privacy / Risk Gate
 
 ## Role

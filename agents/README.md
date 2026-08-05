@@ -4,6 +4,12 @@ These are tool-neutral role templates for projects that benefit from bounded,
 specialized agents. Copy only the roles the project needs, customize every
 placeholder, and keep the project's root AGENTS.md authoritative.
 
+Each role guide starts with v1 schema metadata. Preserve `schema_version: 1`,
+`type: agent_role`, and `template_id` when copying a role. Use the real stable
+`role` slug; do not bump the schema version for ordinary role-policy edits.
+A breaking change to required role metadata belongs in the next integer schema
+directory and requires adapter/consumer migration.
+
 ## Start small
 
 Do not create a team merely because roles can be named. A separate agent earns
@@ -67,6 +73,8 @@ Every project role must:
     fields, interfaces, migrations, releases, or versioned deliverables.
 12. State whether the role may edit schemas, propose or apply version bumps, and
     mutate Git. Unassigned authority means proposal-only or read-only.
+13. Preserve the role guide's `schema_version`, `type`, `template_id`, and `role`
+    metadata and validate it before handoff.
 
 ## Standard execution sequence
 
@@ -172,6 +180,8 @@ permission to apply, publish, commit, or merge.
 ## Customization checklist
 
 - [ ] Replace every [CUSTOMIZE] placeholder.
+- [ ] Preserve valid v1 template metadata and replace `role: custom` with the
+      adopted role slug when starting from the role skeleton.
 - [ ] Delete roles and optional sections the project does not use.
 - [ ] Name exact input and output paths.
 - [ ] Define the role's checkpoint unit.
