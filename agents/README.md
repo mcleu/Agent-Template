@@ -97,7 +97,9 @@ Every project role must:
    stale cross-references.
 10. Apply privacy/risk and independent validation gates where required.
 11. For adopted multi-agent policy, verify every relevant role guide explicitly
-    covers ownership, checkpoints, handoffs, applicable verdicts, and model tier.
+    covers ownership, checkpoints, handoffs, applicable verdicts, and model
+    routing. Provider-neutral roles may record `host-selected` or `not-required`
+    with rationale instead of naming a tier.
 12. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
@@ -208,10 +210,11 @@ permission to apply, publish, commit, or merge.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
+| 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |

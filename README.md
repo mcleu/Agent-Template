@@ -30,16 +30,18 @@ using them as active project policy.
 5. Keep the versioned [schemas/v1/](schemas/v1/) baseline. Copy
    [schema-contract.template.md](schemas/v1/schema-contract.template.md) for each
    shared data or interface contract and register it in the version index.
-6. Apply the [document-control contract](schemas/v1/document-control.md) to every
-   durable human-authored file. Give each one a distinct content version,
-   last-edited date, and append-only change history.
+6. Apply the [document-control contract](schemas/v1/document-control.md) to new
+   and materially revised durable human-authored files. Baseline untouched
+   legacy files without inventing history.
 7. Keep AGENTS.md canonical. Make CLAUDE.md and other runtime entry files thin
    pointers rather than divergent copies.
 8. Commit the customized contract on a feature branch and review it like code.
 
 When adopting only selected files into an existing repository, also copy the
 validator, its tests, and the documentation workflow if you want the template's
-rules enforced in CI. Preserve the existing repository's license and local
+rules enforced in CI. Use its optional configuration to map the canonical policy,
+agent directory, schemas, metadata, exceptions, and private-path candidates to
+the downstream layout. Preserve the existing repository's license and local
 governance unless the owner explicitly approves changing them.
 
 The included [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
@@ -63,6 +65,10 @@ and local commits, writes an incremental adoption matrix, preserves stricter or
 project-specific rules, and proposes exact changes before editing local
 `AGENTS.md` or `CLAUDE.md`. Authorized changes are made minimally on a feature
 branch, with `AGENTS.md` updated before its tool-specific adapters.
+
+For a lightweight repository, begin with ADOPTION.md's **smallest useful
+adoption** profile instead of assuming every role, schema, validator, and
+metadata convention is necessary.
 
 ## Included sub-agent templates
 
@@ -143,6 +149,11 @@ scaffold files, checks document-control blocks on every Markdown file, and
 verifies the schema and typed document metadata on every reusable template. It
 discovers supported integer schema versions from `schemas/vN/`, reports the
 latest supported version, and rejects missing version scaffolds or version gaps.
+Pass `--config path/to/validator.json` to adapt those checks to a downstream
+repository while retaining this repository's zero-configuration defaults. See
+[validator.config.example.json](validator.config.example.json) for the supported
+settings. Set `active_agent_directory` to `null` when the adopted profile has no
+role-guide directory.
 
 ## License
 
@@ -158,11 +169,12 @@ source repositories.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
 | 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
+| 1.2 | 2026-08-08 | Added gradual adoption, lightweight profile, and configurable downstream-validator guidance. |
