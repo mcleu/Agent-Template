@@ -2,8 +2,8 @@
 schema_version: 1
 type: agent_contract
 template_id: root-agent-contract
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-08"
 ---
 
 # AGENTS.md Template — Project Operating Contract
@@ -251,6 +251,10 @@ Recommended research file:
   material.
 - Put local/private paths in .gitignore before adding sensitive files. Include a
   safe .env.example rather than real credentials or identifiers.
+- During preflight, inspect common OS and editor metadata such as `.DS_Store`,
+  `.idea/`, `.vscode/`, `.obsidian/`, swap files, and local workspace state.
+  Decide explicitly whether each candidate is intentional, ignored, or requires
+  owner review; do not delete it automatically.
 - Never commit API keys, account numbers, payment data, health details, home
   addresses, passport or loyalty identifiers, attorney-client work product,
   unreleased product data, confidential business terms, or third-party personal
@@ -402,6 +406,11 @@ gate may block but does not silently rewrite another role's work.
   machine-managed lockfiles use their native version surface plus Git unless a
   project-specific contract requires embedded versions. Record `NOT REQUIRED`
   with the scope reason rather than adding noisy headers.
+- Apply the contract to new durable files immediately. For an existing durable
+  file, apply it when the file is materially revised. Record untouched older
+  files in a dated introduction baseline or migration manifest; do not invent
+  historical versions, dates, or approvals. A project may schedule a broader
+  retrofit, but adoption alone does not require one.
 - The file owner controls its document version. Another role may propose the
   next version but cannot edit the file or its history without write authority.
 
@@ -411,6 +420,12 @@ gate may block but does not silently rewrite another role's work.
   Default to immutable integer version directories such as `schemas/v1/`.
   Register each stable schema ID, current version, owner, producers, consumers,
   validator, generated representations, introduction marker, and migration path.
+- For Markdown-oriented workflows, separate complementary authority when useful:
+  keep domain terms, intent, and human interpretation in a named human-readable
+  contract, while the versioned schema owns producer/consumer compatibility,
+  required fields, lifecycle invariants, and migration behavior. Cross-link the
+  two and state which source decides each kind of disagreement; neither becomes
+  a competing authority for the other's concerns.
 - Every new or changed structured template/artifact declares an integer
   `schema_version` matching its `schemas/vN/` authority and a stable `type`.
   Missing version metadata is legacy only when repository history, an
@@ -573,9 +588,10 @@ Every role guide should specify:
 
 When implementing a policy adoption or governance change, maintain a
 role-coverage table for every relevant role. Confirm that ownership,
-checkpointing, handoff format, applicable verdict/gate semantics, and model tier
-are explicit in the role guide itself. Root `AGENTS.md` language does not fill an
-implicit role-guide gap.
+checkpointing, handoff format, applicable verdict/gate semantics, and model
+routing are explicit in the role guide itself. A provider-neutral role may say
+`host-selected` or `not-required` with a rationale instead of naming a tier.
+Root `AGENTS.md` language does not fill an implicit role-guide gap.
 
 Prefer current capability tiers over dated model IDs:
 
@@ -779,10 +795,11 @@ integrations, approvals, deadlines, or evidence remain unknown.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
+| 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |

@@ -72,7 +72,11 @@ Before retrieving or comparing the template:
    changes.
 5. Identify the local canonical policy file. Do not assume the repository has
    already made `AGENTS.md` canonical.
-6. Do not disturb unrelated edits, switch a dirty worktree, or absorb changes
+6. Inventory common OS and editor metadata such as `.DS_Store`, `.idea/`,
+   `.vscode/`, `.obsidian/`, swap files, and local workspace state. For each
+   candidate, confirm whether it is intentionally tracked, should be ignored, or
+   needs owner review. Do not delete or rewrite it automatically.
+7. Do not disturb unrelated edits, switch a dirty worktree, or absorb changes
    whose ownership is unclear.
 
 Suggested read-only inventory:
@@ -152,8 +156,8 @@ these practice families:
 | Evidence and research | Are sources, URLs, check dates, confidence, assumptions, unknowns, and source-of-truth precedence preserved? |
 | Privacy and publication | Are private inputs, public output, synthetic examples, secret/PII scans, approval gates, and publication surfaces defined? |
 | Planning and ambiguity | Are prerequisite gates, decision owners, approval boundaries, reversibility, and one-question-at-a-time escalation clear? |
-| Multi-agent operation | Are roles bounded by exact reads/writes, checkpoints, handoffs, model tiers, and serialized overlapping writes? |
-| Schemas and versioning | Are canonical contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, producers/consumers, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Does every durable human-authored file have a document version, last-edited date, and append-only history? Are document, schema, release, migration, and Git revisions kept distinct? |
+| Multi-agent operation | Are roles bounded by exact reads/writes, checkpoints, handoffs, host-selected or explicit model routing, and serialized overlapping writes? |
+| Schemas and versioning | Are human-readable domain meaning and versioned producer/consumer invariants assigned clear, complementary authorities? Are schema contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Do new or materially revised durable human-authored files have a document version, last-edited date, and append-only history without invented legacy history? Are document, schema, release, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
@@ -201,6 +205,20 @@ After the matrix is complete:
 6. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
 7. State the smallest coherent implementation batch.
 
+For a lightweight existing repository, consider the **smallest useful
+adoption** profile first:
+
+- expand the canonical operating contract only where the audit finds a gap;
+- retain one thin runtime adapter when the host needs one;
+- keep the adoption audit and a locally appropriate `VERSIONING.md`;
+- add only the schema contracts relevant to active shared interfaces;
+- use the pull-request checklist and the repository's native tests; and
+- omit generic roles, a second validation stack, and repository-wide metadata
+  when they do not address an evidenced risk.
+
+Expand beyond this profile only when the audit identifies distinct ownership,
+handoff, validation, privacy, or compatibility needs.
+
 ### Require role-guide coverage
 
 Do not treat a root `AGENTS.md` change as automatically adopted by sub-agents.
@@ -211,11 +229,12 @@ Add a role-coverage table to the audit:
 
 | Practice ID | Role | Guide path | Ownership | Schema authority | Document-version authority | Git authority | Checkpoint | Handoff | Verdict/gate | Model tier | Coverage |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [ID] | [role] | [path] | explicit/missing | explicit/missing/not-required | explicit/missing/not-required | explicit/missing/not-required | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/missing | covered/gap/not-required |
+| [ID] | [role] | [path] | explicit/missing | explicit/missing/not-required | explicit/missing/not-required | explicit/missing/not-required | explicit/missing | explicit/missing | explicit/missing/not-required | explicit/host-selected/not-required/missing | covered/gap/not-required |
 
 - `covered` requires explicit ownership, checkpointing, handoff, applicable
   schema, document-version, and Git authority when applicable, verdict/gate
-  semantics, and model-tier guidance in the role guide itself.
+  semantics, and an explicit model tier or an intentional `host-selected` or
+  `not-required` routing decision with rationale in the role guide itself.
 - Use `not-required` only when the practice or field genuinely does not apply to
   that role, and record why.
 - A missing or implicit field is a `gap`, not inherited coverage.
@@ -246,8 +265,11 @@ When implementation is explicitly authorized:
 9. Start or advance the document-control version for every durable audit,
    guidance file, or role guide materially changed in the batch. Update its
    last-edited date and append one specific history row.
-10. Commit logical documentation changes, push the branch, and open a pull
-   request when a remote exists. Do not merge the pull request.
+10. Perform only the separately authorized Git stages. Treat local branch
+    creation, commit, push, draft pull request, ready-for-review transition,
+    merge, and release as distinct authorities. A remote's existence does not
+    authorize an external action. Never merge unless the owner explicitly
+    grants that authority.
 
 Do not replace a mature local `AGENTS.md` wholesale with the template. Merge
 practices into the existing structure unless the user explicitly approves a
@@ -375,15 +397,18 @@ result.
     implementation. If implementation is authorized, use a feature branch,
     make minimal changes to canonical AGENTS.md first, relevant role guides
     next, and CLAUDE.md last. Validate reality claims and scanner candidates,
-    apply document control to every durable authored file, close commit metadata
-    without self-reference, commit, push, open a PR, and never merge it.
+    apply document control to new and materially revised durable authored files,
+    baseline untouched legacy files without invented history, close commit
+    metadata without self-reference, and perform only the separately authorized
+    branch, commit, push, or PR stages. Never merge without explicit authority.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
+| 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |

@@ -1,0 +1,20 @@
+{
+  "root": ".",
+  "canonical_policy_file": "AGENTS.md",
+  "active_agent_directory": "agents",
+  "schema_locations": ["schemas"],
+  "template_globs": ["AGENTS.md", "agents/**/*.md", "schemas/v*/*.template.md"],
+  "required_metadata": ["schema_version", "type", "template_id"],
+  "required_scaffold_paths": ["VERSIONING.md"],
+  "document_control_include": ["AGENTS.md", "agents/**/*.md", "docs/**/*.md"],
+  "document_control_exclude": ["docs/legacy/**/*.md"],
+  "private_path_patterns": [
+    "(^|/)\\.DS_Store($|\\s)",
+    "(^|/)\\.obsidian/",
+    "(^|/)private/"
+  ],
+  "approved_exceptions": {
+    "AGENTS.md": ["`private/` is ignored and local-only"]
+  },
+  "enforce_agent_template_types": false
+}

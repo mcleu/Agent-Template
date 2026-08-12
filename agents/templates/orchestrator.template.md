@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-orchestrator
 role: orchestrator
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-08"
 ---
 
 # Agent: Orchestrator
@@ -110,7 +110,8 @@ Before dispatch:
 - Route shared-contract changes through the named Schema/Version Steward or
   explicitly assign equivalent ownership; never leave compatibility implicit.
 - Match model/resource tier to risk and task complexity after checking current
-  availability.
+  availability. In a provider-neutral project, record `host-selected` with
+  rationale and delegate the concrete model choice to the runtime.
 - Verify prerequisite artifacts exist before routing the next stage.
 - Give each worker a minimal context packet and an exact output path.
 - When adopting shared policy, require a role-coverage table and update every
@@ -198,7 +199,8 @@ Require:
 - [ ] Every planned write has one owner.
 - [ ] Every completed role has a durable output or read-only handoff.
 - [ ] Every accepted multi-agent policy has explicit coverage in each relevant
-      role guide for ownership, checkpoints, handoffs, verdicts, and model tier.
+      role guide for ownership, checkpoints, handoffs, verdicts, and explicit,
+      host-selected, or not-required model routing.
 - [ ] Prerequisite and approval gates are evidenced.
 - [ ] Schema, migration, version-bump, and Git ownership is explicit where
       applicable.
@@ -240,10 +242,11 @@ Escalate to the user when:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
+| 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |

@@ -3,20 +3,36 @@
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
 import sys
 from datetime import date
-from json import JSONDecodeError, loads as json_loads
+from json import JSONDecodeError, load as json_load, loads as json_loads
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
+CANONICAL_POLICY_FILE = "AGENTS.md"
+ACTIVE_AGENT_DIRECTORY: str | None = "agents/templates"
+SCHEMA_LOCATIONS = ("schemas",)
+REQUIRED_METADATA = (
+    "schema_version",
+    "type",
+    "template_id",
+    "document_version",
+    "last_edited",
+)
+TEMPLATE_GLOBS = ("**/*.template.md", ".github/PULL_REQUEST_TEMPLATE.md")
+DOCUMENT_CONTROL_INCLUDE = ("**/*.md",)
+DOCUMENT_CONTROL_EXCLUDE: tuple[str, ...] = ()
+ENFORCE_AGENT_TEMPLATE_TYPES = True
 MARKDOWN_LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 REFERENCE_LINK = re.compile(r"^\s{0,3}\[[^\]]+\]:\s*(\S+)")
 FENCE = re.compile(r"^\s*(```|~~~)")
 HIDDEN_AGENT_REFERENCE = re.compile(r"\.agents/")
+PRIVATE_PATH_PATTERNS = (HIDDEN_AGENT_REFERENCE,)
 DOUBLED_AGENT_SEPARATOR = re.compile(r"(?:^|[^.])agents//|\.agents//")
 
 APPROVED_HIDDEN_AGENT_REFERENCES = {
@@ -69,6 +85,99 @@ EXPECTED_TEMPLATE_TYPES = {
 }
 
 
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--config",
+        type=Path,
+        help="JSON configuration for a downstream repository",
+    )
+    return parser.parse_args()
+
+
+def _string_list(config: dict[str, object], key: str, default: tuple[str, ...]) -> tuple[str, ...]:
+    value = config.get(key, list(default))
+    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
+        raise ValueError(f"{key} must be an array of strings")
+    return tuple(value)
+
+
+def apply_configuration(config_path: Path | None) -> None:
+    """Apply optional downstream layout and policy settings."""
+    if config_path is None:
+        return
+
+    resolved = config_path.resolve()
+    try:
+        with resolved.open(encoding="utf-8") as handle:
+            config = json_load(handle)
+    except (OSError, JSONDecodeError) as exc:
+        raise ValueError(f"cannot read configuration {config_path}: {exc}") from exc
+    if not isinstance(config, dict):
+        raise ValueError("configuration root must be a JSON object")
+
+    global ROOT
+    global CANONICAL_POLICY_FILE, ACTIVE_AGENT_DIRECTORY, SCHEMA_LOCATIONS
+    global REQUIRED_METADATA, TEMPLATE_GLOBS
+    global DOCUMENT_CONTROL_INCLUDE, DOCUMENT_CONTROL_EXCLUDE
+    global ENFORCE_AGENT_TEMPLATE_TYPES, PRIVATE_PATH_PATTERNS
+    global APPROVED_HIDDEN_AGENT_REFERENCES, REQUIRED_SCAFFOLD_PATHS
+
+    root_value = config.get("root", ".")
+    if not isinstance(root_value, str):
+        raise ValueError("root must be a string")
+    ROOT = (resolved.parent / root_value).resolve()
+
+    canonical = config.get("canonical_policy_file", CANONICAL_POLICY_FILE)
+    active_agents = config.get("active_agent_directory", ACTIVE_AGENT_DIRECTORY)
+    if not isinstance(canonical, str):
+        raise ValueError("canonical_policy_file must be a string")
+    if active_agents is not None and not isinstance(active_agents, str):
+        raise ValueError("active_agent_directory must be a string or null")
+    CANONICAL_POLICY_FILE = canonical
+    ACTIVE_AGENT_DIRECTORY = active_agents
+    SCHEMA_LOCATIONS = _string_list(config, "schema_locations", SCHEMA_LOCATIONS)
+    REQUIRED_METADATA = _string_list(config, "required_metadata", REQUIRED_METADATA)
+    TEMPLATE_GLOBS = _string_list(config, "template_globs", TEMPLATE_GLOBS)
+    DOCUMENT_CONTROL_INCLUDE = _string_list(
+        config, "document_control_include", DOCUMENT_CONTROL_INCLUDE
+    )
+    DOCUMENT_CONTROL_EXCLUDE = _string_list(
+        config, "document_control_exclude", DOCUMENT_CONTROL_EXCLUDE
+    )
+    REQUIRED_SCAFFOLD_PATHS = _string_list(
+        config, "required_scaffold_paths", REQUIRED_SCAFFOLD_PATHS
+    )
+
+    enforce_types = config.get("enforce_agent_template_types", False)
+    if not isinstance(enforce_types, bool):
+        raise ValueError("enforce_agent_template_types must be true or false")
+    ENFORCE_AGENT_TEMPLATE_TYPES = enforce_types
+
+    pattern_values = _string_list(config, "private_path_patterns", (r"\.agents/",))
+    try:
+        PRIVATE_PATH_PATTERNS = tuple(re.compile(pattern) for pattern in pattern_values)
+    except re.error as exc:
+        raise ValueError(f"invalid private_path_patterns regular expression: {exc}") from exc
+
+    exception_values = config.get("approved_exceptions", {})
+    if not isinstance(exception_values, dict):
+        raise ValueError("approved_exceptions must be an object keyed by repository path")
+    compiled_exceptions: dict[str, tuple[re.Pattern[str], ...]] = {}
+    try:
+        for path, patterns in exception_values.items():
+            if not isinstance(path, str) or not isinstance(patterns, list) or not all(
+                isinstance(pattern, str) for pattern in patterns
+            ):
+                raise ValueError(
+                    "approved_exceptions values must be arrays of regular-expression strings"
+                )
+            compiled_exceptions[path] = tuple(re.compile(pattern) for pattern in patterns)
+    except re.error as exc:
+        raise ValueError(f"invalid approved_exceptions regular expression: {exc}") from exc
+    APPROVED_HIDDEN_AGENT_REFERENCES = compiled_exceptions
+
+
 def markdown_files() -> list[Path]:
     return sorted(
         path
@@ -77,16 +186,21 @@ def markdown_files() -> list[Path]:
     )
 
 
+def configured_files(patterns: tuple[str, ...]) -> list[Path]:
+    files: set[Path] = set()
+    for pattern in patterns:
+        files.update(path for path in ROOT.glob(pattern) if path.is_file())
+    return sorted(path for path in files if ".git" not in path.relative_to(ROOT).parts)
+
+
 def template_files() -> list[Path]:
-    files = {
-        path
-        for path in ROOT.rglob("*.template.md")
-        if ".git" not in path.relative_to(ROOT).parts
-    }
-    pull_request_template = ROOT / ".github" / "PULL_REQUEST_TEMPLATE.md"
-    if pull_request_template.is_file():
-        files.add(pull_request_template)
-    return sorted(files)
+    return configured_files(TEMPLATE_GLOBS)
+
+
+def document_control_files() -> list[Path]:
+    included = set(configured_files(DOCUMENT_CONTROL_INCLUDE))
+    excluded = set(configured_files(DOCUMENT_CONTROL_EXCLUDE))
+    return sorted(included - excluded)
 
 
 def rendered_lines(path: Path):
@@ -183,9 +297,9 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
     approved = 0
     failures: list[str] = []
 
-    if not (ROOT / "agents" / "templates").is_dir():
-        failures.append("agents/templates/: required visible template directory is missing")
-    if (ROOT / ".agents").exists():
+    if ACTIVE_AGENT_DIRECTORY and not (ROOT / ACTIVE_AGENT_DIRECTORY).is_dir():
+        failures.append(f"{ACTIVE_AGENT_DIRECTORY}/: active agent directory is missing")
+    if ACTIVE_AGENT_DIRECTORY == "agents/templates" and (ROOT / ".agents").exists():
         failures.append(".agents/: competing hidden template directory must not exist here")
 
     for path in files:
@@ -194,7 +308,7 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
             if DOUBLED_AGENT_SEPARATOR.search(line):
                 failures.append(f"{relative_path}:{line_number}: doubled agent-folder separator")
 
-            if not HIDDEN_AGENT_REFERENCE.search(line):
+            if not any(pattern.search(line) for pattern in PRIVATE_PATH_PATTERNS):
                 continue
 
             candidates += 1
@@ -203,7 +317,7 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
                 approved += 1
             else:
                 failures.append(
-                    f"{relative_path}:{line_number}: unapproved .agents/ reference candidate"
+                    f"{relative_path}:{line_number}: unapproved private-path reference candidate"
                 )
 
     return candidates, approved, failures
@@ -212,12 +326,13 @@ def check_agent_paths(files: list[Path]) -> tuple[int, int, list[str]]:
 def check_required_scaffolds() -> tuple[int, list[str]]:
     failures: list[str] = []
 
-    for relative_path in REQUIRED_SCAFFOLD_PATHS:
+    required_paths = tuple(dict.fromkeys((CANONICAL_POLICY_FILE, *REQUIRED_SCAFFOLD_PATHS)))
+    for relative_path in required_paths:
         path = ROOT / relative_path
         if not path.is_file():
             failures.append(f"{relative_path}: required scaffold file is missing")
 
-    return len(REQUIRED_SCAFFOLD_PATHS), failures
+    return len(required_paths), failures
 
 
 def parse_document_control(path: Path) -> tuple[str, str, str | None]:
@@ -385,31 +500,32 @@ def parse_template_metadata(path: Path) -> tuple[dict[str, object], str | None]:
 def discover_schema_versions() -> tuple[set[int], list[str]]:
     versions: set[int] = set()
     failures: list[str] = []
-    schemas_root = ROOT / "schemas"
-
-    if not schemas_root.is_dir():
-        return versions, ["schemas/: schema directory is missing"]
-
-    for path in sorted(schemas_root.iterdir()):
-        match = SCHEMA_DIRECTORY.fullmatch(path.name)
-        if not path.is_dir() or not match:
+    for location in SCHEMA_LOCATIONS:
+        schemas_root = ROOT / location
+        if not schemas_root.is_dir():
+            failures.append(f"{location}/: schema directory is missing")
             continue
-        version = int(match.group(1))
-        versions.add(version)
-        required_files = ("README.md", "INTRODUCED.md", "schema-contract.template.md")
-        for required_name in required_files:
-            if not (path / required_name).is_file():
-                failures.append(
-                    f"schemas/{path.name}/{required_name}: required version scaffold is missing"
-                )
+
+        for path in sorted(schemas_root.iterdir()):
+            match = SCHEMA_DIRECTORY.fullmatch(path.name)
+            if not path.is_dir() or not match:
+                continue
+            version = int(match.group(1))
+            versions.add(version)
+            required_files = ("README.md", "INTRODUCED.md", "schema-contract.template.md")
+            for required_name in required_files:
+                if not (path / required_name).is_file():
+                    failures.append(
+                        f"{location}/{path.name}/{required_name}: required version scaffold is missing"
+                    )
 
     if not versions:
-        failures.append("schemas/: no supported vN schema directories found")
+        failures.append("configured schema locations: no supported vN directories found")
         return versions, failures
 
     expected_versions = set(range(1, max(versions) + 1))
     for missing_version in sorted(expected_versions - versions):
-        failures.append(f"schemas/v{missing_version}/: schema version sequence has a gap")
+        failures.append(f"configured schemas/v{missing_version}/: schema version sequence has a gap")
 
     return versions, failures
 
@@ -426,37 +542,53 @@ def check_template_versions() -> tuple[int, int, list[str]]:
             failures.append(f"{relative_path}: {error}")
             continue
 
+        for key in REQUIRED_METADATA:
+            if key not in metadata:
+                failures.append(f"{relative_path}: required metadata key {key} is missing")
+
         schema_version = metadata.get("schema_version")
-        if type(schema_version) is not int:
+        if "schema_version" in metadata and type(schema_version) is not int:
             failures.append(
                 f"{relative_path}: schema_version must be an unquoted integer"
             )
-        elif schema_version not in supported_versions:
+        elif "schema_version" in metadata and schema_version not in supported_versions:
             failures.append(
                 f"{relative_path}: unsupported schema_version {schema_version}; "
                 f"available versions are {sorted(supported_versions)}"
             )
 
-        versioned_schema_path = re.fullmatch(
-            r"schemas/v([1-9][0-9]*)/schema-contract\.template\.md", relative_path
+        relative = path.relative_to(ROOT)
+        schema_location = str(relative.parent.parent) if len(relative.parts) >= 3 else ""
+        versioned_schema = (
+            relative.name == "schema-contract.template.md"
+            and schema_location in SCHEMA_LOCATIONS
+            and SCHEMA_DIRECTORY.fullmatch(relative.parent.name)
         )
-        if versioned_schema_path and type(schema_version) is int:
-            directory_version = int(versioned_schema_path.group(1))
+        if versioned_schema and type(schema_version) is int:
+            directory_version = int(relative.parent.name[1:])
             if schema_version != directory_version:
                 failures.append(
                     f"{relative_path}: schema_version must match its v{directory_version} directory"
                 )
 
         template_type = metadata.get("type")
-        if not isinstance(template_type, str):
+        if "type" in metadata and not isinstance(template_type, str):
             failures.append(f"{relative_path}: type must be a string")
-        elif template_type not in ALLOWED_TEMPLATE_TYPES:
+        elif (
+            "type" in metadata
+            and ENFORCE_AGENT_TEMPLATE_TYPES
+            and template_type not in ALLOWED_TEMPLATE_TYPES
+        ):
             failures.append(f"{relative_path}: unsupported or missing template type")
 
-        expected_type = EXPECTED_TEMPLATE_TYPES.get(relative_path)
-        if relative_path.startswith("agents/templates/"):
+        expected_type = EXPECTED_TEMPLATE_TYPES.get(relative_path) if ENFORCE_AGENT_TEMPLATE_TYPES else None
+        if (
+            ENFORCE_AGENT_TEMPLATE_TYPES
+            and ACTIVE_AGENT_DIRECTORY
+            and relative_path.startswith(f"{ACTIVE_AGENT_DIRECTORY}/")
+        ):
             expected_type = "agent_role"
-        elif versioned_schema_path:
+        elif ENFORCE_AGENT_TEMPLATE_TYPES and versioned_schema:
             expected_type = "schema_contract"
         if expected_type and template_type != expected_type:
             failures.append(
@@ -464,25 +596,25 @@ def check_template_versions() -> tuple[int, int, list[str]]:
             )
 
         template_id = metadata.get("template_id")
-        if not isinstance(template_id, str):
+        if "template_id" in metadata and not isinstance(template_id, str):
             failures.append(f"{relative_path}: template_id must be a string")
-        elif not TEMPLATE_ID.fullmatch(template_id):
+        elif isinstance(template_id, str) and not TEMPLATE_ID.fullmatch(template_id):
             failures.append(f"{relative_path}: template_id must be a stable lower-case slug")
 
         document_version = metadata.get("document_version")
-        if not isinstance(document_version, str):
+        if "document_version" in metadata and not isinstance(document_version, str):
             failures.append(
                 f"{relative_path}: document_version must be a quoted string"
             )
-        elif not DOCUMENT_VERSION.fullmatch(document_version):
+        elif isinstance(document_version, str) and not DOCUMENT_VERSION.fullmatch(document_version):
             failures.append(f"{relative_path}: document_version must use MAJOR.MINOR")
 
         last_edited = metadata.get("last_edited")
-        if not isinstance(last_edited, str):
+        if "last_edited" in metadata and not isinstance(last_edited, str):
             failures.append(f"{relative_path}: last_edited must be a quoted date string")
-        elif not ISO_DATE.fullmatch(last_edited):
+        elif isinstance(last_edited, str) and not ISO_DATE.fullmatch(last_edited):
             failures.append(f"{relative_path}: last_edited must use YYYY-MM-DD")
-        else:
+        elif isinstance(last_edited, str):
             try:
                 date.fromisoformat(last_edited)
             except ValueError:
@@ -490,11 +622,11 @@ def check_template_versions() -> tuple[int, int, list[str]]:
 
         controlled_version, controlled_date, control_error = parse_document_control(path)
         if control_error is None:
-            if document_version != controlled_version:
+            if "document_version" in metadata and document_version != controlled_version:
                 failures.append(
                     f"{relative_path}: metadata and control-block document versions differ"
                 )
-            if last_edited != controlled_date:
+            if "last_edited" in metadata and last_edited != controlled_date:
                 failures.append(
                     f"{relative_path}: metadata and control-block last-edited dates differ"
                 )
@@ -510,11 +642,18 @@ def check_template_versions() -> tuple[int, int, list[str]]:
 
 
 def main() -> int:
+    try:
+        apply_configuration(parse_arguments().config)
+    except ValueError as exc:
+        print(f"Configuration error: {exc}", file=sys.stderr)
+        return 2
+
     files = markdown_files()
     link_count, link_failures = check_links(files)
     path_candidates, approved_candidates, path_failures = check_agent_paths(files)
     scaffold_count, scaffold_failures = check_required_scaffolds()
-    document_count, document_failures = check_document_controls(files)
+    controlled_files = document_control_files()
+    document_count, document_failures = check_document_controls(controlled_files)
     template_count, latest_schema_version, template_failures = check_template_versions()
     failures = (
         link_failures
@@ -527,7 +666,7 @@ def main() -> int:
     print(f"Markdown files scanned: {len(files)}")
     print(f"Relative Markdown links resolved: {link_count}")
     print(
-        "Hidden agent-path candidates: "
+        "Private-path candidates: "
         f"{path_candidates} ({approved_candidates} approved exceptions)"
     )
     present_count = scaffold_count - len(scaffold_failures)

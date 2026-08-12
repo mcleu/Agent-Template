@@ -2,8 +2,8 @@
 schema_version: 1
 type: schema_contract
 template_id: schema-contract
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-08"
 schema_id: "[CUSTOMIZE: stable record or interface identifier]"
 status: draft
 owner: "[CUSTOMIZE: role or team]"
@@ -20,6 +20,14 @@ compatibility_policy: "[CUSTOMIZE: supported versions and window]"
 - Source of truth: [CUSTOMIZE].
 - File or interface location: [CUSTOMIZE].
 - Privacy classification and retention: [CUSTOMIZE].
+- Human-readable domain authority: [CUSTOMIZE: file that defines terms, intent,
+  and interpretation, or `same as this contract`].
+- Versioned interface authority: this file governs producers, consumers,
+  compatibility, required invariants, and migrations.
+
+When these authorities are separate, cross-link them and state which one decides
+each kind of disagreement. They are complementary, not competing sources of
+truth.
 
 ## Canonical record shape
 
@@ -127,10 +135,11 @@ evidence.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Document version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled schema-contract template. |
+| 1.1 | 2026-08-08 | Distinguished human-readable domain authority from versioned interface authority. |

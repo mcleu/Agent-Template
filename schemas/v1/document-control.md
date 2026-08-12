@@ -9,6 +9,17 @@ machine-managed lockfiles use their native version surface plus Git unless a
 project-specific contract explicitly requires embedded file versions. Do not
 add noisy version headers to those files merely to satisfy this document rule.
 
+## Adoption and legacy files
+
+- Apply this contract to every new governed document immediately.
+- Apply it to an existing governed document when that file is materially
+  revised; an adoption-only change does not require a repository-wide retrofit.
+- Inventory untouched older documents in a dated introduction baseline or
+  migration manifest. Record their observed state and intended treatment
+  without inventing versions, dates, approvals, or change history.
+- A repository may deliberately schedule a broader retrofit. Keep that work a
+  separately reviewed migration with explicit scope and validation.
+
 ## Required control block
 
 Place this block near the end of each governed document:
@@ -100,10 +111,11 @@ Before handoff, confirm:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-08
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the v1 document-control contract and two-part file-version rules. |
+| 1.1 | 2026-08-08 | Added gradual adoption and truthful baseline handling for untouched legacy documents. |
