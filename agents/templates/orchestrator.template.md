@@ -105,6 +105,9 @@ Before dispatch:
 - Identify agent-written artifacts that a trusted or more privileged consumer
   may later interpret or execute. Record the consumer, trigger, privilege, and
   current activation state before routing a write.
+- For each external mutation, define the canonical outcome mapping,
+  confirmation source, idempotency scope, receipt owner, retry gate, and stop
+  behavior for unknown or partial outcomes before routing execution.
 
 ### 2. Decompose and route
 
@@ -127,6 +130,9 @@ Before dispatch:
 - Serialize overlapping writes and all cross-owner updates.
 - Do not dispatch a new mutation until the previous worker's checkpoint is
   durable and validated.
+- Do not dispatch a retry or dependent action while the prior external outcome
+  is `outcome_unknown` or `partially_applied`; require authoritative read-back,
+  documented receiver semantics, or a correctly scoped idempotency guarantee.
 - Keep drafting/writing, installation, activation, execution, and deployment as
   separately authorized stages for executable or interpreted control artifacts.
 
@@ -218,6 +224,8 @@ Require:
 - [ ] Privacy and external-action boundaries were respected.
 - [ ] No trusted consumer can activate an agent-written control artifact beyond
       the explicitly authorized stage.
+- [ ] External mutations distinguish acceptance from confirmation, preserve
+      receipts, and stop safely on unknown or partial outcomes.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -260,4 +268,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution and separately authorized activation stages. |
+| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution plus external-mutation outcomes and safe retries. |

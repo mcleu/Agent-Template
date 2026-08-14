@@ -198,6 +198,34 @@ metadata contract, stable template types, identities, and required document
 shape do not change, so `schema_version: 1` remains correct. No new `schemas/v2/`
 contract is warranted.
 
+## Implementation decision for priority 2
+
+The authorized second batch adds practice `EM-01`: every binding external
+mutation uses the common outcome vocabulary, preserves the provider response,
+separates acceptance from confirmation, and prevents local authoritative state
+from advancing ahead of confirmed external state. Retry requires documented
+receiver semantics, authoritative read-back, or an idempotency guarantee bound
+to the same actor, operation, target, payload, and authority window. Unknown or
+partial outcomes stop automatic retries and dependent actions.
+
+Role coverage for practice `EM-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Defines outcome mapping, confirmation source, retry gate, and receipt owner | Blocks dispatch after unknown or partial outcomes | Requires resolved evidence before retry or dependent work | Covered |
+| Writer / Implementer | Emits the mapped outcome and minimal receipt for its assigned mutation | Returns unknown or partial outcomes without guessing | Does not retry or advance local authority without the assigned evidence | Covered |
+| Reviewer / Critic | Reviews response mapping, read-back, receipts, and idempotency binding | Produces an anchored finding for unsafe continuation | Flags acceptance-as-confirmation and unsupported retries | Covered |
+| Validator / Auditor | Independently verifies observed external state and retry evidence | Records one evidence-backed gate at a time | Uses `NOT ASSESSABLE` when effect or confirmation cannot be determined | Covered |
+| Privacy / Risk Gate | Gates retry, dependent action, compensation, and publication | Records minimum necessary evidence and residual risk | GO/CONDITIONAL/NO-GO for exact stages | Covered |
+
+The core contract, adoption guide, role guides, pull-request checklist, and
+README make this behavior operational. This remains an ordinary policy
+refinement: no metadata fields, reusable template identities, or required
+schema shape change, so `schema_version: 1` remains correct. Because priorities
+one and two are being combined in the same unmerged review revision, the
+current document versions remain unchanged and their 2026-08-14 history rows
+describe the combined change.
+
 ## Document control
 
 **Last edited:** 2026-08-14
@@ -207,4 +235,4 @@ contract is warranted.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one implementation scope and compatibility decision. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one and priority-two implementation scope and compatibility decisions. |

@@ -136,14 +136,23 @@ The project's rubric overrides this example.
 - Pair bad news with a mitigation without softening the severity.
 - Return cross-owner effects to the Orchestrator.
 
-### 5. Preserve reviewer independence
+### 5. Review external mutation semantics [WHEN APPLICABLE]
+
+- Verify errors and timeouts are not treated as proof of no effect and that
+  acceptance is not treated as confirmation.
+- Check outcome mappings, authoritative read-back, mutation receipts, and the
+  actor/operation/target/payload/authority binding of idempotency keys.
+- Flag any automatic retry or dependent action after `outcome_unknown` or
+  `partially_applied` as unsafe unless the receiver contract proves it safe.
+
+### 6. Preserve reviewer independence
 
 - Attack the artifact, not the author.
 - Do not read sibling findings before completing a blind review.
 - Endorse a sound assumption explicitly when the register supports endorsements.
 - Let the Orchestrator deduplicate overlapping reports.
 
-### 6. Review contract and version claims [WHEN APPLICABLE]
+### 7. Review contract and version claims [WHEN APPLICABLE]
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
@@ -155,7 +164,7 @@ The project's rubric overrides this example.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 
-### 7. Review delayed-execution boundaries [WHEN APPLICABLE]
+### 8. Review delayed-execution boundaries [WHEN APPLICABLE]
 
 - Identify every trusted or more privileged consumer that may interpret or
   execute the changed artifact, including automatic discovery and indirect
@@ -250,4 +259,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added adversarial review of delayed-execution artifacts and trusted consumers. |
+| 1.2 | 2026-08-14 | Added adversarial review of delayed execution plus external-mutation outcomes and retries. |

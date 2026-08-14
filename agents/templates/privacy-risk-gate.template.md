@@ -94,7 +94,10 @@ Run before substantive writing or execution:
 6. Identify agent-written artifacts that a trusted or more privileged consumer
    may interpret or execute. Gate drafting/writing, installation, activation,
    execution, and deployment as separate stages.
-7. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+7. For external mutations, gate retry, dependent action, compensation, and
+   publication separately. Block automatic continuation when the prior outcome
+   is unknown or partial, or when acceptance lacks authoritative confirmation.
+8. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -111,7 +114,10 @@ executed, or released:
 6. Confirm control-artifact paths, consumers, triggers, privilege boundaries,
    current activation state, and rollback or disable paths match the approved
    plan.
-7. Issue the final verdict. No blocked material may remain in the artifact, and
+7. Confirm mutation receipts contain the minimum necessary evidence without
+   secrets or unnecessary personal data, and that any retry has a valid scoped
+   idempotency or read-back basis.
+8. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -261,4 +267,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added separate risk gates for writing and activating delayed-execution artifacts. |
+| 1.2 | 2026-08-14 | Added separate gates for delayed execution plus external-mutation outcomes, retries, and compensation. |

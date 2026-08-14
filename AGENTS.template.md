@@ -305,6 +305,28 @@ gate may block but does not silently rewrite another role's work.
 - After a human completes an external action, capture only the minimum safe
   evidence needed by the repository.
 
+### External mutation outcomes and retries
+
+- Represent external mutations with one explicit state: `not_attempted`,
+  `rejected`, `accepted`, `confirmed`, `failed_no_effect`, `outcome_unknown`,
+  `partially_applied`, or `compensated`. Map provider-specific states to this
+  vocabulary without erasing the original response.
+- An error, timeout, or lost response does not prove that no effect occurred.
+  An acknowledgement or acceptance does not prove completion, publication, or
+  visibility. Advance local authoritative state only after authoritative
+  read-back or equivalent confirmation of external state.
+- Before retrying a mutation, resolve the prior attempt through documented
+  receiver semantics, an authoritative read-back, or a scoped idempotency
+  guarantee. Bind an idempotency key to the same actor, operation, target,
+  payload, and authority window; a matching key alone is insufficient evidence.
+- When the outcome remains unknown or partial, preserve that state, stop
+  automatic retries and dependent actions, and escalate. Do not describe a
+  compensating action as rollback unless restoration was independently verified.
+- Retain a minimal mutation receipt: operation and idempotency identifiers,
+  actor, target, requested action, response or timeout, observed external state,
+  outcome state, timestamps, retry decision and evidence, and residual
+  uncertainty. Keep secrets and unnecessary personal data out of the receipt.
+
 ## 7. Version control and pull requests
 
 ### Branch and worktree rules
@@ -842,4 +864,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added delayed-execution controls for agent-written artifacts consumed by trusted or privileged components. |
+| 1.2 | 2026-08-14 | Added delayed-execution controls plus explicit external-mutation outcome and retry safety. |

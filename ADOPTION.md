@@ -161,6 +161,7 @@ these practice families:
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
 | Delayed execution and trusted consumers | Can an agent-written hook, workflow, task, startup file, plugin setting, interpreter path, permission, or other control artifact later be executed or interpreted by a more privileged consumer? Are writing, activation, and execution separate authorities with known triggers and rollback? |
+| External mutation outcomes and retries | Does each binding external action distinguish attempted, accepted, confirmed, failed-with-no-effect, unknown, partial, and compensated outcomes? Are retries gated by receiver semantics, scoped idempotency, or authoritative read-back? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -207,8 +208,11 @@ After the matrix is complete:
    producer, consumers, privilege boundary, discovery/loading rule, activation
    trigger, current state, separately authorized stages, and rollback or disable
    path.
-7. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-8. State the smallest coherent implementation batch.
+7. For every external mutation in scope, define its outcome-state mapping,
+   confirmation source, idempotency scope, receipt location, retry gate, and
+   behavior for unknown or partial outcomes.
+8. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+9. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -331,6 +335,10 @@ After the final edit:
 - Confirm agent-written control artifacts remain inactive unless activation was
   separately authorized, and validate the actual trusted consumer rather than
   only the artifact's syntax or location.
+- Confirm external mutations do not advance local authoritative state before
+  confirmation; acceptance remains distinct from completion, and no unknown or
+  partial attempt is retried without receiver semantics, scoped idempotency, or
+  authoritative read-back.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -420,4 +428,4 @@ result.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
-| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution, trusted consumers, and separate write/activation authority. |
+| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution plus external-mutation outcome and retry controls. |

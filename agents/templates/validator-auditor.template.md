@@ -167,7 +167,21 @@ Before validating:
 - Use `NOT ASSESSABLE` rather than PASS when the consumer set, trigger, or
   activation state cannot be determined.
 
-### 7. Adjudicate scanner candidates
+### 7. Validate external mutation outcomes [WHEN APPLICABLE]
+
+- Verify the provider response is preserved and correctly mapped to
+  `not_attempted`, `rejected`, `accepted`, `confirmed`, `failed_no_effect`,
+  `outcome_unknown`, `partially_applied`, or `compensated`.
+- Confirm local authoritative state advances only after authoritative read-back
+  or equivalent external confirmation. Acceptance alone is not confirmation.
+- For a retry, verify documented receiver semantics, authoritative read-back,
+  or an idempotency guarantee scoped to the same actor, operation, target,
+  payload, and authority window. Verify the receipt records the decision and
+  residual uncertainty.
+- Return `NOT ASSESSABLE`, not PASS, when the prior effect or confirmation
+  source cannot be determined.
+
+### 8. Adjudicate scanner candidates
 
 - Treat link, path, case, secret, policy, lint, and other scanner matches as
   candidates rather than automatic failures.
@@ -177,7 +191,7 @@ Before validating:
   positive, or unresolved, with evidence.
 - An unresolved candidate for a required gate is NOT ASSESSABLE, not PASS.
 
-### 8. Validate high-risk filesystem work [OPTIONAL]
+### 9. Validate high-risk filesystem work [OPTIONAL]
 
 - Independently confirm destination presence, expected source absence, hash or
   byte preservation, reference/link validity, collision handling, exact
@@ -280,4 +294,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added independent validation of delayed-execution artifacts and activation boundaries. |
+| 1.1 | 2026-08-14 | Added independent validation of delayed execution plus external-mutation outcomes and retries. |

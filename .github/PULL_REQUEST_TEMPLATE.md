@@ -55,6 +55,9 @@ leaving an applicable surface ambiguous.
 - [ ] Executable or interpreted control artifacts identify their consumers,
       triggers, privilege boundaries, activation state, and rollback/disable
       path; no stage exceeds its separate authority.
+- [ ] External mutations distinguish acceptance from confirmation, preserve a
+      minimal receipt, and retry only after authoritative read-back, documented
+      receiver semantics, or correctly scoped idempotency evidence.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -84,6 +87,9 @@ Checks and evidence:
 - Delayed-execution/control artifacts changed:
 - Trusted consumers, loading rule, trigger, and privilege boundary:
 - Authorized stage: draft/write/install/activate/execute/deploy/NOT REQUIRED
+- External mutation outcome/confirmation source: NOT REQUIRED
+- Idempotency scope or retry gate: NOT REQUIRED
+- Mutation receipt and residual uncertainty: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -97,5 +103,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for delayed-execution artifacts and separately authorized activation. |
+| 1.1 | 2026-08-14 | Added review evidence for delayed execution plus external-mutation outcomes and retries. |
 -->

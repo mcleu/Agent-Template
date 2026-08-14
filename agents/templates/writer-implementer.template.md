@@ -123,6 +123,14 @@ decision precisely.
 - Authority to draft or write a control artifact does not authorize installing,
   enabling, loading, triggering, executing, or deploying it. Leave it inert
   unless the assignment explicitly grants the later stage.
+- For an external mutation, emit the project-defined outcome state and a minimal
+  receipt. Do not translate a timeout or error into `failed_no_effect`, an
+  acceptance into `confirmed`, or update local authoritative state ahead of
+  authoritative external read-back.
+- Retry only under the assigned receiver semantics, scoped idempotency contract,
+  or read-back evidence. Bind any idempotency key to the same actor, operation,
+  target, payload, and authority window; otherwise stop and return
+  `outcome_unknown` or `partially_applied` to the Orchestrator.
 
 ### 3. Write incrementally
 
@@ -260,4 +268,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
 | 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |
-| 1.2 | 2026-08-14 | Separated control-artifact writing from installation, activation, execution, and deployment authority. |
+| 1.2 | 2026-08-14 | Separated control-artifact stages and added explicit external-mutation outcome and retry handling. |
