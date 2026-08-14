@@ -51,6 +51,8 @@ Common team shapes:
   Reviewer/Validator.
 - High-risk migration: Orchestrator → independent inventory/classification →
   Privacy/Risk Gate → designated writer/runner → Validator.
+- Delayed-execution change: Orchestrator → Writer/Implementer → Reviewer and,
+  when activation or elevated risk is in scope, Privacy/Risk Gate → Validator.
 
 ## Shared contract for every role
 
@@ -96,11 +98,14 @@ Every project role must:
 9. Run changed artifacts through full review; scan unchanged artifacts only for
    stale cross-references.
 10. Apply privacy/risk and independent validation gates where required.
-11. For adopted multi-agent policy, verify every relevant role guide explicitly
+11. For executable or interpreted control artifacts, separate write,
+    installation, activation, execution, and deployment authority and validate
+    the actual trusted consumer.
+12. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model
     routing. Provider-neutral roles may record `host-selected` or `not-required`
     with rationale instead of naming a tier.
-12. Commit only validated files and report the actual branch, checks, and
+13. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -204,17 +209,20 @@ permission to apply, publish, commit, or merge.
 - [ ] Define formal verdict semantics, or state why verdicts are not required
       for this role.
 - [ ] Add project-specific privacy and external-action restrictions.
+- [ ] Identify delayed-execution artifacts, trusted consumers, triggers,
+      activation state, stage-specific authority, and rollback/disable paths.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
 | 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |
+| 1.2 | 2026-08-14 | Added team routing and authority checks for delayed-execution artifacts. |

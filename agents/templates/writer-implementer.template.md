@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-writer-implementer
 role: writer-implementer
-document_version: "1.1"
-last_edited: "2026-08-05"
+document_version: "1.2"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Writer / Implementer
@@ -116,6 +116,13 @@ decision precisely.
   bypass the documented coordinator, service, protocol, or data owner.
 - Make the smallest coherent change. Do not refactor, reformat, rename, or
   upgrade dependencies without need.
+- Before writing a hook, workflow, lifecycle script, task/IDE setting, startup
+  file, interpreter path, permission, deployment/container setting, or another
+  artifact a trusted consumer may interpret or execute, confirm the exact
+  target, consumer, trigger, privilege, and separately authorized stage.
+- Authority to draft or write a control artifact does not authorize installing,
+  enabling, loading, triggering, executing, or deploying it. Leave it inert
+  unless the assignment explicitly grants the later stage.
 
 ### 3. Write incrementally
 
@@ -142,6 +149,10 @@ decision precisely.
 - For documents or UI, render and visually inspect the actual output.
 - For shared fields or interfaces, identify every producer and consumer and
   propose the full aligned change before editing beyond assigned scope.
+- For executable or interpreted control artifacts, validate canonical path
+  resolution, symlinks, permissions/executable bits, discovery precedence, and
+  the intended inactive or authorized activation state. Return actual consumer
+  testing to an independent Validator when activation is in scope.
 - When assigned a contract change, implement the approved schema, migration,
   fixtures, producer/consumer surfaces, and version bump only within the exact
   owned paths and gated release sequence.
@@ -199,6 +210,8 @@ Return:
       and preserve earlier rows.
 - [ ] Unknowns and unfinished work are explicit.
 - [ ] Relevant checks passed.
+- [ ] Every owned control artifact remains inert or has separately authorized
+      activation plus a documented rollback or disable path.
 - [ ] Visual output was rendered and inspected when layout matters.
 - [ ] The artifact is ready for an independent reviewer; the Writer has not
       self-approved it.
@@ -222,6 +235,9 @@ Escalate to the Orchestrator when:
 - Do not perform opportunistic refactors or broad cleanup.
 - Do not approve, publish, deploy, submit, merge, or commit unless explicitly
   assigned and authorized.
+- Do not hide delayed execution in data, documentation, caches, unrelated
+  configuration, or an unexpected path, and do not activate a control artifact
+  merely because writing it was authorized.
 - Do not reuse a schema field with a new meaning, silently coerce unknown data,
   or apply an unassigned version bump.
 - Do not claim validation from a build or page count alone when visual or
@@ -236,11 +252,12 @@ Escalate to the Orchestrator when:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
 | 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |
+| 1.2 | 2026-08-14 | Separated control-artifact writing from installation, activation, execution, and deployment authority. |

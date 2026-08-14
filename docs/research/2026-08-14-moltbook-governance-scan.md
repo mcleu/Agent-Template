@@ -163,12 +163,48 @@ independent method better addresses the relevant risk.
 - [The checkpoint passed. The data was wrong](https://www.moltbook.com/post/634b71e1-cc06-43d7-8bae-93cf5c7af50c) reinforces the existing rule that internal consistency and green CI do not prove external correctness.
 - [AskChem makes chemistry retrieval claim-centered](https://www.moltbook.com/post/d33d6969-18bc-45de-9e35-e3e789dd1f8c) supports the existing evidence-first pattern of atomic claims, authoritative sources, and precise evidence locators.
 
+## Implementation decision for priority 1
+
+Authorized on 2026-08-14: implement the delayed-execution/trusted-consumer rule
+as a universal safety refinement.
+
+The smallest coherent implementation covers:
+
+| Surface | Purpose | Document-version change |
+| --- | --- | --- |
+| `AGENTS.template.md` | Canonical producer-consumer boundary and activation rules | `1.1` to `1.2` |
+| `ADOPTION.md` | Require downstream audits to assess delayed-execution paths | `1.1` to `1.2` |
+| `agents/README.md` | Route the relevant roles and stage-specific authority checks | `1.1` to `1.2` |
+| `agents/templates/orchestrator.template.md` | Identify consumers, stages, and authorities before routing | `1.1` to `1.2` |
+| `agents/templates/writer-implementer.template.md` | Prevent authorized writes from implying activation authority | `1.1` to `1.2` |
+| `agents/templates/reviewer-critic.template.md` | Review trigger, privilege, and consumer consequences | `1.1` to `1.2` |
+| `agents/templates/validator-auditor.template.md` | Verify activation state and trusted-consumer behavior | `1.0` to `1.1` |
+| `agents/templates/privacy-risk-gate.template.md` | Gate write, activation, and execution as separate stages | `1.1` to `1.2` |
+| `.github/PULL_REQUEST_TEMPLATE.md` | Make the trust-boundary evidence reviewable | `1.0` to `1.1` |
+| `README.md` | Expose the reusable safety control | `1.2` to `1.3` |
+
+Role coverage for practice `DE-01`:
+
+| Role | Ownership | Schema authority | Document authority | Git authority | Checkpoint/handoff | Verdict or gate | Model routing | Coverage |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Orchestrator | Maps consumers and owns routing/integration | Not required | Existing coordinator-owned output authority | Existing integration authority | Existing validated-handoff checkpoint | Blocks unauthorized stage advancement | Existing explicit/host-selected routing | Covered |
+| Writer / Implementer | Owns only assigned artifact and tests | Not required unless separately assigned | Existing owned-artifact authority | Unassigned by default | Existing coherent-unit handoff | Leaves control artifacts inert unless later stage is authorized | Existing tier guidance | Covered |
+| Reviewer / Critic | Read-only delayed-execution review | Read-only | Findings file only | Read-only | Existing one-finding checkpoint | Anchored severity finding | Existing tier guidance | Covered |
+| Validator / Auditor | Read-only consumer and activation verification | Read-only | Verdict file only | Read-only | Existing one-gate checkpoint | PASS/FAIL/NOT ASSESSABLE/NOT REQUIRED | Existing tier guidance | Covered |
+| Privacy / Risk Gate | Read-only authority and residual-risk gate | Read-only | Gate record only | Read-only | Existing one-risk-item checkpoint | GO/CONDITIONAL/NO-GO by exact stage | Existing tier guidance | Covered |
+
+Compatibility classification: ordinary policy refinement. The existing v1
+metadata contract, stable template types, identities, and required document
+shape do not change, so `schema_version: 1` remains correct. No new `schemas/v2/`
+contract is warranted.
+
 ## Document control
 
 **Last edited:** 2026-08-14
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one implementation scope and compatibility decision. |

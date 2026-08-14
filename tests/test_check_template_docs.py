@@ -52,10 +52,10 @@ class DocumentationValidatorTests(unittest.TestCase):
     def test_rejects_incorrect_metadata_scalar_types(self) -> None:
         self.replace_once("AGENTS.template.md", "schema_version: 1", 'schema_version: "1"')
         self.replace_once(
-            "AGENTS.template.md", 'document_version: "1.1"', "document_version: 1.1"
+            "AGENTS.template.md", 'document_version: "1.2"', "document_version: 1.2"
         )
         self.replace_once(
-            "AGENTS.template.md", 'last_edited: "2026-08-08"', "last_edited: 2026-08-08"
+            "AGENTS.template.md", 'last_edited: "2026-08-14"', "last_edited: 2026-08-14"
         )
 
         result = self.run_validator()

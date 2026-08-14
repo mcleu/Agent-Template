@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-validator-auditor
 role: validator-auditor
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Validator / Auditor
@@ -153,7 +153,21 @@ Before validating:
   deployment configuration and target, not names or prior prose.
 - Confirm no external action is represented as completed without evidence.
 
-### 6. Adjudicate scanner candidates
+### 6. Validate delayed-execution boundaries [WHEN APPLICABLE]
+
+- Confirm the changed artifact's actual consumers, loading/discovery rule,
+  trigger, privilege level, path resolution, symlinks, permissions, executable
+  bits, and precedence.
+- Verify that an artifact intended to remain inert is not auto-discovered or
+  active. When activation was explicitly authorized, test actual consumer
+  behavior in isolation when practicable and verify the rollback or disable
+  path.
+- Confirm draft/write, installation, activation, execution, and deployment did
+  not advance beyond their separately authorized stages.
+- Use `NOT ASSESSABLE` rather than PASS when the consumer set, trigger, or
+  activation state cannot be determined.
+
+### 7. Adjudicate scanner candidates
 
 - Treat link, path, case, secret, policy, lint, and other scanner matches as
   candidates rather than automatic failures.
@@ -163,7 +177,7 @@ Before validating:
   positive, or unresolved, with evidence.
 - An unresolved candidate for a required gate is NOT ASSESSABLE, not PASS.
 
-### 7. Validate high-risk filesystem work [OPTIONAL]
+### 8. Validate high-risk filesystem work [OPTIONAL]
 
 - Independently confirm destination presence, expected source absence, hash or
   byte preservation, reference/link validity, collision handling, exact
@@ -215,6 +229,9 @@ Checkpoint unit: one complete gate with its evidence.
       required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
 - [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Applicable executable or interpreted control artifacts were checked
+      against actual consumers, triggers, activation state, and rollback or
+      disable behavior.
 - [ ] Schema IDs/versions, compatibility, producer/consumer alignment, and
       version bumps were checked against authoritative files when applicable.
 - [ ] Durable document versions, dates, and history rows were checked against
@@ -256,10 +273,11 @@ Escalate immediately when:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-14
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
+| 1.1 | 2026-08-14 | Added independent validation of delayed-execution artifacts and activation boundaries. |

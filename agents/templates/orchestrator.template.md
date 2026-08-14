@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-orchestrator
 role: orchestrator
-document_version: "1.1"
-last_edited: "2026-08-08"
+document_version: "1.2"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Orchestrator
@@ -102,6 +102,9 @@ Before dispatch:
   or certification decisions.
 - Never convert a requested readiness label into a confirmed state without its
   evidence gate.
+- Identify agent-written artifacts that a trusted or more privileged consumer
+  may later interpret or execute. Record the consumer, trigger, privilege, and
+  current activation state before routing a write.
 
 ### 2. Decompose and route
 
@@ -124,12 +127,17 @@ Before dispatch:
 - Serialize overlapping writes and all cross-owner updates.
 - Do not dispatch a new mutation until the previous worker's checkpoint is
   durable and validated.
+- Keep drafting/writing, installation, activation, execution, and deployment as
+  separately authorized stages for executable or interpreted control artifacts.
 
 ### 4. Validate every handoff
 
 - Inspect the actual output, not only the worker's completion message.
 - Check path ownership, structure/schema, privacy, source attribution,
   duplicates/collisions, consistency, and the named checkpoint.
+- For a control artifact, require the worker's producer/consumer map, loading or
+  discovery rule, trigger, path/permission checks, inactive-or-authorized state,
+  and rollback or disable path.
 - Confirm reported schema IDs/versions, compatibility, migration gates, and
   version proposals against authoritative files.
 - Confirm new/changed templates declare the version, type, identity, and role
@@ -208,6 +216,8 @@ Require:
       `NOT REQUIRED` reason for a native/Git-versioned file.
 - [ ] No unresolved high-risk item is hidden.
 - [ ] Privacy and external-action boundaries were respected.
+- [ ] No trusted consumer can activate an agent-written control artifact beyond
+      the explicitly authorized stage.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -242,11 +252,12 @@ Escalate to the user when:
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
+| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution and separately authorized activation stages. |

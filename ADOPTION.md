@@ -160,6 +160,7 @@ these practice families:
 | Schemas and versioning | Are human-readable domain meaning and versioned producer/consumer invariants assigned clear, complementary authorities? Are schema contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Do new or materially revised durable human-authored files have a document version, last-edited date, and append-only history without invented legacy history? Are document, schema, release, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
+| Delayed execution and trusted consumers | Can an agent-written hook, workflow, task, startup file, plugin setting, interpreter path, permission, or other control artifact later be executed or interpreted by a more privileged consumer? Are writing, activation, and execution separate authorities with known triggers and rollback? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -202,8 +203,12 @@ After the matrix is complete:
 3. Identify local language that will be retained, replaced, or moved.
 4. List commands, paths, links, and branch rules that require live verification.
 5. List any privacy, publication, destructive-action, or external-action gate.
-6. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-7. State the smallest coherent implementation batch.
+6. For every executable or interpreted control artifact in scope, list its
+   producer, consumers, privilege boundary, discovery/loading rule, activation
+   trigger, current state, separately authorized stages, and rollback or disable
+   path.
+7. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+8. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -323,6 +328,9 @@ After the final edit:
   stale branch names, broken links, nonexistent commands, and invalid paths.
 - Check that no local privacy, safety, evidence, approval, or domain rule was
   weakened or dropped.
+- Confirm agent-written control artifacts remain inactive unless activation was
+  separately authorized, and validate the actual trusted consumer rather than
+  only the artifact's syntax or location.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -404,11 +412,12 @@ result.
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
+| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution, trusted consumers, and separate write/activation authority. |

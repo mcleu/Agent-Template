@@ -2,8 +2,8 @@
 schema_version: 1
 type: pull_request
 template_id: pull-request
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-14"
 -->
 
 ## Outcome and scope
@@ -52,6 +52,9 @@ leaving an applicable surface ambiguous.
       visual, and branch checks ran or have a named verdict and reason.
 - [ ] Scanner candidates were adjudicated against authoritative files and
       approved exceptions.
+- [ ] Executable or interpreted control artifacts identify their consumers,
+      triggers, privilege boundaries, activation state, and rollback/disable
+      path; no stage exceeds its separate authority.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -78,6 +81,9 @@ Checks and evidence:
 ## Risks, approvals, and unknowns
 
 - Privacy/security/safety impact:
+- Delayed-execution/control artifacts changed:
+- Trusted consumers, loading rule, trigger, and privilege boundary:
+- Authorized stage: draft/write/install/activate/execute/deploy/NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -85,10 +91,11 @@ Checks and evidence:
 <!--
 ## Document control
 
-Last edited: 2026-08-05
-Current version: 1.0
+Last edited: 2026-08-14
+Current version: 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
+| 1.1 | 2026-08-14 | Added review evidence for delayed-execution artifacts and separately authorized activation. |
 -->

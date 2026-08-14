@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-privacy-risk-gate
 role: privacy-risk-gate
-document_version: "1.1"
-last_edited: "2026-08-05"
+document_version: "1.2"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Privacy / Risk Gate
@@ -91,7 +91,10 @@ Run before substantive writing or execution:
    or authority.
 5. Gate schema changes that alter sensitivity, retention, access, redaction,
    auditability, or unknown-value handling.
-6. Issue GO, NO-GO, or CONDITIONAL for drafting/execution.
+6. Identify agent-written artifacts that a trusted or more privileged consumer
+   may interpret or execute. Gate drafting/writing, installation, activation,
+   execution, and deployment as separate stages.
+7. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -105,7 +108,10 @@ executed, or released:
 4. Check containment: private working files, source records, and approval notes
    remain in permitted locations.
 5. Check final approval list and unresolved risk.
-6. Issue the final verdict. No blocked material may remain in the artifact, and
+6. Confirm control-artifact paths, consumers, triggers, privilege boundaries,
+   current activation state, and rollback or disable paths match the approved
+   plan.
+7. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -118,9 +124,10 @@ executed, or released:
 
 - Every verdict must name `allows=<stage list or none>` and
   `blocks=<stage list or none>`; words such as proceed or continue are too vague.
-- Suggested stages include research, drafting, implementation, review, commit,
-  delivery, publication, submission, deployment, migration, or another
-  project-defined lifecycle state.
+- Suggested stages include research, drafting, implementation, writing a control
+  artifact, installation, activation, execution, review, commit, delivery,
+  publication, submission, deployment, migration, or another project-defined
+  lifecycle state.
 - Pending owner approval may allow drafting from already permitted material
   while blocking delivery or publication.
 - Unresolved blocked material must not be written into the artifact. It stops
@@ -197,6 +204,8 @@ Checkpoint unit: one reviewed claim, file, action, or risk item.
 - [ ] Beyond-label third-party and business confidentiality checks ran.
 - [ ] Approval-required items are listed with exact output and source.
 - [ ] Required controls have an owner and implemented artifact.
+- [ ] Writing, installation, activation, execution, and deployment authority are
+      separately gated for applicable control artifacts.
 - [ ] Schema, migration, version, and Git changes stay within named authority and
       preserve sensitivity, retention, and auditability requirements.
 - [ ] Residual risk and unassessable areas are explicit.
@@ -244,11 +253,12 @@ Escalate to the named human owner or qualified counsel when:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
+| 1.2 | 2026-08-14 | Added separate risk gates for writing and activating delayed-execution artifacts. |
