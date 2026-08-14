@@ -191,7 +191,20 @@ Before validating:
   positive, or unresolved, with evidence.
 - An unresolved candidate for a required gate is NOT ASSESSABLE, not PASS.
 
-### 9. Validate high-risk filesystem work [OPTIONAL]
+### 9. Validate composition and sequence safety [WHEN APPLICABLE]
+
+- Verify the end-to-end sequence map identifies every actor, input, output,
+  authority, data exposure, external effect, checkpoint, and consumer.
+- Check cumulative authority and privacy exposure against the original scope at
+  every boundary; confirm provenance and authorization are not widened by a
+  transformation or successful prior step.
+- Run synthetic adversarial sequence fixtures for applicable reorder, replay,
+  duplicate, omission, stale input, partial failure, and instruction/data
+  confusion paths. Test the full sequence in addition to isolated steps.
+- Return `NOT ASSESSABLE`, not PASS, when a material intermediate state,
+  consumer, accumulated permission, or cross-step effect cannot be observed.
+
+### 10. Validate high-risk filesystem work [OPTIONAL]
 
 - Independently confirm destination presence, expected source absence, hash or
   byte preservation, reference/link validity, collision handling, exact
@@ -294,4 +307,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added independent validation of delayed execution plus external-mutation outcomes and retries. |
+| 1.1 | 2026-08-14 | Added independent validation of delayed execution, mutation/retry safety, and composed sequences. |

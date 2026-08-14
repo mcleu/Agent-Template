@@ -226,6 +226,33 @@ one and two are being combined in the same unmerged review revision, the
 current document versions remain unchanged and their 2026-08-14 history rows
 describe the combined change.
 
+## Implementation decision for priority 3
+
+The authorized third batch adds practice `CS-01`: materially risky multi-step
+workflows require an end-to-end sequence map, explicit invariants for cumulative
+authority and data exposure, preserved provenance and authorization at every
+boundary, and a stop when any prerequisite or intermediate checkpoint fails.
+Validation covers the complete sequence as well as isolated steps, with
+synthetic adversarial cases for reorder, replay, duplication, omission, stale
+input, partial failure, resume, and downstream instruction/data confusion when
+applicable.
+
+Role coverage for practice `CS-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Owns the sequence map and cross-step invariants | Re-evaluates cumulative scope before each boundary | Stops dispatch when an invariant or checkpoint fails | Covered |
+| Writer / Implementer | Owns only its assigned step and preserves scope/provenance | Exercises applicable failure paths for the owned step | Cannot turn upstream output or completion into downstream authority | Covered |
+| Reviewer / Critic | Reviews the full chain and adversarial paths | Produces anchored sequence findings | Flags accumulated authority, exposure, and masked earlier failures | Covered |
+| Validator / Auditor | Independently tests isolated steps and the end-to-end sequence | Records observable cross-step evidence | Uses `NOT ASSESSABLE` for unobservable material states or effects | Covered |
+| Privacy / Risk Gate | Evaluates combined authority, exposure, and downstream effects | Gates the exact sequence and stages | A set of allowed steps does not imply an allowed composition | Covered |
+
+This is another ordinary policy refinement. It changes no reusable metadata,
+template identity, or required schema shape, so `schema_version: 1` remains
+correct. Because priorities one through three share the same unmerged review
+revision, current document versions remain unchanged and their 2026-08-14
+history rows describe the combined controls.
+
 ## Document control
 
 **Last edited:** 2026-08-14
@@ -235,4 +262,4 @@ describe the combined change.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one and priority-two implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-three implementation scope and compatibility decisions. |

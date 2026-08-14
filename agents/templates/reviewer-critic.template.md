@@ -152,7 +152,17 @@ The project's rubric overrides this example.
 - Endorse a sound assumption explicitly when the register supports endorsements.
 - Let the Orchestrator deduplicate overlapping reports.
 
-### 7. Review contract and version claims [WHEN APPLICABLE]
+### 7. Review composition and sequence safety [WHEN APPLICABLE]
+
+- Review the full actor/input/output/authority/data/effect chain, not only the
+  changed step. Identify cumulative authority or privacy exposure that exceeds
+  any single grant.
+- Check that provenance and authorization survive transformations and that no
+  upstream output becomes downstream instructions or authority implicitly.
+- Probe reorder, replay, duplicate, omission, stale-state, partial-failure, and
+  resume paths. Flag a later successful result that masks an earlier violation.
+
+### 8. Review contract and version claims [WHEN APPLICABLE]
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
@@ -164,7 +174,7 @@ The project's rubric overrides this example.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 
-### 8. Review delayed-execution boundaries [WHEN APPLICABLE]
+### 9. Review delayed-execution boundaries [WHEN APPLICABLE]
 
 - Identify every trusted or more privileged consumer that may interpret or
   execute the changed artifact, including automatic discovery and indirect
@@ -259,4 +269,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added adversarial review of delayed execution plus external-mutation outcomes and retries. |
+| 1.2 | 2026-08-14 | Added adversarial review of delayed execution, mutation/retry semantics, and composed sequences. |

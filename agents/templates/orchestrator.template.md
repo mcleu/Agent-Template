@@ -108,6 +108,9 @@ Before dispatch:
 - For each external mutation, define the canonical outcome mapping,
   confirmation source, idempotency scope, receipt owner, retry gate, and stop
   behavior for unknown or partial outcomes before routing execution.
+- For each materially risky multi-step workflow, maintain a sequence map of
+  actors, inputs, outputs, authority, data exposure, external effects,
+  checkpoints, consumers, and cross-step invariants before dispatch.
 
 ### 2. Decompose and route
 
@@ -135,6 +138,9 @@ Before dispatch:
   documented receiver semantics, or a correctly scoped idempotency guarantee.
 - Keep drafting/writing, installation, activation, execution, and deployment as
   separately authorized stages for executable or interpreted control artifacts.
+- Re-evaluate cumulative authority and privacy exposure before each boundary;
+  never infer a downstream permission from an upstream assignment or completed
+  step. Stop when a sequence invariant or checkpoint fails.
 
 ### 4. Validate every handoff
 
@@ -226,6 +232,9 @@ Require:
       the explicitly authorized stage.
 - [ ] External mutations distinguish acceptance from confirmation, preserve
       receipts, and stop safely on unknown or partial outcomes.
+- [ ] Risky sequences were checked end to end for cumulative authority, privacy
+      exposure, preserved provenance, ordering, replay, omission, duplication,
+      and partial failure.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -268,4 +277,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution plus external-mutation outcomes and safe retries. |
+| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutation/retry safety, and sequence composition. |
