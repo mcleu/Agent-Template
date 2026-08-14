@@ -211,6 +211,16 @@ Before validating:
   timestamps, and terminal manifest status.
 - Stop after any mismatch or non-terminal/rollback state.
 
+### 11. Validate rollback and compensation receipts [WHEN APPLICABLE]
+
+- Verify `reverted_state`, `compensated_state`, and `irreversible_state` against
+  the actual target and prior revision/state; do not infer restoration from an
+  inverse operation, exit code, or acknowledgement.
+- Check notified observers, propagation window, downstream consumers, unresolved
+  reconciliation, verification time/evidence, owner, and final status.
+- Return FAIL for a false complete-restoration claim and `NOT ASSESSABLE` when a
+  material target, replica, observer, or downstream effect cannot be observed.
+
 ## Report format
 
     # Validation Report
@@ -307,4 +317,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added independent validation of delayed execution, mutation/retry safety, and composed sequences. |
+| 1.1 | 2026-08-14 | Added validation of delayed execution, mutations, sequences, and structured rollback evidence. |

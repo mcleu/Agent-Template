@@ -253,6 +253,31 @@ correct. Because priorities one through three share the same unmerged review
 revision, current document versions remain unchanged and their 2026-08-14
 history rows describe the combined controls.
 
+## Implementation decision for priority 4
+
+The authorized fourth batch adds practice `RR-01`: a material rollback or
+compensation requires a structured receipt that separates verified reverted
+state, compensated state, and irreversible state and records notified observers,
+the propagation window, unresolved downstream reconciliation, verification
+evidence/time, owner, and final status. An inverse request, successful command,
+or provider acknowledgement is not evidence that remote, replicated, cached,
+published, or already-consumed state was restored.
+
+Role coverage for practice `RR-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Assigns receipt and reconciliation owners | Keeps recovery open through propagation/reconciliation | Does not declare completion without verified restoration evidence | Covered |
+| Writer / Implementer | Records separate reverted, compensated, and irreversible state | Returns the structured recovery receipt | Cannot infer rollback from an inverse command or acknowledgement | Covered |
+| Reviewer / Critic | Reviews recovery claims against targets and consumers | Produces anchored residual-effect findings | Rejects boolean or overstated rollback claims | Covered |
+| Validator / Auditor | Independently verifies receipt fields and downstream state | Records observable evidence and limits | FAIL for false restoration; `NOT ASSESSABLE` for unobservable material effects | Covered |
+| Privacy / Risk Gate | Gates restoration, compensation, notification, and reconciliation | Tracks observers, propagation, and residual risk | GO/CONDITIONAL/NO-GO for exact recovery stages | Covered |
+
+This is an ordinary policy refinement, not a reusable metadata or schema-shape
+change. `schema_version: 1` remains correct. Because priorities one through four
+share the same unmerged review revision, current document versions remain
+unchanged and their 2026-08-14 history rows describe the combined controls.
+
 ## Document control
 
 **Last edited:** 2026-08-14
@@ -262,4 +287,4 @@ history rows describe the combined controls.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-three implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-four implementation scope and compatibility decisions. |

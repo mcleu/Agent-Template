@@ -349,6 +349,26 @@ gate may block but does not silently rewrite another role's work.
   earlier violation, and do not resume from an intermediate state until its
   validity and remaining authority are re-established.
 
+### Rollback and compensation receipts
+
+- Do not use a boolean `rolled_back` claim as proof of restoration. Distinguish
+  state actually reverted to its verified prior value, compensating actions
+  that offset but do not erase an effect, and irreversible or still-unknown
+  state.
+- For a material rollback or compensation, retain a structured receipt with:
+  operation/revision and target; `reverted_state`; `compensated_state`;
+  `irreversible_state`; notified observers or explicit none; propagation window;
+  unresolved downstream reconciliation; verification evidence and time; owner;
+  and final status.
+- Verify the actual target and relevant downstream consumers after the action.
+  A command exit code, inverse request, local restoration, or provider
+  acknowledgement alone does not prove remote, cached, replicated, published,
+  or already-consumed state was restored.
+- Keep the incident or mutation open while irreversible effects, unnotified
+  observers, propagation, or reconciliation remain unresolved. Describe the
+  result as compensation or partial recovery rather than rollback when exact
+  restoration cannot be evidenced.
+
 ## 7. Version control and pull requests
 
 ### Branch and worktree rules
@@ -886,4 +906,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added delayed-execution, external-mutation/retry, and composition/sequence safety controls. |
+| 1.2 | 2026-08-14 | Added delayed-execution, mutation/retry, sequence, and structured rollback-receipt controls. |

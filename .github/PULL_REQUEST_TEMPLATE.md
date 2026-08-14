@@ -61,6 +61,9 @@ leaving an applicable surface ambiguous.
 - [ ] Material multi-step workflows have an end-to-end sequence map and
       adversarial evidence for applicable reorder, replay, duplicate, omission,
       stale-input, partial-failure, and instruction/data-confusion paths.
+- [ ] Rollback/compensation evidence separates reverted, compensated, and
+      irreversible state and accounts for observers, propagation, verification,
+      and unresolved downstream reconciliation.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -95,6 +98,8 @@ Checks and evidence:
 - Mutation receipt and residual uncertainty: NOT REQUIRED
 - Sequence map and cumulative authority/privacy invariants: NOT REQUIRED
 - Adversarial sequence evidence or `NOT ASSESSABLE` reason: NOT REQUIRED
+- Recovery receipt/reverted, compensated, and irreversible state: NOT REQUIRED
+- Observers, propagation, and unresolved reconciliation: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -108,5 +113,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for delayed execution, mutation/retry safety, and sequence composition. |
+| 1.1 | 2026-08-14 | Added review evidence for delayed execution, mutations, sequences, and rollback receipts. |
 -->

@@ -111,6 +111,9 @@ Before dispatch:
 - For each materially risky multi-step workflow, maintain a sequence map of
   actors, inputs, outputs, authority, data exposure, external effects,
   checkpoints, consumers, and cross-step invariants before dispatch.
+- For each material rollback or compensation, assign a receipt owner,
+  downstream reconciliation owner, observers/consumers to verify, propagation
+  window, and exact restoration evidence before describing recovery as complete.
 
 ### 2. Decompose and route
 
@@ -235,6 +238,8 @@ Require:
 - [ ] Risky sequences were checked end to end for cumulative authority, privacy
       exposure, preserved provenance, ordering, replay, omission, duplication,
       and partial failure.
+- [ ] Rollback/compensation receipts distinguish reverted, compensated,
+      irreversible, propagated, and unresolved downstream state.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -277,4 +282,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutation/retry safety, and sequence composition. |
+| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutations, sequences, and rollback receipts. |

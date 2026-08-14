@@ -100,7 +100,10 @@ Run before substantive writing or execution:
 8. Evaluate the complete sequence for cumulative authority, combined data
    exposure, instruction/data boundary crossings, and irreversible downstream
    effects; a separately allowed step does not make the composition allowed.
-9. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+9. Require recovery plans to distinguish restoration from compensation and to
+   identify irreversible effects, affected observers, propagation, and the
+   downstream reconciliation owner.
+10. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -122,7 +125,9 @@ executed, or released:
    idempotency or read-back basis.
 8. Confirm sequence invariants still hold across the actual final artifacts and
    effects, including intermediate outputs and downstream consumers.
-9. Issue the final verdict. No blocked material may remain in the artifact, and
+9. Confirm the recovery receipt accounts for reverted, compensated,
+   irreversible, propagated, observed, and unresolved downstream state.
+10. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -272,4 +277,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added gates for delayed execution, mutation/retry safety, and cumulative sequence risk. |
+| 1.2 | 2026-08-14 | Added gates for delayed execution, mutations, sequences, and structured recovery evidence. |

@@ -140,6 +140,8 @@ Example:
 - End-to-end sequence safety that limits cumulative authority and data exposure,
   preserves authorization across handoffs, and tests adversarial ordering and
   partial-failure paths in addition to isolated steps.
+- Structured rollback and compensation receipts that distinguish verified
+  restoration from compensation and irreversible or unreconciled effects.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
 
@@ -188,4 +190,4 @@ source repositories.
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
 | 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
 | 1.2 | 2026-08-08 | Added gradual adoption, lightweight profile, and configurable downstream-validator guidance. |
-| 1.3 | 2026-08-14 | Added delayed-execution, mutation/retry, and end-to-end sequence safety controls. |
+| 1.3 | 2026-08-14 | Added delayed-execution, mutation/retry, sequence, and structured recovery controls. |

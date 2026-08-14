@@ -163,6 +163,7 @@ these practice families:
 | Delayed execution and trusted consumers | Can an agent-written hook, workflow, task, startup file, plugin setting, interpreter path, permission, or other control artifact later be executed or interpreted by a more privileged consumer? Are writing, activation, and execution separate authorities with known triggers and rollback? |
 | External mutation outcomes and retries | Does each binding external action distinguish attempted, accepted, confirmed, failed-with-no-effect, unknown, partial, and compensated outcomes? Are retries gated by receiver semantics, scoped idempotency, or authoritative read-back? |
 | Composition and sequence safety | Can individually permitted steps accumulate prohibited authority or data exposure? Are authorization and provenance preserved at each boundary, and are order, replay, omission, duplication, and partial-failure paths tested? |
+| Rollback and compensation evidence | Does rollback distinguish verified restoration, compensation, irreversible effects, propagation, notified observers, and unresolved downstream reconciliation instead of relying on a boolean claim? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -215,8 +216,11 @@ After the matrix is complete:
 8. For every materially risky multi-step workflow, map actors, inputs, outputs,
    authority, data exposure, external effects, checkpoints, and consumers;
    define sequence invariants and adversarial test cases.
-9. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-10. State the smallest coherent implementation batch.
+9. For every material rollback or compensation path, define the receipt fields,
+   downstream observers/consumers, propagation window, verification source,
+   reconciliation owner, and residual irreversible state.
+10. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+11. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -347,6 +351,9 @@ After the final edit:
   provenance survive every boundary, cumulative authority/data exposure remain
   within scope, and order/replay/duplicate/omission/partial-failure cases have
   evidence or a named `NOT ASSESSABLE` result.
+- Confirm rollback claims identify verified reverted state separately from
+  compensation and irreversible effects, account for observers and propagation,
+  and leave unresolved downstream reconciliation explicitly open.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -436,4 +443,4 @@ result.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
-| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution, mutation/retry safety, and sequence composition. |
+| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution, mutation/retry safety, sequences, and rollback receipts. |
