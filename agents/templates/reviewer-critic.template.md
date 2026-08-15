@@ -184,7 +184,18 @@ The project's rubric overrides this example.
   target, policy, evidence, environment assumptions, or controls materially
   changed after review.
 
-### 10. Review contract and version claims [WHEN APPLICABLE]
+### 10. Review omissions and denominators [WHEN APPLICABLE]
+
+- Establish the eligible population from evidence independent of the action
+  trace. Verify identities are deduplicated and outcome categories are mutually
+  exclusive and exhaustive.
+- Reconcile `eligible = processed + excluded + deferred + failed`; inspect every
+  omission reason and distinguish `not_run` from `pass` and `not_applicable`.
+- Challenge unexplained zeroes, count mismatches, and distribution/cardinality
+  shifts against a defensible baseline. Flag completion as not assessable when
+  the denominator or independent inventory is unavailable.
+
+### 11. Review contract and version claims [WHEN APPLICABLE]
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
@@ -196,7 +207,7 @@ The project's rubric overrides this example.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 
-### 11. Review delayed-execution boundaries [WHEN APPLICABLE]
+### 12. Review delayed-execution boundaries [WHEN APPLICABLE]
 
 - Identify every trusted or more privileged consumer that may interpret or
   execute the changed artifact, including automatic discovery and indirect
@@ -291,4 +302,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added review of delayed execution, mutations, sequences, recovery evidence, and approval binding. |
+| 1.2 | 2026-08-14 | Added review of execution, mutations, sequences, recovery, approval binding, and omissions. |

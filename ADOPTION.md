@@ -165,6 +165,7 @@ these practice families:
 | Composition and sequence safety | Can individually permitted steps accumulate prohibited authority or data exposure? Are authorization and provenance preserved at each boundary, and are order, replay, omission, duplication, and partial-failure paths tested? |
 | Rollback and compensation evidence | Does rollback distinguish verified restoration, compensation, irreversible effects, propagation, notified observers, and unresolved downstream reconciliation instead of relying on a boolean claim? |
 | Revision-bound approval | Is each material approval bound to an immutable artifact revision plus the reviewed policy/test evidence, scope, stages, target, and invalidation triggers? |
+| Omission-aware validation | Is the eligible population independently defined and reconciled to processed, excluded, deferred, and failed outcomes? Are skipped checks distinct from passes and cardinality/distribution shifts investigated? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -223,8 +224,11 @@ After the matrix is complete:
 10. For every reusable or high-impact approved artifact/action, define its
     immutable revision identity, approval record, exact scope/stages, governing
     policy and evidence revisions, expiry, and material-change invalidators.
-11. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-12. State the smallest coherent implementation batch.
+11. For every workflow where silent omission is material, define the independent
+    eligible population, mutually exclusive outcome categories, reconciliation
+    invariant, omission reasons/owners, and cardinality/distribution baselines.
+12. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+13. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -361,6 +365,9 @@ After the final edit:
 - Confirm material approvals resolve to the exact artifact, policy, and evidence
   revisions reviewed and are invalidated after relevant behavior, dependency,
   authority, consumer, target, environment, or control changes.
+- Confirm applicable eligible populations reconcile to processed, excluded,
+  deferred, and failed outcomes; skipped checks are not passes; omissions have
+  reasons; and independent inventories or baselines expose unknown exclusions.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -450,4 +457,4 @@ result.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
-| 1.2 | 2026-08-14 | Added adoption coverage for delayed execution, mutations, sequences, rollback receipts, and revision-bound approval. |
+| 1.2 | 2026-08-14 | Added adoption coverage for execution, mutations, sequences, recovery, approval binding, and omission-aware validation. |

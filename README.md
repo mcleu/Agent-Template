@@ -144,6 +144,9 @@ Example:
   restoration from compensation and irreversible or unreconciled effects.
 - Revision-bound approval for reusable and high-impact artifacts, including the
   exact policy/test evidence reviewed and explicit invalidation triggers.
+- Omission-aware validation that reconciles eligible inputs to terminal outcomes,
+  distinguishes unrun checks from passes, and checks defensible cardinality and
+  distribution baselines.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
 
@@ -192,4 +195,4 @@ source repositories.
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
 | 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
 | 1.2 | 2026-08-08 | Added gradual adoption, lightweight profile, and configurable downstream-validator guidance. |
-| 1.3 | 2026-08-14 | Added delayed-execution, mutation, sequence, recovery, and revision-bound approval controls. |
+| 1.3 | 2026-08-14 | Added execution, mutation, sequence, recovery, approval, and omission-aware controls. |

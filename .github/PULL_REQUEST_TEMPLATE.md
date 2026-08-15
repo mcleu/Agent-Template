@@ -67,6 +67,9 @@ leaving an applicable surface ambiguous.
 - [ ] Material approval identifies the immutable artifact revision, approved
       scope/stages/target, governing policy and evidence revisions, expiry, and
       material-change invalidators; the actual revision was resolved.
+- [ ] Applicable eligible populations reconcile to processed, excluded,
+      deferred, and failed outcomes; omissions have reasons/owners, `not_run` is
+      not PASS, and cardinality/distribution anomalies were investigated.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -105,6 +108,8 @@ Checks and evidence:
 - Observers, propagation, and unresolved reconciliation: NOT REQUIRED
 - Approval record and exact artifact revision: NOT REQUIRED
 - Approved policy/evidence revisions, scope, expiry, invalidators: NOT REQUIRED
+- Eligible/processed/excluded/deferred/failed reconciliation: NOT REQUIRED
+- Omission reasons, independent inventory, and baseline/tolerance: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -118,5 +123,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for delayed execution, mutations, sequences, recovery, and revision-bound approval. |
+| 1.1 | 2026-08-14 | Added review evidence for execution, mutations, sequences, recovery, approval, and omission detection. |
 -->

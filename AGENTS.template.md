@@ -386,6 +386,26 @@ gate may block but does not silently rewrite another role's work.
   result as compensation or partial recovery rather than rollback when exact
   restoration cannot be evidenced.
 
+### Omission-aware validation
+
+- Define the eligible population and denominator independently of the work log
+  when silent omission could affect correctness, privacy, safety, money,
+  publication, migration, or a completion claim. A trace of actions taken cannot
+  by itself prove that every required item was considered.
+- Reconcile mutually exclusive terminal counts using a stated invariant such as
+  `eligible = processed + excluded + deferred + failed`. Define each category,
+  deduplicate identities before counting, and give every excluded, deferred, or
+  failed item a stable reason and owner when follow-up is required.
+- Distinguish `pass`, `fail`, `not_run`, and `not_applicable`. Absence of a
+  failure, log line, exception, or record is not evidence that a check ran or an
+  item was intentionally excluded.
+- When a defensible baseline exists, compare cardinality and distribution by
+  relevant cohort, source, time window, or category with documented tolerances.
+  Investigate unexpected zeroes, sharp shifts, and exact-count mismatches.
+- Use an independent inventory, source manifest, schema, authoritative query, or
+  consumer read-back to detect unknown omissions. If the eligible population or
+  reconciliation cannot be established, report `NOT ASSESSABLE`, not complete.
+
 ## 7. Version control and pull requests
 
 ### Branch and worktree rules
@@ -923,4 +943,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added delayed-execution, mutation, sequence, rollback-receipt, and revision-bound approval controls. |
+| 1.2 | 2026-08-14 | Added delayed-execution, mutation, sequence, recovery, revision-bound approval, and omission-aware validation controls. |

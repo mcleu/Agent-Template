@@ -106,7 +106,10 @@ Run before substantive writing or execution:
 10. Bind every material approval to an immutable artifact revision, exact
     scope/stages/target, and the governing policy and evidence revisions; name
     expiry and material-change invalidators.
-11. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+11. Where silent exclusion could create harm, require an independently defined
+    eligible population, exhaustive outcome categories, reasons for omissions,
+    and follow-up ownership.
+12. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -133,7 +136,10 @@ executed, or released:
 10. Resolve the actual artifact/policy/evidence revisions and confirm the
     approval remains valid after dependency, authority, consumer, target,
     environment, and control changes.
-11. Issue the final verdict. No blocked material may remain in the artifact, and
+11. Confirm eligible items reconcile to processed, excluded, deferred, and
+    failed outcomes and that unrun checks, unexpected zeroes, and material
+    cardinality/distribution shifts are not hidden by aggregate success.
+12. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -283,4 +289,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added gates for delayed execution, mutations, sequences, recovery, and revision-bound approval. |
+| 1.2 | 2026-08-14 | Added gates for execution, mutations, sequences, recovery, approval, and harmful omissions. |

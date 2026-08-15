@@ -113,11 +113,14 @@ Every project role must:
 15. Bind material approval to an immutable artifact revision and the exact
     policy/evidence reviewed; invalidate it when relevant behavior, dependency,
     authority, consumer, target, environment, or control assumptions change.
-16. For adopted multi-agent policy, verify every relevant role guide explicitly
+16. Where omission matters, independently define `eligible` and reconcile it to
+    `processed + excluded + deferred + failed`; reason every omission and keep
+    `not_run` distinct from pass.
+17. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model
     routing. Provider-neutral roles may record `host-selected` or `not-required`
     with rationale instead of naming a tier.
-17. Commit only validated files and report the actual branch, checks, and
+18. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -232,6 +235,8 @@ permission to apply, publish, commit, or merge.
       checks, irreversible effects, and downstream reconciliation ownership.
 - [ ] Bind approval to immutable artifact, policy, and evidence revisions with
       exact scope, stages, target, expiry, and material-change invalidators.
+- [ ] Define the independent eligible population, outcome reconciliation,
+      omission reasons/owners, check-state vocabulary, and applicable baselines.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
@@ -246,4 +251,4 @@ permission to apply, publish, commit, or merge.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
 | 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |
-| 1.2 | 2026-08-14 | Added routing for delayed execution, mutations, sequences, recovery, and revision-bound approval. |
+| 1.2 | 2026-08-14 | Added routing for execution, mutations, sequences, recovery, approval, and omission detection. |

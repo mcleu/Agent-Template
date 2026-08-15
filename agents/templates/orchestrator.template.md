@@ -118,6 +118,9 @@ Before dispatch:
   artifact revision and the governing policy/test evidence revisions against
   the approval record. Re-route material changes for approval; never transfer
   approval by artifact name or claimed equivalence.
+- When omission is material, assign an independent owner/source for the eligible
+  population and require a reconciliation of `processed`, `excluded`,
+  `deferred`, and `failed` before accepting a completion claim.
 
 ### 2. Decompose and route
 
@@ -246,6 +249,8 @@ Require:
       irreversible, propagated, and unresolved downstream state.
 - [ ] Every applicable approval matches the exact artifact, policy, evidence,
       scope, stage, target, and still-valid assumptions used by the work.
+- [ ] Eligible populations reconcile to terminal outcomes; all omissions and
+      unrun checks are explicit, reasoned, and independently detectable.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -288,4 +293,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutations, sequences, recovery, and revision-bound approval. |
+| 1.2 | 2026-08-14 | Added orchestration gates for execution, mutations, sequences, recovery, approval, and omission detection. |

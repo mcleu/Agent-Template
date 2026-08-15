@@ -278,6 +278,33 @@ change. `schema_version: 1` remains correct. Because priorities one through four
 share the same unmerged review revision, current document versions remain
 unchanged and their 2026-08-14 history rows describe the combined controls.
 
+## Implementation decision for priority 6
+
+The authorized sixth batch adds practice `OV-01`: workflows where silent
+omission is material independently define the eligible population and reconcile
+mutually exclusive terminal counts using
+`eligible = processed + excluded + deferred + failed`. Every excluded, deferred,
+or failed identity has a reason and follow-up owner when needed; `not_run` is
+distinct from `pass`, `fail`, and `not_applicable`. Defensible cardinality and
+distribution baselines expose unexpected zeroes or shifts, and an independent
+manifest, schema, authoritative query, inventory, or consumer read-back detects
+unknown omissions.
+
+Role coverage for practice `OV-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Assigns the independent denominator source and reconciliation | Requires exhaustive outcomes before completion | Blocks claims with unknown eligible population or unexplained omissions | Covered |
+| Writer / Implementer | Preserves stable identities and outcome categories | Reports every non-processed item and reason | Cannot infer completeness from its own successful trace | Covered |
+| Reviewer / Critic | Challenges denominator, categories, reasons, and baselines | Produces anchored count/omission findings | Treats unavailable denominator as not assessable | Covered |
+| Validator / Auditor | Independently derives eligible population and reconciles counts | Records cardinality/distribution evidence | Uses `NOT ASSESSABLE` when independent omission detection is unavailable | Covered |
+| Privacy / Risk Gate | Identifies omissions that could cause privacy/safety harm | Tracks omitted identities and follow-up owners | Prevents aggregate success from hiding harmful exclusions | Covered |
+
+This is an ordinary policy refinement, not a reusable metadata or schema-shape
+change. `schema_version: 1` remains correct. Because priorities one through six
+share the same unmerged review revision, current document versions remain
+unchanged and their 2026-08-14 history rows describe the combined controls.
+
 ## Implementation decision for priority 5
 
 The authorized fifth batch adds practice `AB-01`: approval for reusable or
@@ -313,4 +340,4 @@ unchanged and their 2026-08-14 history rows describe the combined controls.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-five implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-six implementation scope and compatibility decisions. |

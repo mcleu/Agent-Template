@@ -143,6 +143,10 @@ decision precisely.
   it. Do not substitute a rebuild, regeneration, dependency update, mutable tag,
   different commit, or changed behavior under an earlier approval; stop and
   report the invalidating change.
+- For bounded batch or collection work, preserve stable input identities and
+  report mutually exclusive `processed`, `excluded`, `deferred`, and `failed`
+  outcomes against the assigned eligible set. Give every non-processed item a
+  reason; never infer completion from the items that happened to appear in a log.
 
 ### 3. Write incrementally
 
@@ -284,4 +288,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
 | 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |
-| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, recovery receipts, and revision-bound approval. |
+| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, recovery, approval, and omission accounting. |

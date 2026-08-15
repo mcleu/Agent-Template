@@ -233,6 +233,20 @@ Before validating:
   `NOT ASSESSABLE` when exact revision identity or reviewed evidence cannot be
   established.
 
+### 13. Validate omissions and cardinality [WHEN APPLICABLE]
+
+- Derive the eligible population from an independent manifest, schema,
+  authoritative query, inventory, or consumer state rather than the producer's
+  trace alone; verify stable identities and deduplication.
+- Reconcile mutually exclusive `processed`, `excluded`, `deferred`, and `failed`
+  counts to `eligible`; sample or inspect every omission reason and follow-up
+  owner. Treat `not_run` as distinct from PASS and NOT REQUIRED.
+- Compare cardinality and relevant cohort/source/time/category distributions
+  with the documented baseline and tolerance. Investigate unexpected zeroes,
+  shifts, and mismatches.
+- Return `NOT ASSESSABLE` when the denominator or independent detection source
+  cannot be established; do not certify completeness from successful records.
+
 ## Report format
 
     # Validation Report
@@ -329,4 +343,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added validation of delayed execution, mutations, sequences, recovery, and revision-bound approval. |
+| 1.1 | 2026-08-14 | Added validation of execution, mutations, sequences, recovery, approval, and omission/cardinality evidence. |
