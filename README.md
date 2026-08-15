@@ -149,6 +149,9 @@ Example:
   distribution baselines.
 - Field-level transformation provenance that separates source-backed, derived,
   inferred, and defaulted values and quarantines missing required lineage.
+- Independent review designed around distinct failure modes and evidence paths,
+  with shared context and blind spots disclosed instead of assuming a separate
+  invocation or provider is sufficient.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
 
@@ -197,4 +200,4 @@ source repositories.
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
 | 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
 | 1.2 | 2026-08-08 | Added gradual adoption, lightweight profile, and configurable downstream-validator guidance. |
-| 1.3 | 2026-08-14 | Added execution, mutation, sequence, recovery, approval, omission, and field-lineage controls. |
+| 1.3 | 2026-08-14 | Added all eight ranked governance controls, including failure-diverse independent review. |

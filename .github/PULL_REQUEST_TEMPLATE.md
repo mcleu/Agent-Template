@@ -73,6 +73,9 @@ leaving an applicable surface ambiguous.
 - [ ] Governed transformed fields retain `source_backed`, `derived`, `inferred`,
       or `defaulted` classification and source/rule evidence through consumers;
       missing required lineage quarantines the affected field/record.
+- [ ] Independent gates name the material failure mode and use evidence/methods
+      not derived solely from the producer; shared context, dependencies, and
+      blind spots are disclosed.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -115,6 +118,8 @@ Checks and evidence:
 - Omission reasons, independent inventory, and baseline/tolerance: NOT REQUIRED
 - Field-level lineage requirements and classifications: NOT REQUIRED
 - Source/rule evidence, consumer retention, and quarantine: NOT REQUIRED
+- Independent gate, failure mode, and evidence/method path: NOT REQUIRED
+- Shared context/dependencies and residual blind spots: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -128,5 +133,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
+| 1.1 | 2026-08-14 | Added review evidence for all eight ranked controls, including failure-diverse independence. |
 -->

@@ -151,6 +151,14 @@ The project's rubric overrides this example.
 - Do not read sibling findings before completing a blind review.
 - Endorse a sound assumption explicitly when the register supports endorsements.
 - Let the Orchestrator deduplicate overlapping reports.
+- Before review, state the material claim/failure mode and the evidence or method
+  used to detect it independently of the producer's conclusion.
+- Disclose shared source summaries, context, assumptions, model family when
+  relevant, tools, generated artifacts, and other correlated blind spots. A new
+  invocation or different provider does not establish independence by itself.
+- Prefer raw/authoritative evidence, deterministic checks, independent
+  inventories, adversarial fixtures, rendered inspection, or live read-back as
+  appropriate. Return `NOT ASSESSABLE` when the failure mode is not observable.
 
 ### 7. Review composition and sequence safety [WHEN APPLICABLE]
 
@@ -312,4 +320,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added review of execution, mutations, sequences, recovery, approval, omissions, and field provenance. |
+| 1.2 | 2026-08-14 | Added review of all eight ranked controls and defined independence by failure mode and evidence. |

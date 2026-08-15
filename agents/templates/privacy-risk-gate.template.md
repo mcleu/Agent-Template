@@ -112,7 +112,10 @@ Run before substantive writing or execution:
 12. For governed transformations, define lineage-required fields and gate
     source locators, derivation/inference/default rules, downstream retention,
     quarantine, and privacy exposure of the lineage metadata itself.
-13. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+13. For every independent risk gate, name the failure mode and require an
+    evidence/method path capable of detecting it without relying solely on the
+    producer's conclusion; record shared dependencies and residual blind spots.
+14. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -295,4 +298,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added gates for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
+| 1.2 | 2026-08-14 | Added gates for all eight ranked controls and failure-mode-based independent review. |

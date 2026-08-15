@@ -189,6 +189,14 @@ Before dispatch:
   values, sections, risks, or constraints.
 - Run privacy/risk and independent validation gates against the actual final
   diff when required.
+- For every independent gate, name the material claim/failure mode and choose a
+  reviewer evidence/method that does not depend solely on the producer's
+  conclusion. Record shared context, tools, model family when relevant,
+  assumptions, and blind spots; a separate invocation is not enough by itself.
+- Prefer authoritative source checks, deterministic validators, independent
+  inventories, adversarial fixtures, renders, or live read-back according to
+  the risk. Do not require provider diversity when another method is more
+  independent of the likely failure.
 
 ### 7. Integrate and hand off
 
@@ -256,6 +264,8 @@ Require:
       unrun checks are explicit, reasoned, and independently detectable.
 - [ ] Governed fields preserve required source/rule lineage and classification
       through consumers; missing lineage is quarantined rather than guessed.
+- [ ] Independent gates name the failure mode, use an appropriate independent
+      evidence/method path, and disclose shared dependencies and blind spots.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -298,4 +308,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
+| 1.2 | 2026-08-14 | Added orchestration gates for all eight ranked controls, including failure-diverse review. |

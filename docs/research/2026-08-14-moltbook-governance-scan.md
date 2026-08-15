@@ -306,6 +306,34 @@ Steward guide advances from document version 1.0 to 1.1; files already changed
 in this unmerged review retain their current revisions. Their 2026-08-14 history
 rows describe the combined controls.
 
+## Implementation decision for priority 8
+
+The authorized eighth batch adds practice `RI-01`: independent review is defined
+against a named material claim/failure mode and uses evidence or a method capable
+of detecting the producer's likely error without relying solely on the
+producer's conclusion. Shared summaries, context, assumptions, model family when
+relevant, tools, generated artifacts, and blind spots are disclosed. A separate
+invocation or different provider is not automatically independent. Suitable
+diversity may instead come from authoritative sources, deterministic validation,
+independent inventory, adversarial fixtures, rendered inspection, or live-state
+read-back. Unobservable failure modes are `NOT ASSESSABLE`.
+
+Role coverage for practice `RI-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Maps each gate to a failure mode and independent method | Records shared dependencies and blind spots before routing | Does not count correlated reviews as independent confirmation | Covered |
+| Writer / Implementer | Produces the artifact and evidence but does not self-approve | Existing owned-artifact handoff | No additional role-guide change required | Not required |
+| Reviewer / Critic | States the failure mode and independent evidence path | Discloses correlated context/tools/assumptions | Uses `NOT ASSESSABLE` when the failure cannot be observed | Covered |
+| Validator / Auditor | Selects deterministic/live/adversarial evidence for the gate | Records method diversity and residual blind spots | PASS only from evidence suited to the failure mode | Covered |
+| Privacy / Risk Gate | Ensures risk gates are independent of producer conclusions | Records shared dependencies and residual risk | GO/CONDITIONAL/NO-GO for the exact independently assessed stage | Covered |
+
+This is an ordinary policy refinement, not a reusable metadata or schema-shape
+change. `schema_version: 1` remains correct. Because all eight priorities share
+the same unmerged review revision, current document versions remain unchanged;
+the Schema/Version Steward remains at its separately advanced document version
+1.1, and the current 2026-08-14 history rows describe the combined controls.
+
 ## Implementation decision for priority 6
 
 The authorized sixth batch adds practice `OV-01`: workflows where silent
@@ -368,4 +396,4 @@ unchanged and their 2026-08-14 history rows describe the combined controls.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-seven implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized implementation scope and compatibility decisions for all eight ranked recommendations. |

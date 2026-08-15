@@ -119,11 +119,14 @@ Every project role must:
 17. For governed transformations, classify required fields as source-backed,
     derived, inferred, or defaulted; retain source/rule lineage through consumers
     and quarantine missing required lineage.
-18. For adopted multi-agent policy, verify every relevant role guide explicitly
+18. Define independent review by the failure mode and evidence/method diversity;
+    disclose shared context and blind spots. Separate invocations or providers
+    are not automatically independent.
+19. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model
     routing. Provider-neutral roles may record `host-selected` or `not-required`
     with rationale instead of naming a tier.
-19. Commit only validated files and report the actual branch, checks, and
+20. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -242,6 +245,8 @@ permission to apply, publish, commit, or merge.
       omission reasons/owners, check-state vocabulary, and applicable baselines.
 - [ ] Define field-level lineage classes, required source/rule evidence,
       consumer retention, quarantine behavior, and privacy constraints.
+- [ ] Define each independent gate's failure mode, evidence/method path, shared
+      dependencies/context, blind spots, and `NOT ASSESSABLE` condition.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
@@ -256,4 +261,4 @@ permission to apply, publish, commit, or merge.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
 | 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |
-| 1.2 | 2026-08-14 | Added routing for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
+| 1.2 | 2026-08-14 | Added routing for all eight ranked controls, including failure-diverse review. |

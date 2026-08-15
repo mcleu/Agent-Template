@@ -790,6 +790,22 @@ Customize the ownership table:
 
 - Use blind or independent reviewers when shared context would create anchoring
   or groupthink. Have the coordinator deduplicate after their reports exist.
+- Define independence against the material failure mode. For each review gate,
+  state the claim at risk, how the producer could be wrong, and the reviewer
+  evidence/method that can detect that error without relying on the producer's
+  conclusion.
+- A separate invocation using the same source summary, assumptions, model family,
+  tool path, or generated artifact may provide useful review but is not
+  automatically an independent check. Record shared context, dependencies, and
+  blind spots.
+- Prefer evidence and method diversity suited to the risk: authoritative source
+  comparison, deterministic validation, independent inventory, adversarial
+  fixture, rendered inspection, live-state/read-back verification, or a reviewer
+  given raw evidence rather than the producer's reasoning. Provider diversity is
+  optional and is not by itself proof of independence.
+- If no method can independently observe the relevant failure mode, label the
+  gate `NOT ASSESSABLE` and preserve the residual risk; do not count multiple
+  correlated reviews as independent confirmation.
 - A reviewer attacks the artifact, not its author, and anchors every finding to
   a path, line, section, requirement, or stable ID.
 - Every finding includes severity, evidence, impact, and a proposed resolution.
@@ -964,4 +980,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added execution, mutation, sequence, recovery, approval, omission, and field-lineage controls. |
+| 1.2 | 2026-08-14 | Added eight reusable safety controls, including failure-mode-based independent review. |

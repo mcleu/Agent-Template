@@ -135,6 +135,13 @@ Before validating:
 - Run the broader relevant suite in proportion to risk.
 - Record the exact command, exit status, and material result.
 - Use synthetic fixtures rather than real private/customer data.
+- For an independent gate, name the failure mode and use evidence or a method
+  not derived solely from the producer's trace, summary, or conclusion. Record
+  shared context, tools, assumptions, and blind spots that could correlate the
+  result.
+- Prefer deterministic checks, authoritative source comparison, independent
+  inventory, adversarial fixtures, rendered inspection, or live read-back to a
+  nominally separate but methodologically identical invocation.
 
 ### 4. Validate visual output
 
@@ -304,6 +311,8 @@ Checkpoint unit: one complete gate with its evidence.
       required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
 - [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Every independent gate names its failure mode, evidence/method diversity,
+      shared dependencies, and residual blind spots.
 - [ ] Applicable executable or interpreted control artifacts were checked
       against actual consumers, triggers, activation state, and rollback or
       disable behavior.
@@ -355,4 +364,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added validation of execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
+| 1.1 | 2026-08-14 | Added validation of all eight ranked controls and failure-mode-based independence evidence. |
