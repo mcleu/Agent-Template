@@ -406,6 +406,27 @@ gate may block but does not silently rewrite another role's work.
   consumer read-back to detect unknown omissions. If the eligible population or
   reconciliation cannot be established, report `NOT ASSESSABLE`, not complete.
 
+### Field-level transformation provenance
+
+- For governed transformations where lineage affects correctness, auditability,
+  privacy, safety, finance, legal meaning, or publication, classify each output
+  field as `source_backed`, `derived`, `inferred`, or `defaulted`.
+- Retain a field-level lineage record with output record/field identity, source
+  record and precise locator when source-backed, transformation rule and version
+  when derived, stated basis and confidence/uncertainty when inferred, and the
+  default rule/version when defaulted. Preserve the immutable source or its
+  governed reference and the transformation revision.
+- Never present `inferred` or `defaulted` data as source-backed fact. Keep the
+  classification available to downstream consumers and prevent summaries,
+  exports, or generated representations from dropping it where the distinction
+  affects interpretation.
+- Define which fields require lineage. Quarantine the affected record or field
+  when required lineage, source identity, or transformation rule is missing or
+  invalid; do not silently coerce it to unknown, source-backed, or valid.
+- Apply privacy and retention rules to lineage itself. Store the minimum locator
+  and evidence needed for verification without copying restricted source values
+  into public logs, examples, or metadata.
+
 ## 7. Version control and pull requests
 
 ### Branch and worktree rules
@@ -943,4 +964,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added delayed-execution, mutation, sequence, recovery, revision-bound approval, and omission-aware validation controls. |
+| 1.2 | 2026-08-14 | Added execution, mutation, sequence, recovery, approval, omission, and field-lineage controls. |

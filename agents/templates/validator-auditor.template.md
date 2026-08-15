@@ -247,6 +247,18 @@ Before validating:
 - Return `NOT ASSESSABLE` when the denominator or independent detection source
   cannot be established; do not certify completeness from successful records.
 
+### 14. Validate field-level provenance [WHEN APPLICABLE]
+
+- Sample or exhaustively trace governed fields to source records/locators,
+  transformation/default rule revisions, or stated inference evidence; verify
+  `source_backed`, `derived`, `inferred`, and `defaulted` classifications.
+- Confirm downstream consumers preserve required lineage distinctions and that
+  missing/invalid required lineage quarantines the field or record.
+- Test missing source, stale rule, invalid locator, and misclassified inference
+  fixtures. Check lineage metadata for prohibited source values and retention.
+- Return FAIL for false source-backed claims and `NOT ASSESSABLE` when required
+  source/rule evidence cannot be independently inspected.
+
 ## Report format
 
     # Validation Report
@@ -343,4 +355,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added validation of execution, mutations, sequences, recovery, approval, and omission/cardinality evidence. |
+| 1.1 | 2026-08-14 | Added validation of execution, mutations, sequences, recovery, approval, omissions, and field lineage. |

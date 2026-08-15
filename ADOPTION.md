@@ -166,6 +166,7 @@ these practice families:
 | Rollback and compensation evidence | Does rollback distinguish verified restoration, compensation, irreversible effects, propagation, notified observers, and unresolved downstream reconciliation instead of relying on a boolean claim? |
 | Revision-bound approval | Is each material approval bound to an immutable artifact revision plus the reviewed policy/test evidence, scope, stages, target, and invalidation triggers? |
 | Omission-aware validation | Is the eligible population independently defined and reconciled to processed, excluded, deferred, and failed outcomes? Are skipped checks distinct from passes and cardinality/distribution shifts investigated? |
+| Field-level transformation provenance | Are governed output fields classified as source-backed, derived, inferred, or defaulted with source/rule revisions, preserved lineage for consumers, and quarantine when required lineage is missing? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -227,8 +228,11 @@ After the matrix is complete:
 11. For every workflow where silent omission is material, define the independent
     eligible population, mutually exclusive outcome categories, reconciliation
     invariant, omission reasons/owners, and cardinality/distribution baselines.
-12. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-13. State the smallest coherent implementation batch.
+12. For every governed transformation, identify lineage-required fields,
+    classification vocabulary, source locator and transformation-rule versions,
+    downstream retention, privacy constraints, and quarantine behavior.
+13. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+14. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -368,6 +372,9 @@ After the final edit:
 - Confirm applicable eligible populations reconcile to processed, excluded,
   deferred, and failed outcomes; skipped checks are not passes; omissions have
   reasons; and independent inventories or baselines expose unknown exclusions.
+- Confirm governed fields retain source/rule lineage and the source-backed,
+  derived, inferred, or defaulted distinction through consumers; required
+  missing lineage is quarantined and lineage metadata respects privacy rules.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -457,4 +464,4 @@ result.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
-| 1.2 | 2026-08-14 | Added adoption coverage for execution, mutations, sequences, recovery, approval binding, and omission-aware validation. |
+| 1.2 | 2026-08-14 | Added adoption coverage for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |

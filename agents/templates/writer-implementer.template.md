@@ -147,6 +147,11 @@ decision precisely.
   report mutually exclusive `processed`, `excluded`, `deferred`, and `failed`
   outcomes against the assigned eligible set. Give every non-processed item a
   reason; never infer completion from the items that happened to appear in a log.
+- For governed transformations, emit each required field's `source_backed`,
+  `derived`, `inferred`, or `defaulted` classification and its source locator,
+  transformation/default rule revision, or inference basis as applicable.
+  Preserve the distinction through owned outputs and quarantine missing required
+  lineage; never make inferred/defaulted values look source-supported.
 
 ### 3. Write incrementally
 
@@ -288,4 +293,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
 | 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |
-| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, recovery, approval, and omission accounting. |
+| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, recovery, approval, omissions, and field lineage. |

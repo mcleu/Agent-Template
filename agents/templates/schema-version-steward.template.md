@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-schema-version-steward
 role: schema-version-steward
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Schema / Version Steward
@@ -99,6 +99,10 @@ Before writing:
   permission to discard or coerce information from an unspecified case.
 - Identify the canonical representation and label every generated or derived
   representation so authority cannot drift.
+- For governed transformations, define which output fields require lineage and
+  classify them as `source_backed`, `derived`, `inferred`, or `defaulted`.
+  Specify source locator, transformation/default rule revision, inference basis,
+  consumer-retention, quarantine, and privacy requirements for each class.
 
 ### 2. Map impact
 
@@ -130,6 +134,9 @@ Before writing:
   rollback or stop conditions, and evidence retained after migration.
 - Require synthetic fixtures for old, new, missing, unknown, invalid, and
   deprecated cases as applicable.
+- Require lineage fixtures for missing source, invalid/stale rule, inferred or
+  defaulted values, consumer retention, and quarantine when field provenance is
+  part of the governed contract.
 - Name exact validation and generated-drift commands; do not invent commands not
   present in the repository.
 
@@ -215,10 +222,11 @@ requires separate explicit authorization.
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-14
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Schema / Version Steward role guide. |
+| 1.1 | 2026-08-14 | Added field-level transformation provenance and lineage-contract responsibilities. |

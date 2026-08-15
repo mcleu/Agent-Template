@@ -116,11 +116,14 @@ Every project role must:
 16. Where omission matters, independently define `eligible` and reconcile it to
     `processed + excluded + deferred + failed`; reason every omission and keep
     `not_run` distinct from pass.
-17. For adopted multi-agent policy, verify every relevant role guide explicitly
+17. For governed transformations, classify required fields as source-backed,
+    derived, inferred, or defaulted; retain source/rule lineage through consumers
+    and quarantine missing required lineage.
+18. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model
     routing. Provider-neutral roles may record `host-selected` or `not-required`
     with rationale instead of naming a tier.
-18. Commit only validated files and report the actual branch, checks, and
+19. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -237,6 +240,8 @@ permission to apply, publish, commit, or merge.
       exact scope, stages, target, expiry, and material-change invalidators.
 - [ ] Define the independent eligible population, outcome reconciliation,
       omission reasons/owners, check-state vocabulary, and applicable baselines.
+- [ ] Define field-level lineage classes, required source/rule evidence,
+      consumer retention, quarantine behavior, and privacy constraints.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
@@ -251,4 +256,4 @@ permission to apply, publish, commit, or merge.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
 | 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |
-| 1.2 | 2026-08-14 | Added routing for execution, mutations, sequences, recovery, approval, and omission detection. |
+| 1.2 | 2026-08-14 | Added routing for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |

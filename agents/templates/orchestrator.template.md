@@ -121,6 +121,9 @@ Before dispatch:
 - When omission is material, assign an independent owner/source for the eligible
   population and require a reconciliation of `processed`, `excluded`,
   `deferred`, and `failed` before accepting a completion claim.
+- For governed transformations, assign the Schema/Version Steward to define
+  lineage-required fields, classification, source/rule revisions, consumer
+  retention, quarantine behavior, and privacy handling before implementation.
 
 ### 2. Decompose and route
 
@@ -251,6 +254,8 @@ Require:
       scope, stage, target, and still-valid assumptions used by the work.
 - [ ] Eligible populations reconcile to terminal outcomes; all omissions and
       unrun checks are explicit, reasoned, and independently detectable.
+- [ ] Governed fields preserve required source/rule lineage and classification
+      through consumers; missing lineage is quarantined rather than guessed.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -293,4 +298,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for execution, mutations, sequences, recovery, approval, and omission detection. |
+| 1.2 | 2026-08-14 | Added orchestration gates for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |

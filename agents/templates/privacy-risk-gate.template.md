@@ -109,7 +109,10 @@ Run before substantive writing or execution:
 11. Where silent exclusion could create harm, require an independently defined
     eligible population, exhaustive outcome categories, reasons for omissions,
     and follow-up ownership.
-12. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+12. For governed transformations, define lineage-required fields and gate
+    source locators, derivation/inference/default rules, downstream retention,
+    quarantine, and privacy exposure of the lineage metadata itself.
+13. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -139,7 +142,10 @@ executed, or released:
 11. Confirm eligible items reconcile to processed, excluded, deferred, and
     failed outcomes and that unrun checks, unexpected zeroes, and material
     cardinality/distribution shifts are not hidden by aggregate success.
-12. Issue the final verdict. No blocked material may remain in the artifact, and
+12. Confirm inferred/defaulted values are not represented as source-backed,
+    required missing lineage is quarantined, downstream distinctions remain
+    visible, and lineage records contain no unnecessary restricted source data.
+13. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -289,4 +295,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added gates for execution, mutations, sequences, recovery, approval, and harmful omissions. |
+| 1.2 | 2026-08-14 | Added gates for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |

@@ -70,6 +70,9 @@ leaving an applicable surface ambiguous.
 - [ ] Applicable eligible populations reconcile to processed, excluded,
       deferred, and failed outcomes; omissions have reasons/owners, `not_run` is
       not PASS, and cardinality/distribution anomalies were investigated.
+- [ ] Governed transformed fields retain `source_backed`, `derived`, `inferred`,
+      or `defaulted` classification and source/rule evidence through consumers;
+      missing required lineage quarantines the affected field/record.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -110,6 +113,8 @@ Checks and evidence:
 - Approved policy/evidence revisions, scope, expiry, invalidators: NOT REQUIRED
 - Eligible/processed/excluded/deferred/failed reconciliation: NOT REQUIRED
 - Omission reasons, independent inventory, and baseline/tolerance: NOT REQUIRED
+- Field-level lineage requirements and classifications: NOT REQUIRED
+- Source/rule evidence, consumer retention, and quarantine: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -123,5 +128,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for execution, mutations, sequences, recovery, approval, and omission detection. |
+| 1.1 | 2026-08-14 | Added review evidence for execution, mutations, sequences, recovery, approval, omissions, and field lineage. |
 -->

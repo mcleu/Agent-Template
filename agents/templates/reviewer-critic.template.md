@@ -195,7 +195,17 @@ The project's rubric overrides this example.
   shifts against a defensible baseline. Flag completion as not assessable when
   the denominator or independent inventory is unavailable.
 
-### 11. Review contract and version claims [WHEN APPLICABLE]
+### 11. Review field-level provenance [WHEN APPLICABLE]
+
+- Trace governed output fields to exact source locators, transformation/default
+  rule revisions, or explicit inference bases and verify the classification is
+  `source_backed`, `derived`, `inferred`, or `defaulted` as claimed.
+- Check downstream summaries/exports preserve distinctions that affect meaning;
+  flag inferred or defaulted values presented as source-supported facts.
+- Verify missing required lineage quarantines the field/record and that lineage
+  metadata neither leaks restricted source values nor prevents authorized audit.
+
+### 12. Review contract and version claims [WHEN APPLICABLE]
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
@@ -207,7 +217,7 @@ The project's rubric overrides this example.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 
-### 12. Review delayed-execution boundaries [WHEN APPLICABLE]
+### 13. Review delayed-execution boundaries [WHEN APPLICABLE]
 
 - Identify every trusted or more privileged consumer that may interpret or
   execute the changed artifact, including automatic discovery and indirect
@@ -302,4 +312,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added review of execution, mutations, sequences, recovery, approval binding, and omissions. |
+| 1.2 | 2026-08-14 | Added review of execution, mutations, sequences, recovery, approval, omissions, and field provenance. |

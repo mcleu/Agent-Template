@@ -278,6 +278,34 @@ change. `schema_version: 1` remains correct. Because priorities one through four
 share the same unmerged review revision, current document versions remain
 unchanged and their 2026-08-14 history rows describe the combined controls.
 
+## Implementation decision for priority 7
+
+The authorized seventh batch adds practice `FP-01`: governed transformed fields
+are classified as `source_backed`, `derived`, `inferred`, or `defaulted` and
+retain output identity, source record/locator, transformation/default rule
+revision, or inference basis and uncertainty as applicable. The distinction
+survives downstream summaries and exports where it affects meaning. Missing or
+invalid required lineage quarantines the field/record rather than silently
+coercing it, and lineage metadata follows its own privacy and retention rules.
+
+Role coverage for practice `FP-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Routes lineage contract design to the Schema/Version Steward | Requires lineage requirements before implementation | Blocks guessed lineage or unowned contract decisions | Covered |
+| Schema / Version Steward | Defines required fields, classes, evidence, retention, and quarantine | Checkpoints one field/rule/consumer decision | Owns compatibility and lineage fixture requirements | Covered |
+| Writer / Implementer | Emits field classification and evidence | Quarantines missing required lineage | Cannot present inferred/defaulted data as source-backed | Covered |
+| Reviewer / Critic | Traces fields and downstream representations | Produces anchored lineage/misclassification findings | Flags lost distinctions and privacy leakage | Covered |
+| Validator / Auditor | Independently tests lineage and failure fixtures | Records source/rule/consumer evidence | FAIL for false provenance; `NOT ASSESSABLE` when evidence is unavailable | Covered |
+| Privacy / Risk Gate | Gates source locator detail, retention, and inference exposure | Reviews actual lineage metadata and quarantine | GO/CONDITIONAL/NO-GO for exact lineage flows | Covered |
+
+This is an additive policy and role-guide refinement. The new lineage vocabulary
+is not added as required reusable-template metadata, so the v1 metadata shape
+and `schema_version: 1` remain correct. The previously released Schema/Version
+Steward guide advances from document version 1.0 to 1.1; files already changed
+in this unmerged review retain their current revisions. Their 2026-08-14 history
+rows describe the combined controls.
+
 ## Implementation decision for priority 6
 
 The authorized sixth batch adds practice `OV-01`: workflows where silent
@@ -340,4 +368,4 @@ unchanged and their 2026-08-14 history rows describe the combined controls.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-six implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-seven implementation scope and compatibility decisions. |
