@@ -305,6 +305,23 @@ gate may block but does not silently rewrite another role's work.
 - After a human completes an external action, capture only the minimum safe
   evidence needed by the repository.
 
+### Approval binding and invalidation
+
+- Bind approval for a reusable artifact, external action, control, model,
+  workflow, migration, or release to the exact reviewed revision: a stable
+  identity plus immutable version, digest, or commit. Approval of a name, path,
+  moving branch, `latest`, or mutable tag is not revision-specific approval.
+- The approval record names the approver, artifact/revision, allowed purpose,
+  target/audience, lifecycle stages, authority and data scope, governing policy
+  revision, test/evidence revision, decision time, and expiry or review trigger.
+- Before use, resolve the actual artifact and evidence revisions and compare
+  them with the approval record. Do not silently substitute rebuilt, regenerated,
+  dependency-updated, relocated, or behaviorally equivalent artifacts.
+- Invalidate and re-evaluate approval when artifact behavior/content,
+  dependencies, permissions/authority, consumers, target/audience, governing
+  policy, evidence, environment assumptions, or safety controls materially
+  change. A later revision does not inherit approval automatically.
+
 ### External mutation outcomes and retries
 
 - Represent external mutations with one explicit state: `not_attempted`,
@@ -906,4 +923,4 @@ integrations, approvals, deadlines, or evidence remain unknown.
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled root operating-contract template. |
 | 1.1 | 2026-08-08 | Added gradual document control, complementary schema authority, metadata preflight, and host-selected model routing. |
-| 1.2 | 2026-08-14 | Added delayed-execution, mutation/retry, sequence, and structured rollback-receipt controls. |
+| 1.2 | 2026-08-14 | Added delayed-execution, mutation, sequence, rollback-receipt, and revision-bound approval controls. |

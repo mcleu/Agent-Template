@@ -103,7 +103,10 @@ Run before substantive writing or execution:
 9. Require recovery plans to distinguish restoration from compensation and to
    identify irreversible effects, affected observers, propagation, and the
    downstream reconciliation owner.
-10. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
+10. Bind every material approval to an immutable artifact revision, exact
+    scope/stages/target, and the governing policy and evidence revisions; name
+    expiry and material-change invalidators.
+11. Issue GO, NO-GO, or CONDITIONAL for the exact named stages.
 
 ### Pass 2 — Final artifact/diff gate
 
@@ -127,7 +130,10 @@ executed, or released:
    effects, including intermediate outputs and downstream consumers.
 9. Confirm the recovery receipt accounts for reverted, compensated,
    irreversible, propagated, observed, and unresolved downstream state.
-10. Issue the final verdict. No blocked material may remain in the artifact, and
+10. Resolve the actual artifact/policy/evidence revisions and confirm the
+    approval remains valid after dependency, authority, consumer, target,
+    environment, and control changes.
+11. Issue the final verdict. No blocked material may remain in the artifact, and
    every blocked next stage remains prohibited.
 
 ## Verdict semantics
@@ -277,4 +283,4 @@ Escalate to the named human owner or qualified counsel when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Privacy / Risk Gate role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned gate record. |
-| 1.2 | 2026-08-14 | Added gates for delayed execution, mutations, sequences, and structured recovery evidence. |
+| 1.2 | 2026-08-14 | Added gates for delayed execution, mutations, sequences, recovery, and revision-bound approval. |

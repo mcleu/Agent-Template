@@ -278,6 +278,32 @@ change. `schema_version: 1` remains correct. Because priorities one through four
 share the same unmerged review revision, current document versions remain
 unchanged and their 2026-08-14 history rows describe the combined controls.
 
+## Implementation decision for priority 5
+
+The authorized fifth batch adds practice `AB-01`: approval for reusable or
+high-impact artifacts/actions binds to a stable identity plus an immutable
+version, digest, or commit and records the exact purpose, target/audience,
+lifecycle stages, authority/data scope, governing policy revision, test/evidence
+revision, time, expiry, and review triggers. Names, paths, moving branches,
+`latest`, and mutable tags do not carry revision-specific approval. Material
+changes to behavior, dependencies, authority, consumers, targets, policy,
+evidence, environment assumptions, or controls invalidate the approval.
+
+Role coverage for practice `AB-01`:
+
+| Role | Ownership | Checkpoint/handoff | Verdict or gate | Coverage |
+| --- | --- | --- | --- | --- |
+| Orchestrator | Resolves approved revisions and re-routes invalidated work | Records approval identity before dispatch | Blocks revision substitution or inherited approval | Covered |
+| Writer / Implementer | Uses only the exact approved revision | Reports rebuilds, updates, or behavior drift | Stops rather than substituting an allegedly equivalent artifact | Covered |
+| Reviewer / Critic | Reviews artifact identity, scope, evidence, and invalidators | Produces anchored stale-approval findings | Rejects name/path/tag-only approval | Covered |
+| Validator / Auditor | Independently resolves artifact bytes/revision and evidence | Records exact identity and observable behavior | FAIL for invalid revision; `NOT ASSESSABLE` when identity is unresolved | Covered |
+| Privacy / Risk Gate | Owns approval scope, stages, expiry, and invalidators | Rechecks the actual final revisions | GO/CONDITIONAL/NO-GO only for the bound revision and scope | Covered |
+
+This is an ordinary policy refinement, not a reusable metadata or schema-shape
+change. `schema_version: 1` remains correct. Because priorities one through five
+share the same unmerged review revision, current document versions remain
+unchanged and their 2026-08-14 history rows describe the combined controls.
+
 ## Document control
 
 **Last edited:** 2026-08-14
@@ -287,4 +313,4 @@ unchanged and their 2026-08-14 history rows describe the combined controls.
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-14 | Recorded the read-only Moltbook governance scan and ranked recommendations. |
-| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-four implementation scope and compatibility decisions. |
+| 1.1 | 2026-08-14 | Recorded the authorized priority-one through priority-five implementation scope and compatibility decisions. |

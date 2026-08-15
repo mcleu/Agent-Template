@@ -221,6 +221,18 @@ Before validating:
 - Return FAIL for a false complete-restoration claim and `NOT ASSESSABLE` when a
   material target, replica, observer, or downstream effect cannot be observed.
 
+### 12. Validate approval binding [WHEN APPLICABLE]
+
+- Independently resolve the artifact's stable identity and immutable
+  version/digest/commit and compare them with the approval record and actual
+  bytes/behavior under test.
+- Verify approved purpose, target/audience, lifecycle stages, authority/data
+  scope, governing policy revision, test/evidence revision, time, expiry, and
+  invalidation triggers.
+- Return FAIL when an unapproved or invalidated revision is used and
+  `NOT ASSESSABLE` when exact revision identity or reviewed evidence cannot be
+  established.
+
 ## Report format
 
     # Validation Report
@@ -317,4 +329,4 @@ Escalate immediately when:
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
-| 1.1 | 2026-08-14 | Added validation of delayed execution, mutations, sequences, and structured rollback evidence. |
+| 1.1 | 2026-08-14 | Added validation of delayed execution, mutations, sequences, recovery, and revision-bound approval. |

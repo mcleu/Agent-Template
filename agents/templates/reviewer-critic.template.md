@@ -173,7 +173,18 @@ The project's rubric overrides this example.
 - Flag recovery as incomplete while residual effects, observer notification, or
   reconciliation remain open.
 
-### 9. Review contract and version claims [WHEN APPLICABLE]
+### 9. Review approval binding [WHEN APPLICABLE]
+
+- Resolve the actual artifact version/digest/commit and compare it with the
+  approval record; a matching name, path, branch, mutable tag, or claimed
+  equivalence is insufficient.
+- Check purpose, target/audience, stages, authority/data scope, policy and test
+  evidence revisions, approval time, expiry, and review triggers.
+- Flag approval as stale when behavior, dependencies, authority, consumers,
+  target, policy, evidence, environment assumptions, or controls materially
+  changed after review.
+
+### 10. Review contract and version claims [WHEN APPLICABLE]
 
 - Check the canonical schema, producer/consumer alignment, generated
   representations, migration/cutover plan, and unknown-value behavior.
@@ -185,7 +196,7 @@ The project's rubric overrides this example.
 - Check that release, tag, branch, commit, PR, and CI statements match the
   observed files/state and remain within assigned authority.
 
-### 10. Review delayed-execution boundaries [WHEN APPLICABLE]
+### 11. Review delayed-execution boundaries [WHEN APPLICABLE]
 
 - Identify every trusted or more privileged consumer that may interpret or
   execute the changed artifact, including automatic discovery and indirect
@@ -280,4 +291,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Reviewer / Critic role guide. |
 | 1.1 | 2026-08-05 | Limited document-version authority to the owned findings file. |
-| 1.2 | 2026-08-14 | Added adversarial review of delayed execution, mutations, sequences, and rollback evidence. |
+| 1.2 | 2026-08-14 | Added review of delayed execution, mutations, sequences, recovery evidence, and approval binding. |

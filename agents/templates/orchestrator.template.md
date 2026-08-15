@@ -114,6 +114,10 @@ Before dispatch:
 - For each material rollback or compensation, assign a receipt owner,
   downstream reconciliation owner, observers/consumers to verify, propagation
   window, and exact restoration evidence before describing recovery as complete.
+- Before routing approved reusable or high-impact work, resolve the exact
+  artifact revision and the governing policy/test evidence revisions against
+  the approval record. Re-route material changes for approval; never transfer
+  approval by artifact name or claimed equivalence.
 
 ### 2. Decompose and route
 
@@ -240,6 +244,8 @@ Require:
       and partial failure.
 - [ ] Rollback/compensation receipts distinguish reverted, compensated,
       irreversible, propagated, and unresolved downstream state.
+- [ ] Every applicable approval matches the exact artifact, policy, evidence,
+      scope, stage, target, and still-valid assumptions used by the work.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -282,4 +288,4 @@ Escalate to the user when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
-| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutations, sequences, and rollback receipts. |
+| 1.2 | 2026-08-14 | Added orchestration gates for delayed execution, mutations, sequences, recovery, and revision-bound approval. |

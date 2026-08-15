@@ -64,6 +64,9 @@ leaving an applicable surface ambiguous.
 - [ ] Rollback/compensation evidence separates reverted, compensated, and
       irreversible state and accounts for observers, propagation, verification,
       and unresolved downstream reconciliation.
+- [ ] Material approval identifies the immutable artifact revision, approved
+      scope/stages/target, governing policy and evidence revisions, expiry, and
+      material-change invalidators; the actual revision was resolved.
 - [ ] The final diff contains no private, generated, unrelated, or unintended
       files.
 
@@ -100,6 +103,8 @@ Checks and evidence:
 - Adversarial sequence evidence or `NOT ASSESSABLE` reason: NOT REQUIRED
 - Recovery receipt/reverted, compensated, and irreversible state: NOT REQUIRED
 - Observers, propagation, and unresolved reconciliation: NOT REQUIRED
+- Approval record and exact artifact revision: NOT REQUIRED
+- Approved policy/evidence revisions, scope, expiry, invalidators: NOT REQUIRED
 - Approval gates:
 - Remaining unknowns:
 - Rollback or recovery path:
@@ -113,5 +118,5 @@ Current version: 1.1
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled pull-request template. |
-| 1.1 | 2026-08-14 | Added review evidence for delayed execution, mutations, sequences, and rollback receipts. |
+| 1.1 | 2026-08-14 | Added review evidence for delayed execution, mutations, sequences, recovery, and revision-bound approval. |
 -->

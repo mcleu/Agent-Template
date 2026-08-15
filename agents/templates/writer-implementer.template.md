@@ -139,6 +139,10 @@ decision precisely.
   `compensated_state`, and `irreversible_state` separately, plus observers,
   propagation, and unresolved reconciliation. Do not emit `rolled_back: true`
   or an equivalent completion claim from an inverse command or acknowledgement.
+- Resolve approval to the exact input and output artifact revision before using
+  it. Do not substitute a rebuild, regeneration, dependency update, mutable tag,
+  different commit, or changed behavior under an earlier approval; stop and
+  report the invalidating change.
 
 ### 3. Write incrementally
 
@@ -280,4 +284,4 @@ Escalate to the Orchestrator when:
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Writer / Implementer role guide. |
 | 1.1 | 2026-08-05 | Clarified the exact boundary for owned document and other version metadata. |
-| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, and structured recovery receipts. |
+| 1.2 | 2026-08-14 | Added safeguards for control artifacts, mutations, sequences, recovery receipts, and revision-bound approval. |
