@@ -130,6 +130,28 @@ Example:
   sensitive sources.
 - Read-only audit, reviewable manifests, approval binding, collision refusal,
   and independent validation for high-risk filesystem changes.
+- Delayed-execution safety for hooks, workflows, task/IDE settings, startup
+  files, permissions, and other agent-written artifacts that a trusted consumer
+  may later interpret or execute; writing and activation remain separate
+  authorities.
+- Explicit external-mutation outcomes that separate acceptance from
+  confirmation, stop on unknown or partial effects, and permit retries only
+  with authoritative read-back, receiver semantics, or scoped idempotency.
+- End-to-end sequence safety that limits cumulative authority and data exposure,
+  preserves authorization across handoffs, and tests adversarial ordering and
+  partial-failure paths in addition to isolated steps.
+- Structured rollback and compensation receipts that distinguish verified
+  restoration from compensation and irreversible or unreconciled effects.
+- Revision-bound approval for reusable and high-impact artifacts, including the
+  exact policy/test evidence reviewed and explicit invalidation triggers.
+- Omission-aware validation that reconciles eligible inputs to terminal outcomes,
+  distinguishes unrun checks from passes, and checks defensible cardinality and
+  distribution baselines.
+- Field-level transformation provenance that separates source-backed, derived,
+  inferred, and defaulted values and quarantines missing required lineage.
+- Independent review designed around distinct failure modes and evidence paths,
+  with shared context and blind spots disclosed instead of assuming a separate
+  invocation or provider is sufficient.
 - Versioned deliverables that preserve superseded files rather than overwriting
   history.
 
@@ -169,12 +191,13 @@ source repositories.
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.2
+**Current version:** 1.3
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added public schema, role, adoption, and per-file document-version scaffolding. |
 | 1.1 | 2026-08-05 | Added MIT licensing, direct template/download onboarding, and typed multi-version validation guidance. |
 | 1.2 | 2026-08-08 | Added gradual adoption, lightweight profile, and configurable downstream-validator guidance. |
+| 1.3 | 2026-08-14 | Added all eight ranked governance controls, including failure-diverse independent review. |

@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-validator-auditor
 role: validator-auditor
-document_version: "1.0"
-last_edited: "2026-08-05"
+document_version: "1.1"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Validator / Auditor
@@ -135,6 +135,13 @@ Before validating:
 - Run the broader relevant suite in proportion to risk.
 - Record the exact command, exit status, and material result.
 - Use synthetic fixtures rather than real private/customer data.
+- For an independent gate, name the failure mode and use evidence or a method
+  not derived solely from the producer's trace, summary, or conclusion. Record
+  shared context, tools, assumptions, and blind spots that could correlate the
+  result.
+- Prefer deterministic checks, authoritative source comparison, independent
+  inventory, adversarial fixtures, rendered inspection, or live read-back to a
+  nominally separate but methodologically identical invocation.
 
 ### 4. Validate visual output
 
@@ -153,7 +160,35 @@ Before validating:
   deployment configuration and target, not names or prior prose.
 - Confirm no external action is represented as completed without evidence.
 
-### 6. Adjudicate scanner candidates
+### 6. Validate delayed-execution boundaries [WHEN APPLICABLE]
+
+- Confirm the changed artifact's actual consumers, loading/discovery rule,
+  trigger, privilege level, path resolution, symlinks, permissions, executable
+  bits, and precedence.
+- Verify that an artifact intended to remain inert is not auto-discovered or
+  active. When activation was explicitly authorized, test actual consumer
+  behavior in isolation when practicable and verify the rollback or disable
+  path.
+- Confirm draft/write, installation, activation, execution, and deployment did
+  not advance beyond their separately authorized stages.
+- Use `NOT ASSESSABLE` rather than PASS when the consumer set, trigger, or
+  activation state cannot be determined.
+
+### 7. Validate external mutation outcomes [WHEN APPLICABLE]
+
+- Verify the provider response is preserved and correctly mapped to
+  `not_attempted`, `rejected`, `accepted`, `confirmed`, `failed_no_effect`,
+  `outcome_unknown`, `partially_applied`, or `compensated`.
+- Confirm local authoritative state advances only after authoritative read-back
+  or equivalent external confirmation. Acceptance alone is not confirmation.
+- For a retry, verify documented receiver semantics, authoritative read-back,
+  or an idempotency guarantee scoped to the same actor, operation, target,
+  payload, and authority window. Verify the receipt records the decision and
+  residual uncertainty.
+- Return `NOT ASSESSABLE`, not PASS, when the prior effect or confirmation
+  source cannot be determined.
+
+### 8. Adjudicate scanner candidates
 
 - Treat link, path, case, secret, policy, lint, and other scanner matches as
   candidates rather than automatic failures.
@@ -163,12 +198,73 @@ Before validating:
   positive, or unresolved, with evidence.
 - An unresolved candidate for a required gate is NOT ASSESSABLE, not PASS.
 
-### 7. Validate high-risk filesystem work [OPTIONAL]
+### 9. Validate composition and sequence safety [WHEN APPLICABLE]
+
+- Verify the end-to-end sequence map identifies every actor, input, output,
+  authority, data exposure, external effect, checkpoint, and consumer.
+- Check cumulative authority and privacy exposure against the original scope at
+  every boundary; confirm provenance and authorization are not widened by a
+  transformation or successful prior step.
+- Run synthetic adversarial sequence fixtures for applicable reorder, replay,
+  duplicate, omission, stale input, partial failure, and instruction/data
+  confusion paths. Test the full sequence in addition to isolated steps.
+- Return `NOT ASSESSABLE`, not PASS, when a material intermediate state,
+  consumer, accumulated permission, or cross-step effect cannot be observed.
+
+### 10. Validate high-risk filesystem work [OPTIONAL]
 
 - Independently confirm destination presence, expected source absence, hash or
   byte preservation, reference/link validity, collision handling, exact
   timestamps, and terminal manifest status.
 - Stop after any mismatch or non-terminal/rollback state.
+
+### 11. Validate rollback and compensation receipts [WHEN APPLICABLE]
+
+- Verify `reverted_state`, `compensated_state`, and `irreversible_state` against
+  the actual target and prior revision/state; do not infer restoration from an
+  inverse operation, exit code, or acknowledgement.
+- Check notified observers, propagation window, downstream consumers, unresolved
+  reconciliation, verification time/evidence, owner, and final status.
+- Return FAIL for a false complete-restoration claim and `NOT ASSESSABLE` when a
+  material target, replica, observer, or downstream effect cannot be observed.
+
+### 12. Validate approval binding [WHEN APPLICABLE]
+
+- Independently resolve the artifact's stable identity and immutable
+  version/digest/commit and compare them with the approval record and actual
+  bytes/behavior under test.
+- Verify approved purpose, target/audience, lifecycle stages, authority/data
+  scope, governing policy revision, test/evidence revision, time, expiry, and
+  invalidation triggers.
+- Return FAIL when an unapproved or invalidated revision is used and
+  `NOT ASSESSABLE` when exact revision identity or reviewed evidence cannot be
+  established.
+
+### 13. Validate omissions and cardinality [WHEN APPLICABLE]
+
+- Derive the eligible population from an independent manifest, schema,
+  authoritative query, inventory, or consumer state rather than the producer's
+  trace alone; verify stable identities and deduplication.
+- Reconcile mutually exclusive `processed`, `excluded`, `deferred`, and `failed`
+  counts to `eligible`; sample or inspect every omission reason and follow-up
+  owner. Treat `not_run` as distinct from PASS and NOT REQUIRED.
+- Compare cardinality and relevant cohort/source/time/category distributions
+  with the documented baseline and tolerance. Investigate unexpected zeroes,
+  shifts, and mismatches.
+- Return `NOT ASSESSABLE` when the denominator or independent detection source
+  cannot be established; do not certify completeness from successful records.
+
+### 14. Validate field-level provenance [WHEN APPLICABLE]
+
+- Sample or exhaustively trace governed fields to source records/locators,
+  transformation/default rule revisions, or stated inference evidence; verify
+  `source_backed`, `derived`, `inferred`, and `defaulted` classifications.
+- Confirm downstream consumers preserve required lineage distinctions and that
+  missing/invalid required lineage quarantines the field or record.
+- Test missing source, stale rule, invalid locator, and misclassified inference
+  fixtures. Check lineage metadata for prohibited source values and retention.
+- Return FAIL for false source-backed claims and `NOT ASSESSABLE` when required
+  source/rule evidence cannot be independently inspected.
 
 ## Report format
 
@@ -215,6 +311,11 @@ Checkpoint unit: one complete gate with its evidence.
       required checks in disguise.
 - [ ] Visual and external behaviors were not inferred from unrelated checks.
 - [ ] Reality claims were checked against actual configuration and live state.
+- [ ] Every independent gate names its failure mode, evidence/method diversity,
+      shared dependencies, and residual blind spots.
+- [ ] Applicable executable or interpreted control artifacts were checked
+      against actual consumers, triggers, activation state, and rollback or
+      disable behavior.
 - [ ] Schema IDs/versions, compatibility, producer/consumer alignment, and
       version bumps were checked against authoritative files when applicable.
 - [ ] Durable document versions, dates, and history rows were checked against
@@ -256,10 +357,11 @@ Escalate immediately when:
 
 ## Document control
 
-**Last edited:** 2026-08-05
+**Last edited:** 2026-08-14
 
-**Current version:** 1.0
+**Current version:** 1.1
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Validator / Auditor role guide. |
+| 1.1 | 2026-08-14 | Added validation of all eight ranked controls and failure-mode-based independence evidence. |

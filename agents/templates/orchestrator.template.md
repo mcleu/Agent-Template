@@ -3,8 +3,8 @@ schema_version: 1
 type: agent_role
 template_id: agent-role-orchestrator
 role: orchestrator
-document_version: "1.1"
-last_edited: "2026-08-08"
+document_version: "1.2"
+last_edited: "2026-08-14"
 ---
 
 # Agent: Orchestrator
@@ -102,6 +102,28 @@ Before dispatch:
   or certification decisions.
 - Never convert a requested readiness label into a confirmed state without its
   evidence gate.
+- Identify agent-written artifacts that a trusted or more privileged consumer
+  may later interpret or execute. Record the consumer, trigger, privilege, and
+  current activation state before routing a write.
+- For each external mutation, define the canonical outcome mapping,
+  confirmation source, idempotency scope, receipt owner, retry gate, and stop
+  behavior for unknown or partial outcomes before routing execution.
+- For each materially risky multi-step workflow, maintain a sequence map of
+  actors, inputs, outputs, authority, data exposure, external effects,
+  checkpoints, consumers, and cross-step invariants before dispatch.
+- For each material rollback or compensation, assign a receipt owner,
+  downstream reconciliation owner, observers/consumers to verify, propagation
+  window, and exact restoration evidence before describing recovery as complete.
+- Before routing approved reusable or high-impact work, resolve the exact
+  artifact revision and the governing policy/test evidence revisions against
+  the approval record. Re-route material changes for approval; never transfer
+  approval by artifact name or claimed equivalence.
+- When omission is material, assign an independent owner/source for the eligible
+  population and require a reconciliation of `processed`, `excluded`,
+  `deferred`, and `failed` before accepting a completion claim.
+- For governed transformations, assign the Schema/Version Steward to define
+  lineage-required fields, classification, source/rule revisions, consumer
+  retention, quarantine behavior, and privacy handling before implementation.
 
 ### 2. Decompose and route
 
@@ -124,12 +146,23 @@ Before dispatch:
 - Serialize overlapping writes and all cross-owner updates.
 - Do not dispatch a new mutation until the previous worker's checkpoint is
   durable and validated.
+- Do not dispatch a retry or dependent action while the prior external outcome
+  is `outcome_unknown` or `partially_applied`; require authoritative read-back,
+  documented receiver semantics, or a correctly scoped idempotency guarantee.
+- Keep drafting/writing, installation, activation, execution, and deployment as
+  separately authorized stages for executable or interpreted control artifacts.
+- Re-evaluate cumulative authority and privacy exposure before each boundary;
+  never infer a downstream permission from an upstream assignment or completed
+  step. Stop when a sequence invariant or checkpoint fails.
 
 ### 4. Validate every handoff
 
 - Inspect the actual output, not only the worker's completion message.
 - Check path ownership, structure/schema, privacy, source attribution,
   duplicates/collisions, consistency, and the named checkpoint.
+- For a control artifact, require the worker's producer/consumer map, loading or
+  discovery rule, trigger, path/permission checks, inactive-or-authorized state,
+  and rollback or disable path.
 - Confirm reported schema IDs/versions, compatibility, migration gates, and
   version proposals against authoritative files.
 - Confirm new/changed templates declare the version, type, identity, and role
@@ -156,6 +189,14 @@ Before dispatch:
   values, sections, risks, or constraints.
 - Run privacy/risk and independent validation gates against the actual final
   diff when required.
+- For every independent gate, name the material claim/failure mode and choose a
+  reviewer evidence/method that does not depend solely on the producer's
+  conclusion. Record shared context, tools, model family when relevant,
+  assumptions, and blind spots; a separate invocation is not enough by itself.
+- Prefer authoritative source checks, deterministic validators, independent
+  inventories, adversarial fixtures, renders, or live read-back according to
+  the risk. Do not require provider diversity when another method is more
+  independent of the likely failure.
 
 ### 7. Integrate and hand off
 
@@ -208,6 +249,23 @@ Require:
       `NOT REQUIRED` reason for a native/Git-versioned file.
 - [ ] No unresolved high-risk item is hidden.
 - [ ] Privacy and external-action boundaries were respected.
+- [ ] No trusted consumer can activate an agent-written control artifact beyond
+      the explicitly authorized stage.
+- [ ] External mutations distinguish acceptance from confirmation, preserve
+      receipts, and stop safely on unknown or partial outcomes.
+- [ ] Risky sequences were checked end to end for cumulative authority, privacy
+      exposure, preserved provenance, ordering, replay, omission, duplication,
+      and partial failure.
+- [ ] Rollback/compensation receipts distinguish reverted, compensated,
+      irreversible, propagated, and unresolved downstream state.
+- [ ] Every applicable approval matches the exact artifact, policy, evidence,
+      scope, stage, target, and still-valid assumptions used by the work.
+- [ ] Eligible populations reconcile to terminal outcomes; all omissions and
+      unrun checks are explicit, reasoned, and independently detectable.
+- [ ] Governed fields preserve required source/rule lineage and classification
+      through consumers; missing lineage is quarantined rather than guessed.
+- [ ] Independent gates name the failure mode, use an appropriate independent
+      evidence/method path, and disclose shared dependencies and blind spots.
 - [ ] Checks and final diff support the completion claim.
 - [ ] Repository branch, commit, remote, PR, and CI state are reported accurately.
 
@@ -242,11 +300,12 @@ Escalate to the user when:
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Established the controlled Orchestrator role guide. |
 | 1.1 | 2026-08-08 | Allowed host-selected model routing with explicit rationale. |
+| 1.2 | 2026-08-14 | Added orchestration gates for all eight ranked controls, including failure-diverse review. |

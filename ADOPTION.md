@@ -160,6 +160,14 @@ these practice families:
 | Schemas and versioning | Are human-readable domain meaning and versioned producer/consumer invariants assigned clear, complementary authorities? Are schema contracts kept in version directories with stable IDs, integer versions, introduction evidence, owners, compatibility, migrations, fixtures, and bump authority? Does every reusable template declare its schema version and stable type? Do new or materially revised durable human-authored files have a document version, last-edited date, and append-only history without invented legacy history? Are document, schema, release, migration, and Git revisions kept distinct? |
 | Review and validation | Are review independence, anchored findings, binary verdicts, actual-artifact checks, visual QA, and stale-check invalidation covered? |
 | High-risk filesystem work | Are audit-first plans, exact mappings, collision refusal, provenance, approval binding, sole-writer execution, rollback, and independent verification required where relevant? |
+| Delayed execution and trusted consumers | Can an agent-written hook, workflow, task, startup file, plugin setting, interpreter path, permission, or other control artifact later be executed or interpreted by a more privileged consumer? Are writing, activation, and execution separate authorities with known triggers and rollback? |
+| External mutation outcomes and retries | Does each binding external action distinguish attempted, accepted, confirmed, failed-with-no-effect, unknown, partial, and compensated outcomes? Are retries gated by receiver semantics, scoped idempotency, or authoritative read-back? |
+| Composition and sequence safety | Can individually permitted steps accumulate prohibited authority or data exposure? Are authorization and provenance preserved at each boundary, and are order, replay, omission, duplication, and partial-failure paths tested? |
+| Rollback and compensation evidence | Does rollback distinguish verified restoration, compensation, irreversible effects, propagation, notified observers, and unresolved downstream reconciliation instead of relying on a boolean claim? |
+| Revision-bound approval | Is each material approval bound to an immutable artifact revision plus the reviewed policy/test evidence, scope, stages, target, and invalidation triggers? |
+| Omission-aware validation | Is the eligible population independently defined and reconciled to processed, excluded, deferred, and failed outcomes? Are skipped checks distinct from passes and cardinality/distribution shifts investigated? |
+| Field-level transformation provenance | Are governed output fields classified as source-backed, derived, inferred, or defaulted with source/rule revisions, preserved lineage for consumers, and quarantine when required lineage is missing? |
+| Reviewer independence and failure diversity | Is each independent gate designed around a material failure mode and a genuinely different evidence/method path? Are shared context and blind spots disclosed rather than treating separate invocations or provider diversity as sufficient? |
 | Documentation improvement | Are decisions, assumptions, risks, retrospectives, schemas, and generated-versus-source distinctions durable? |
 | Completion and handoff | Must the agent report files, commit, PR/CI state, checks, explicit unknowns, open gates, and the next action? |
 
@@ -202,8 +210,33 @@ After the matrix is complete:
 3. Identify local language that will be retained, replaced, or moved.
 4. List commands, paths, links, and branch rules that require live verification.
 5. List any privacy, publication, destructive-action, or external-action gate.
-6. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
-7. State the smallest coherent implementation batch.
+6. For every executable or interpreted control artifact in scope, list its
+   producer, consumers, privilege boundary, discovery/loading rule, activation
+   trigger, current state, separately authorized stages, and rollback or disable
+   path.
+7. For every external mutation in scope, define its outcome-state mapping,
+   confirmation source, idempotency scope, receipt location, retry gate, and
+   behavior for unknown or partial outcomes.
+8. For every materially risky multi-step workflow, map actors, inputs, outputs,
+   authority, data exposure, external effects, checkpoints, and consumers;
+   define sequence invariants and adversarial test cases.
+9. For every material rollback or compensation path, define the receipt fields,
+   downstream observers/consumers, propagation window, verification source,
+   reconciliation owner, and residual irreversible state.
+10. For every reusable or high-impact approved artifact/action, define its
+    immutable revision identity, approval record, exact scope/stages, governing
+    policy and evidence revisions, expiry, and material-change invalidators.
+11. For every workflow where silent omission is material, define the independent
+    eligible population, mutually exclusive outcome categories, reconciliation
+    invariant, omission reasons/owners, and cardinality/distribution baselines.
+12. For every governed transformation, identify lineage-required fields,
+    classification vocabulary, source locator and transformation-rule versions,
+    downstream retention, privacy constraints, and quarantine behavior.
+13. For every independent review gate, name the claim/failure mode, producer
+    blind spot, independent evidence/method, shared dependencies/context, and
+    residual risk when the failure cannot be independently observed.
+14. Separate straightforward `ADOPT`/`ADAPT` work from `NEEDS_DECISION` items.
+15. State the smallest coherent implementation batch.
 
 For a lightweight existing repository, consider the **smallest useful
 adoption** profile first:
@@ -323,6 +356,32 @@ After the final edit:
   stale branch names, broken links, nonexistent commands, and invalid paths.
 - Check that no local privacy, safety, evidence, approval, or domain rule was
   weakened or dropped.
+- Confirm agent-written control artifacts remain inactive unless activation was
+  separately authorized, and validate the actual trusted consumer rather than
+  only the artifact's syntax or location.
+- Confirm external mutations do not advance local authoritative state before
+  confirmation; acceptance remains distinct from completion, and no unknown or
+  partial attempt is retried without receiver semantics, scoped idempotency, or
+  authoritative read-back.
+- Confirm high-risk workflows were evaluated end to end, authorization and
+  provenance survive every boundary, cumulative authority/data exposure remain
+  within scope, and order/replay/duplicate/omission/partial-failure cases have
+  evidence or a named `NOT ASSESSABLE` result.
+- Confirm rollback claims identify verified reverted state separately from
+  compensation and irreversible effects, account for observers and propagation,
+  and leave unresolved downstream reconciliation explicitly open.
+- Confirm material approvals resolve to the exact artifact, policy, and evidence
+  revisions reviewed and are invalidated after relevant behavior, dependency,
+  authority, consumer, target, environment, or control changes.
+- Confirm applicable eligible populations reconcile to processed, excluded,
+  deferred, and failed outcomes; skipped checks are not passes; omissions have
+  reasons; and independent inventories or baselines expose unknown exclusions.
+- Confirm governed fields retain source/rule lineage and the source-backed,
+  derived, inferred, or defaulted distinction through consumers; required
+  missing lineage is quarantined and lineage metadata respects privacy rules.
+- Confirm independent review gates target named failure modes with evidence or
+  methods not derived solely from the producer; shared context and blind spots
+  are disclosed, and unobservable failures are `NOT ASSESSABLE`.
 - Check `AGENTS.md` and `CLAUDE.md` for duplicated or contradictory policy.
 - Confirm the role-coverage table has no unexplained gaps for accepted
   multi-agent practices.
@@ -404,11 +463,12 @@ result.
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added audit-first adoption, role coverage, reality checks, and document-version adoption. |
 | 1.1 | 2026-08-08 | Added lightweight adoption, host-selected routing, gradual legacy document control, and stage-specific publication authority. |
+| 1.2 | 2026-08-14 | Added adoption coverage for all eight ranked controls, including failure-diverse review. |

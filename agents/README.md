@@ -51,6 +51,8 @@ Common team shapes:
   Reviewer/Validator.
 - High-risk migration: Orchestrator → independent inventory/classification →
   Privacy/Risk Gate → designated writer/runner → Validator.
+- Delayed-execution change: Orchestrator → Writer/Implementer → Reviewer and,
+  when activation or elevated risk is in scope, Privacy/Risk Gate → Validator.
 
 ## Shared contract for every role
 
@@ -96,11 +98,35 @@ Every project role must:
 9. Run changed artifacts through full review; scan unchanged artifacts only for
    stale cross-references.
 10. Apply privacy/risk and independent validation gates where required.
-11. For adopted multi-agent policy, verify every relevant role guide explicitly
+11. For executable or interpreted control artifacts, separate write,
+    installation, activation, execution, and deployment authority and validate
+    the actual trusted consumer.
+12. For external mutations, require explicit outcome states, authoritative
+    confirmation, scoped idempotency or read-back before retry, and a stop on
+    unknown or partial outcomes.
+13. For risky multi-step workflows, map every boundary and validate cumulative
+    authority, data exposure, provenance, order, replay, omission, duplication,
+    and partial-failure behavior end to end.
+14. For material recovery, require a structured receipt that separates verified
+    restoration, compensation, irreversible effects, notified observers,
+    propagation, and unresolved downstream reconciliation.
+15. Bind material approval to an immutable artifact revision and the exact
+    policy/evidence reviewed; invalidate it when relevant behavior, dependency,
+    authority, consumer, target, environment, or control assumptions change.
+16. Where omission matters, independently define `eligible` and reconcile it to
+    `processed + excluded + deferred + failed`; reason every omission and keep
+    `not_run` distinct from pass.
+17. For governed transformations, classify required fields as source-backed,
+    derived, inferred, or defaulted; retain source/rule lineage through consumers
+    and quarantine missing required lineage.
+18. Define independent review by the failure mode and evidence/method diversity;
+    disclose shared context and blind spots. Separate invocations or providers
+    are not automatically independent.
+19. For adopted multi-agent policy, verify every relevant role guide explicitly
     covers ownership, checkpoints, handoffs, applicable verdicts, and model
     routing. Provider-neutral roles may record `host-selected` or `not-required`
     with rationale instead of naming a tier.
-12. Commit only validated files and report the actual branch, checks, and
+20. Commit only validated files and report the actual branch, checks, and
     remaining unknowns.
 
 ## Handoff formats
@@ -204,17 +230,35 @@ permission to apply, publish, commit, or merge.
 - [ ] Define formal verdict semantics, or state why verdicts are not required
       for this role.
 - [ ] Add project-specific privacy and external-action restrictions.
+- [ ] Identify delayed-execution artifacts, trusted consumers, triggers,
+      activation state, stage-specific authority, and rollback/disable paths.
+- [ ] Define external-mutation outcome mappings, confirmation evidence,
+      mutation receipts, idempotency scope, retry gates, and unknown/partial
+      stop behavior.
+- [ ] Map risky sequences, cross-step invariants, cumulative authority/privacy
+      exposure, instruction/data boundaries, and adversarial sequence fixtures.
+- [ ] Define rollback/compensation receipt fields, observer and propagation
+      checks, irreversible effects, and downstream reconciliation ownership.
+- [ ] Bind approval to immutable artifact, policy, and evidence revisions with
+      exact scope, stages, target, expiry, and material-change invalidators.
+- [ ] Define the independent eligible population, outcome reconciliation,
+      omission reasons/owners, check-state vocabulary, and applicable baselines.
+- [ ] Define field-level lineage classes, required source/rule evidence,
+      consumer retention, quarantine behavior, and privacy constraints.
+- [ ] Define each independent gate's failure mode, evidence/method path, shared
+      dependencies/context, blind spots, and `NOT ASSESSABLE` condition.
 - [ ] Add the real validation commands or evidence requirements.
 - [ ] Define escalation triggers and the human decision owner.
 - [ ] Confirm runtime adapters remain semantically aligned.
 
 ## Document control
 
-**Last edited:** 2026-08-08
+**Last edited:** 2026-08-14
 
-**Current version:** 1.1
+**Current version:** 1.2
 
 | Version | Date | Change |
 | --- | --- | --- |
 | 1.0 | 2026-08-05 | Added reusable role selection, coverage, handoffs, and per-file document-version duties. |
 | 1.1 | 2026-08-08 | Allowed explicit host-selected or not-required model routing for provider-neutral roles. |
+| 1.2 | 2026-08-14 | Added routing for all eight ranked controls, including failure-diverse review. |
